@@ -1,0 +1,4 @@
+Testing the mimas board with a ftdi ft2232h in ft245 synchronous mode.
+
+This is a simple counter for testing the expected bandwidth and starting
+the software implementation on the host computer.

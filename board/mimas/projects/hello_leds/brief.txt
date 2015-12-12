@@ -1,0 +1,2 @@
+Testing the mimas board and the ise tools -> make sure everything connects
+and is programming as expected.
