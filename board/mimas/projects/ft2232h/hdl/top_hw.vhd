@@ -4,31 +4,31 @@ library ieee;
 entity top_hw is
 	port
 	(
-		FT_CLKOUT		: in	std_logic;
-		FT_DATA			: out	std_logic_vector(7 downto 0);
-		FT_nRESET		: out	std_logic;
-		FT_nTXE			: in	std_logic;
-		FT_nRXF			: in	std_logic;
-		FT_nWR			: out	std_logic;
-		FT_nRD			: out	std_logic;
-		FT_SIWUA		: out	std_logic;
-		FT_nOE			: out	std_logic;
-		FT_nSUSPEND		: in	std_logic
+		FT_CLKOUT		: in	std_ulogic;
+		FT_DATA			: out	std_ulogic_vector(7 downto 0);
+		FT_nRESET		: out	std_ulogic;
+		FT_nTXE			: in	std_ulogic;
+		FT_nRXF			: in	std_ulogic;
+		FT_nWR			: out	std_ulogic;
+		FT_nRD			: out	std_ulogic;
+		FT_SIWUA		: out	std_ulogic;
+		FT_nOE			: out	std_ulogic;
+		FT_nSUSPEND		: in	std_ulogic
 	);
 end top_hw;
 
 architecture bhv of top_hw is
-	signal write : std_logic;
-	signal read : std_logic;
-	signal now : std_logic;
-	signal oe : std_logic;
-	signal ft_reset : std_logic;
-	signal data	: std_logic_vector(FT_DATA'range);
-	signal tx_not_full : std_logic;
-	signal rx_not_empty : std_logic;
-	signal suspend : std_logic;
-	signal clock : std_logic;
-	signal reset : std_logic;
+	signal write : std_ulogic;
+	signal read : std_ulogic;
+	signal now : std_ulogic;
+	signal oe : std_ulogic;
+	signal ft_reset : std_ulogic;
+	signal data	: std_ulogic_vector(FT_DATA'range);
+	signal tx_not_full : std_ulogic;
+	signal rx_not_empty : std_ulogic;
+	signal suspend : std_ulogic;
+	signal clock : std_ulogic;
+	signal reset : std_ulogic;
 	
 	-- Force signals into IO pads
 	attribute iob					: string;
@@ -90,7 +90,6 @@ port map
 	oe				=> oe,
 	suspend			=> suspend
 );
-
 		
 end bhv;
 

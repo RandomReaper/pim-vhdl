@@ -5,17 +5,17 @@ library ieee;
 entity top is
 	port
 	(
-		clock			: in	std_logic;
-		reset			: in	std_logic;
-		data			: out	std_logic_vector(7 downto 0);
-		ft_reset		: out	std_logic;
-		tx_not_full		: in	std_logic;
-		rx_not_empty	: in	std_logic;
-		write			: out	std_logic;
-		read			: out	std_logic;
-		now				: out	std_logic;
-		oe				: out	std_logic;
-		suspend			: in	std_logic
+		clock			: in	std_ulogic;
+		reset			: in	std_ulogic;
+		data			: out	std_ulogic_vector(7 downto 0);
+		ft_reset		: out	std_ulogic;
+		tx_not_full		: in	std_ulogic;
+		rx_not_empty	: in	std_ulogic;
+		write			: out	std_ulogic;
+		read			: out	std_ulogic;
+		now				: out	std_ulogic;
+		oe				: out	std_ulogic;
+		suspend			: in	std_ulogic
 	);
 end top;
 
@@ -26,7 +26,7 @@ begin
 read <= '0';
 oe <= '0';
 ft_reset <= '0';
-data <= std_logic_vector(counter);
+data <= std_ulogic_vector(counter);
 now <= '0';
 
 write_gen: process(reset, clock)
