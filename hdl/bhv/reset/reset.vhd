@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file		: clock.vhd 
+-- file			: clock.vhd 
 --
 -- brief		: Reset generator (for simulation)
 -- author(s)	: marc at pignat dot org
@@ -27,7 +27,7 @@ architecture bhv of reset is
 	signal counter : natural;
 begin
 
-counter: process(clock)
+counter_gen: process(clock)
 begin
 	if rising_edge(clock) then
 		if counter < clock_duration then

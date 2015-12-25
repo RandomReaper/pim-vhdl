@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file		: clock.vhd 
+-- file			: clock.vhd 
 --
 -- brief		: Clock generator (for simulation)
 -- author(s)	: marc at pignat dot org

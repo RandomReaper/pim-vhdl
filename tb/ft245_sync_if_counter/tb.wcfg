@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pim/git/hw/tb/ft245_sync_if_counter/tmp/tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="15" />
+   <wvobject fp_name="/tb/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/adbus" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">adbus[7:0]</obj_property>
+      <obj_property name="ObjectShortName">adbus[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/txe_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">txe_n</obj_property>
+      <obj_property name="ObjectShortName">txe_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/rxf_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rxf_n</obj_property>
+      <obj_property name="ObjectShortName">rxf_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/oe_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_n</obj_property>
+      <obj_property name="ObjectShortName">oe_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/siwu" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">siwu</obj_property>
+      <obj_property name="ObjectShortName">siwu</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/suspend_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">suspend_n</obj_property>
+      <obj_property name="ObjectShortName">suspend_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/reset_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/out_data_ack" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data_ack</obj_property>
+      <obj_property name="ObjectShortName">out_data_ack</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/counter" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">counter[7:0]</obj_property>
+      <obj_property name="ObjectShortName">counter[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/out_data_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data_write</obj_property>
+      <obj_property name="ObjectShortName">out_data_write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_sim/d_data_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d_data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d_data_out[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

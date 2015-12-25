@@ -23,20 +23,52 @@ entity ft245_sync_sim is
 		oe_n		: in	std_ulogic;
 		siwu		: in	std_ulogic;
 		reset_n		: in	std_ulogic;
-		sudpend_n	: out	std_ulogic
+		suspend_n	: out	std_ulogic;
+		
+		d_data_out	: out	std_ulogic_vector(7 downto 0)
 	);
 end ft245_sync_sim ;
 
 architecture bhv of ft245_sync_sim is
-	signal reset	: std_ulogic;
-	signal oe		: std_ulogic;
-	signal data_in	: std_ulogic_vector(adbus'range);
-	signal clock	: std_ulogic;
+	signal reset		: std_ulogic;
+	signal oe			: std_ulogic;
+	signal data_in		: std_ulogic_vector(adbus'range);
+	signal clock		: std_ulogic;
+	signal tx_full		: std_ulogic;
+	signal tx_full_old	: std_ulogic;
+	signal tx_counter	: unsigned(3 downto 0);
 begin
 
-reset	<= not reset_n;
-oe		<= not oe_n;
-clkout	<= clock;
+reset		<= not reset_n;
+oe			<= not oe_n;
+clkout		<= clock;
+rxf_n		<= '0';
+txe_n		<= tx_full;
+suspend_n	<= '0';
+
+tx_counter_gen: process(reset, clock)
+begin
+	if reset = '1' then
+		tx_counter <= (others => '0');
+	elsif rising_edge(clock) then
+		tx_counter <= tx_counter + 1;
+	end if;
+end process;
+tx_full <= '1' when tx_counter = 0 else '0';
+
+debug_out: process(reset, clock)
+begin
+	if reset = '1' then
+		d_data_out <= (others => '-');
+		tx_full_old <= '0';
+	elsif rising_edge(clock) then
+		tx_full_old <= tx_full;
+		d_data_out <= (others => '-');
+		if tx_full = '0' and wr_n = '0' then
+			d_data_out <= std_ulogic_vector(adbus);
+		end if;
+	end if;	
+end process;
 
 hi_z: process(oe, data_in)
 begin
@@ -56,5 +88,5 @@ i_clock: entity work.clock
 	(
 		clock	=> clock
 	);
-
+	
 end architecture bhv;
