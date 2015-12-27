@@ -25,7 +25,9 @@ entity ft245_sync_sim is
 		reset_n		: in	std_ulogic;
 		suspend_n	: out	std_ulogic;
 		
-		d_data_out	: out	std_ulogic_vector(7 downto 0)
+		d_data_out	: out	std_ulogic_vector(7 downto 0);
+		d_data_in	: in	std_ulogic_vector(7 downto 0);
+		d_data_write: in	std_ulogic
 	);
 end ft245_sync_sim ;
 
@@ -42,7 +44,7 @@ begin
 reset		<= not reset_n;
 oe			<= not oe_n;
 clkout		<= clock;
-rxf_n		<= '0';
+rxf_n		<= not d_data_write;
 txe_n		<= tx_full;
 suspend_n	<= '0';
 
@@ -70,14 +72,16 @@ begin
 	end if;	
 end process;
 
-hi_z: process(oe, data_in)
+debug_in: process(reset, clock)
 begin
-	if oe = '1' then
-		adbus <= std_logic_vector(data_in);
-	else
-		adbus <= (others => 'Z');
-	end if;
+	if reset = '1' then
+		data_in <= d_data_in;
+	elsif rising_edge(clock) then
+		data_in <= d_data_in;
+	end if;	
 end process;
+
+adbus <= std_logic_vector(data_in) when oe = '1' else (others => 'Z');
 
 i_clock: entity work.clock
 	generic map
