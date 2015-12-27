@@ -48,7 +48,7 @@ entity fifo is
 		used 				: out std_ulogic_vector(g_depth_log2 downto 0)
 	);
 
-type mem_t is array ( 2 **g_depth_log2 downto 0) of std_ulogic_vector(write_data'range);
+type mem_t is array ( (2 **g_depth_log2 ) - 1 downto 0) of std_ulogic_vector(write_data'range);
 subtype mem_range_r is natural range (g_depth_log2 - 1) downto 0;
 subtype ptr_range_r is natural range (g_depth_log2 - 0) downto 0;
 end fifo;
