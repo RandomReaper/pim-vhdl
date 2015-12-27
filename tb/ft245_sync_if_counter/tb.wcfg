@@ -23,7 +23,7 @@
    <wvobject fp_name="/tb/adbus" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">adbus[7:0]</obj_property>
       <obj_property name="ObjectShortName">adbus[7:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/txe_n" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">txe_n</obj_property>
@@ -49,30 +49,31 @@
       <obj_property name="ElementShortName">siwu</obj_property>
       <obj_property name="ObjectShortName">siwu</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/suspend_n" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">suspend_n</obj_property>
-      <obj_property name="ObjectShortName">suspend_n</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/reset_n" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">reset_n</obj_property>
-      <obj_property name="ObjectShortName">reset_n</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/out_data_ack" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">out_data_ack</obj_property>
-      <obj_property name="ObjectShortName">out_data_ack</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/counter" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">counter[7:0]</obj_property>
-      <obj_property name="ObjectShortName">counter[7:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/out_data_write" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">out_data_write</obj_property>
-      <obj_property name="ObjectShortName">out_data_write</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb/i_ft_sim/d_data_out" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">d_data_out[7:0]</obj_property>
       <obj_property name="ObjectShortName">d_data_out[7:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/read_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">read_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">read_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/read_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read_valid</obj_property>
+      <obj_property name="ObjectShortName">read_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/write_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/write_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_full</obj_property>
+      <obj_property name="ObjectShortName">write_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write</obj_property>
+      <obj_property name="ObjectShortName">write</obj_property>
    </wvobject>
 </wave_config>

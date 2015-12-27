@@ -26,9 +26,13 @@ architecture bhv of tb is
 	signal siwu				: std_ulogic;
 	signal suspend_n		: std_ulogic;
 	signal reset_n			: std_ulogic;
-	signal out_data_ack		: std_ulogic;
-	signal counter			: unsigned(7 downto 0);
-	signal out_data_write	: std_ulogic;
+	signal out_data_full	: std_ulogic;
+	signal out_counter		: unsigned(7 downto 0);
+	signal out_value		: unsigned(7 downto 0);
+	signal in_counter		: unsigned(8 downto 0);
+	signal in_value			: unsigned(7 downto 0);
+	signal write			: std_ulogic;
+	signal d_write			: std_ulogic;
 begin
 
 reset_n <= not reset;
@@ -48,13 +52,12 @@ port map
 	suspend_n		=> suspend_n,
 	
 	reset			=> reset,
-	in_data			=> open,
-	in_data_read	=> '0',
-	in_data_valid	=> open,
+	read_data		=> open,
+	read_valid		=> open,
 	
-	out_data		=> std_ulogic_vector(counter),
-	out_data_write	=> out_data_write,
-	out_data_ack	=> out_data_ack
+	write_data		=> std_ulogic_vector(out_value),
+	write			=> write,
+	write_full		=> out_data_full
 );
 
 i_ft_sim : entity work.ft245_sync_sim
@@ -69,7 +72,10 @@ port map
 	oe_n		=> oe_n,
 	siwu		=> siwu,
 	reset_n		=> reset_n,
-	suspend_n	=> suspend_n
+	suspend_n	=> suspend_n,
+	
+	d_data_in	=> std_ulogic_vector(in_value),
+	d_data_write=> d_write
 );
 
 i_reset : entity work.reset
@@ -79,16 +85,38 @@ port map
 	clock	=> clock
 );
 
-counter_gen: process(reset, clock)
+counter_out_gen: process(reset, clock)
 begin
 	if reset = '1' then
-		counter <= (others => '0');
-		out_data_write <= '0';
+		out_counter <= (others => '0');
+		out_value	<= (others => '-');
+		write <= '0';
+		
 	elsif rising_edge(clock) then
-		out_data_write <= '0';
-		if out_data_ack = '1' then
-			counter <= counter + 1;
-			out_data_write <= '1';
+		write <= '0';
+		out_value	<= (others => '-');
+		if out_data_full = '0' then
+			out_counter <= out_counter + 1;
+			write <= '1';
+			out_value <= out_counter;
+		end if;
+	end if;
+end process;
+
+counter_in_gen: process(reset, clock)
+begin
+	if reset = '1' then
+		in_counter <= (others => '1');
+		in_value	<= (others => '-');
+		d_write <= '0';
+		
+	elsif rising_edge(clock) then
+		d_write <= '0';
+		in_value	<= (others => '-');
+		in_counter <= in_counter + 1;
+		if in_counter(4) = '1' then
+			d_write <= '1';
+			in_value <= in_counter(in_value'range);
 		end if;
 	end if;
 end process;
