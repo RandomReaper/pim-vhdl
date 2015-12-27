@@ -4,8 +4,14 @@ library ieee;
 entity top_hw is
 	port
 	(
+		-- Mimas
+		clk				: in	std_ulogic;
+		sw				: in	std_ulogic_vector(3 downto 0);
+		led				: out	std_ulogic_vector(7 downto 0);
+		
+		-- FT2232h
 		FT_CLKOUT		: in	std_ulogic;
-		FT_DATA			: out	std_ulogic_vector(7 downto 0);
+		FT_DATA			: inout	std_logic_vector(7 downto 0);
 		FT_nRESET		: out	std_ulogic;
 		FT_nTXE			: in	std_ulogic;
 		FT_nRXF			: in	std_ulogic;
@@ -18,78 +24,65 @@ entity top_hw is
 end top_hw;
 
 architecture bhv of top_hw is
-	signal write : std_ulogic;
-	signal read : std_ulogic;
-	signal now : std_ulogic;
-	signal oe : std_ulogic;
-	signal ft_reset : std_ulogic;
-	signal data	: std_ulogic_vector(FT_DATA'range);
-	signal tx_not_full : std_ulogic;
-	signal rx_not_empty : std_ulogic;
-	signal suspend : std_ulogic;
-	signal clock : std_ulogic;
-	signal reset : std_ulogic;
+	alias clock			: std_ulogic is FT_CLKOUT;
+	signal reset		: std_ulogic;
 	
-	-- Force signals into IO pads
-	attribute iob					: string;
-	
-	attribute iob of FT_DATA		: signal is "FORCE";
-	attribute iob of FT_nRESET		: signal is "FORCE";
-	attribute iob of FT_nTXE		: signal is "FORCE";
-	attribute iob of FT_nRXF		: signal is "FORCE";
-	attribute iob of FT_nWR			: signal is "FORCE";
-	attribute iob of FT_nRD			: signal is "FORCE";
-	attribute iob of FT_SIWUA		: signal is "FORCE";
-	attribute iob of FT_nOE			: signal is "FORCE";
-	attribute iob of FT_nSUSPEND	: signal is "FORCE";
-
+	signal write_data	: std_ulogic_vector(FT_DATA'range);
+	signal write		: std_ulogic;
+	signal write_full	: std_ulogic;
+	signal read_data	: std_ulogic_vector(FT_DATA'range);
+	signal read_valid	: std_ulogic;
 begin
 
-clock <= FT_CLKOUT;
+i_ft245_sync_if : entity work.ft245_sync_if
+port map
+(
+	-- Interface to the ftdi chip
+	adbus			=> FT_DATA,
+	rxf_n			=> FT_nRXF,
+	txe_n			=> FT_nTXE,
+	rd_n			=> FT_nRD,
+	wr_n			=> FT_nWR,
+	clkout			=> FT_CLKOUT,
+	oe_n			=> FT_nOE,
+	siwu			=> FT_SIWUA,
+	reset_n			=> FT_nRESET, 
+	suspend_n		=> FT_nSUSPEND,
+	
+	-- Interface to the internal logic
+	reset			=> reset,
+	
+	write_data		=> write_data,
+	write			=> write,
+	write_full		=> write_full,
+	
+	read_data		=> read_data,
+	read_valid		=> read_valid
+);
 
 -- FIXME reset should be generated
 reset <= '0';
 
-io_sync: process(reset, clock)
-begin
-	if reset = '1' then
-		FT_nWR <= '1';
-		FT_nRD <= '1';
-		FT_SIWUA <= '1';
-		FT_nOE <= '1';
-		FT_nRESET <= '1';
-		tx_not_full <= '0';
-		rx_not_empty <= '0';
-		suspend <= '0';
-	elsif rising_edge(clock) then
-		FT_DATA <= data;
-		FT_nWR <= not write;
-		FT_nRD <= not read;
-		FT_SIWUA <= not now;
-		FT_nOE <= not oe;
-		FT_nRESET <= not ft_reset;
-		tx_not_full <= not FT_nTXE;
-		rx_not_empty <= not FT_nRXF;
-		suspend <= not FT_nSUSPEND;
-	end if;
-end process;
-	
-
 i_top : entity work.top
 port map
 (
-	clock			=> clock,
+	clock			=> FT_CLKOUT,
 	reset			=> reset,
-	data			=> data,
-	ft_reset		=> ft_reset,
-	tx_not_full		=> tx_not_full,
-	rx_not_empty	=> rx_not_empty,
-	write			=> write,
-	read			=> read,
-	now				=> now,
-	oe				=> oe,
-	suspend			=> suspend
+	data			=> write_data,
+	write_full		=> write_full,
+	write			=> write
 );
-		
+
+led_out: process(reset, clock)
+begin
+	if reset = '1' then
+		led <= (others => '0');
+	elsif rising_edge(clock) then
+		if read_valid = '1' then
+			led <= read_data;
+		end if;
+	end if;
+end process;
+
 end bhv;
 
