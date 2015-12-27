@@ -5,6 +5,9 @@
 -- author(s)	: marc at pignat dot org
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
+--
+-- FIXME : loses bytes when the ft245 tx fifo is full
+--
 -----------------------------------------------------------------------------
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -27,30 +30,32 @@ port
 	
 	-- Interface to the internal logic
 	reset			: in	std_ulogic;
-	in_data			: out	std_ulogic_vector(7 downto 0);
-	in_data_read	: in	std_ulogic;
-	in_data_valid	: out	std_ulogic;
 	
-	out_data		: in	std_ulogic_vector(7 downto 0);
-	out_data_write	: in	std_ulogic;
-	out_data_ack	: out	std_ulogic
+	write_data		: in	std_ulogic_vector(7 downto 0);
+	write			: in	std_ulogic;
+	write_full		: out	std_ulogic;
+	
+	read_data		: out	std_ulogic_vector(7 downto 0);
+	read_valid		: out	std_ulogic
 );
 end ft245_sync_if;
 
 architecture rtl of ft245_sync_if is
-	signal clock		: std_ulogic;
-	signal oe			: std_ulogic;
-	signal in_data_int	: std_ulogic_vector(in_data'range);
-	signal out_data_int : std_ulogic_vector(out_data'range);
-	signal tx_not_full	: std_ulogic;
-	signal rx_not_empty : std_ulogic;
-	signal read			: std_ulogic;
-	signal write		: std_ulogic;
-	signal write_ext	: std_ulogic;
-	signal write_done	: std_ulogic;
-	signal status_full	: std_ulogic;
-	signal status_empty	: std_ulogic;
-
+	constant g_depth_log2 : natural := 2;
+	alias clock				: std_ulogic is clkout;
+	signal oe				: std_ulogic;
+	signal read_data_sync	: std_ulogic_vector(read_data'range);
+	signal write_data_sync	: std_ulogic_vector(write_data'range);
+	signal tx_not_full		: std_ulogic;
+	signal rx_not_empty		: std_ulogic;
+	signal ft_read			: std_ulogic;
+	signal ft_write			: std_ulogic;
+	signal ft_suspend		: std_ulogic;
+	signal write_try		: std_ulogic;
+	signal write_failed		: std_ulogic;
+	signal write_ok			: std_ulogic;
+	signal read_ok			: std_ulogic;
+	signal write_data_int	: std_ulogic_vector(write_data'range);
 	
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
@@ -71,87 +76,81 @@ begin
 reset_n <= '1';
 siwu <= '1';
 
--- Signal polarity and renaming
-oe_n <= not oe;
-clock <= clkout;
-write <= not status_empty;
-
--- FIXME reading is not implemented
-oe		<= '0';
-read	<= '0';
-
 -- Tristate
-adbus <= std_logic_vector(out_data_int) when oe = '0' else (others => 'Z');
+adbus <= std_logic_vector(write_data_sync) when oe = '0' else (others => 'Z');
 
 -- Synchronize input signals
 in_sample: process(reset, clock)
 begin
 	if reset = '1' then
-		in_data_int		<= (others => '0');
+		read_data_sync	<= (others => '0');
 		tx_not_full		<= '0';
 		rx_not_empty	<= '0';
+		ft_suspend		<= '0';
 	elsif rising_edge(clock) then
-		in_data_int		<= std_ulogic_vector(adbus);
+		read_data_sync	<= std_ulogic_vector(adbus);
 		tx_not_full		<= not txe_n;
 		rx_not_empty	<= not rxf_n;
+		ft_suspend		<= not suspend_n;
 	end if;
 end process;
+
+ft_read	<= rx_not_empty;
+oe		<= ft_read;
 
 -- Synchronize output signals
 out_sync: process(reset, clock)
 begin
 	if reset = '1' then
-		--out_data_int	<= (others => '0');
+		write_data_sync	<= (others => '0');
 		rd_n			<= '1';
 		wr_n			<= '1';
+		oe_n			<= '1';
 	elsif rising_edge(clock) then
-		--out_data_int	<= out_data;
-		rd_n			<= not read;
-		wr_n			<= not (write and tx_not_full);
+		write_data_sync	<= write_data_int;
+		rd_n			<= not ft_read;
+		wr_n			<= not (ft_write and tx_not_full);
+		oe_n			<= not oe;
 	end if;
 end process;
 
-out_data_ack <= not status_full;
-i_fifo : entity work.fifo
-generic map
-(
-	g_depth_log2 => 1
-)
-port map
-(
-	clock				=> clock,
-	reset				=> reset,
-
-	-- input
-	sync_reset			=> '0',
-	write				=> out_data_write,
-	write_data			=> out_data,
-
-	-- outputs
-	read				=> tx_not_full,
-	read_data			=> out_data_int,
-
-	--status
-	status_full			=> status_full,
-	status_empty		=> status_empty,
-	status_write_error	=> open,
-	status_read_error	=> open,
-	
-	free 				=> open,
-	used 				=> open
-);
-
--- Write to FTDI has succeeded when write is active at the same time as
--- fifo was not full.
-data_out_ok: process(reset, clock)
+in_sync: process(reset, clock)
 begin
 	if reset = '1' then
-		write_ext		<= '0';
-		write_done		<= '0';
+		read_data	<= (others => '0');
+		read_valid	<= '0';
+		read_ok		<= '0';
 	elsif rising_edge(clock) then
-		write_ext		<= write;
-		write_done		<= write_ext and tx_not_full;
+		read_data	<= std_ulogic_vector(adbus);
+		read_ok		<= ft_read;
+		read_valid	<= read_ok;
 	end if;
+end process;
+
+try_out: process(reset, clock)
+begin
+	if reset = '1' then
+		write_try		<= '0';
+	elsif rising_edge(clock) then
+		write_try		<= ft_write and tx_not_full;
+	end if;	
+end process;
+write_failed	<= write_try and not tx_not_full;
+write_ok		<= write_try and tx_not_full;
+
+write_full		<= not tx_not_full;
+process(reset, clock)
+begin
+	if reset = '1' then
+		write_data_int			<= (others => '0');
+		ft_write				<= '0';
+	elsif rising_edge(clock) then
+		ft_write				<= '0';
+		if write = '1' then
+			write_data_int		<= write_data;
+			ft_write			<= '1';
+		end if;
+	end if;	
 end process;
 
 end rtl;
