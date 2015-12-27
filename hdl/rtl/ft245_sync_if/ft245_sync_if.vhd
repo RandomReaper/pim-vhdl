@@ -60,7 +60,7 @@ architecture rtl of ft245_sync_if is
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
 	attribute iob					: string;
-	attribute iob of adbus			: signal is "FORCE";
+	attribute iob of write_data_sync: signal is "FORCE";
 	attribute iob of rxf_n			: signal is "FORCE";
 	attribute iob of txe_n			: signal is "FORCE";
 	attribute iob of rd_n			: signal is "FORCE";
