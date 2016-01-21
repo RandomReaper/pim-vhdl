@@ -26,13 +26,17 @@ architecture bhv of tb is
 	signal siwu				: std_ulogic;
 	signal suspend_n		: std_ulogic;
 	signal reset_n			: std_ulogic;
-	signal out_data_full	: std_ulogic;
-	signal out_counter		: unsigned(7 downto 0);
-	signal out_value		: unsigned(7 downto 0);
-	signal in_counter		: unsigned(8 downto 0);
-	signal in_value			: unsigned(7 downto 0);
-	signal write			: std_ulogic;
-	signal d_write			: std_ulogic;
+	signal d_counter		: unsigned(7 downto 0);
+	signal d_data_in		: std_ulogic_vector(7 downto 0);
+	signal d_data_write		: std_ulogic;
+	signal d_data_full		: std_ulogic;
+	signal status_full		: std_ulogic;
+	signal status_empty		: std_ulogic;
+	signal status_not_empty	: std_ulogic;
+	signal read_data		: std_ulogic_vector(7 downto 0);
+	signal write_data		: std_ulogic_vector(7 downto 0);
+	signal write_read		: std_ulogic;
+	signal read_valid		: std_ulogic;
 begin
 
 reset_n <= not reset;
@@ -52,12 +56,43 @@ port map
 	suspend_n		=> suspend_n,
 	
 	reset			=> reset,
-	read_data		=> open,
-	read_valid		=> open,
+	read_data		=> read_data,
+	read_valid		=> read_valid,
 	
-	write_data		=> std_ulogic_vector(out_value),
-	write			=> write,
-	write_full		=> out_data_full
+	write_data		=> write_data,
+	write_read		=> write_read,
+	write_not_empty	=> status_not_empty
+);
+status_not_empty <= not(status_empty);
+
+i_fifo : entity work.fifo
+generic map
+(
+	g_depth_log2 => 4
+)
+port map
+(
+	clock		=> clock,
+	reset		=> reset,
+
+	-- input
+	sync_reset	=> '0',
+	write		=> read_valid,
+	write_data	=> read_data,
+
+	-- outputs
+	read		=> write_read,
+	read_data	=> write_data,
+
+	--status
+	status_full	=> status_full,
+	status_empty	=> status_empty
+	--status_write_error	: out std_ulogic;
+	--status_read_error	: out std_ulogic;
+	
+	--free 				: out std_ulogic_vector(g_depth_log2 downto 0);
+	--used 				: out std_ulogic_vector(g_depth_log2 downto 0)	
+
 );
 
 i_ft_sim : entity work.ft245_sync_sim
@@ -74,8 +109,9 @@ port map
 	reset_n		=> reset_n,
 	suspend_n	=> suspend_n,
 	
-	d_data_in	=> std_ulogic_vector(in_value),
-	d_data_write=> d_write
+	d_data_in	=> d_data_in,
+	d_data_write=> d_data_write,
+	d_data_full	=> d_data_full
 );
 
 i_reset : entity work.reset
@@ -85,38 +121,21 @@ port map
 	clock	=> clock
 );
 
-counter_out_gen: process(reset, clock)
+sim_pc: process(reset, clock)
 begin
 	if reset = '1' then
-		out_counter <= (others => '0');
-		out_value	<= (others => '-');
-		write <= '0';
-		
+		d_data_in <= (others => '-');
+		d_data_write <= '0';
+		d_counter <= (others => '0');
 	elsif rising_edge(clock) then
-		write <= '0';
-		out_value	<= (others => '-');
-		if out_data_full = '0' then
-			out_counter <= out_counter + 1;
-			write <= '1';
-			out_value <= out_counter;
-		end if;
-	end if;
-end process;
-
-counter_in_gen: process(reset, clock)
-begin
-	if reset = '1' then
-		in_counter <= (others => '1');
-		in_value	<= (others => '-');
-		d_write <= '0';
-		
-	elsif rising_edge(clock) then
-		d_write <= '0';
-		in_value	<= (others => '-');
-		in_counter <= in_counter + 1;
-		if in_counter(4) = '1' then
-			d_write <= '1';
-			in_value <= in_counter(in_value'range);
+		d_data_in <= (others => '-');
+		d_data_write <= '0';
+		if d_data_full = '0' then
+			d_counter <= d_counter + 1;
+			if d_counter(d_counter'left downto d_counter'left-4) = 0 then
+				d_data_write <= '1';
+				d_data_in <= std_ulogic_vector(d_counter);			
+			end if;
 		end if;
 	end if;
 end process;

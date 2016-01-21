@@ -32,8 +32,8 @@ port
 	reset			: in	std_ulogic;
 	
 	write_data		: in	std_ulogic_vector(7 downto 0);
-	write			: in	std_ulogic;
-	write_full		: out	std_ulogic;
+	write_not_empty	: in	std_ulogic;
+	write_read		: out	std_ulogic;
 	
 	read_data		: out	std_ulogic_vector(7 downto 0);
 	read_valid		: out	std_ulogic
@@ -41,21 +41,33 @@ port
 end ft245_sync_if;
 
 architecture rtl of ft245_sync_if is
-	constant g_depth_log2 : natural := 2;
+
 	alias clock				: std_ulogic is clkout;
+
+	type state_e is
+	(
+		STATE_RESET,
+		STATE_IDLE,
+		STATE_WAIT_READ1,
+		STATE_WAIT_READ2,
+		STATE_READ,
+		STATE_WRITE_FIRST,
+		STATE_WRITE_FIFO,
+		STATE_WRITE_FAILED
+	);
+	
+	signal state			: state_e;
+	signal next_state		: state_e;
+	
 	signal oe				: std_ulogic;
-	signal read_data_sync	: std_ulogic_vector(read_data'range);
+	signal read				: std_ulogic;
 	signal write_data_sync	: std_ulogic_vector(write_data'range);
 	signal tx_not_full		: std_ulogic;
 	signal rx_not_empty		: std_ulogic;
-	signal ft_read			: std_ulogic;
 	signal ft_write			: std_ulogic;
 	signal ft_suspend		: std_ulogic;
-	signal write_try		: std_ulogic;
-	signal write_failed		: std_ulogic;
-	signal write_ok			: std_ulogic;
-	signal read_ok			: std_ulogic;
-	signal write_data_int	: std_ulogic_vector(write_data'range);
+	signal read_old			: std_ulogic;
+	signal read_old_old		: std_ulogic;
 	
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
@@ -79,24 +91,81 @@ siwu <= '1';
 -- Tristate
 adbus <= std_logic_vector(write_data_sync) when oe = '0' else (others => 'Z');
 
+state_machine: process(reset, clock)
+begin
+	if reset = '1' then
+		state <= STATE_RESET;
+	elsif rising_edge(clock) then
+		state <= next_state;
+	end if;
+end process;
+
+state_machine_next: process(state, write_not_empty, rx_not_empty, tx_not_full, ft_write)
+begin
+	next_state <= state;
+	
+	case state is
+		when STATE_RESET =>
+				next_state <= STATE_IDLE;
+
+		when STATE_IDLE =>
+			if write_not_empty = '1' then
+				next_state <= STATE_WRITE_FIRST;
+			end if;
+		
+			if rx_not_empty = '1' then
+				next_state <= STATE_WAIT_READ1;
+			end if;
+
+		when STATE_WAIT_READ1 =>
+			next_state <= STATE_WAIT_READ2;
+
+		when STATE_WAIT_READ2 =>
+			next_state <= STATE_READ;
+
+		when STATE_READ =>
+			if rx_not_empty = '0' then
+				next_state <= STATE_IDLE;
+			end if;
+			
+		when STATE_WRITE_FIRST =>
+			if tx_not_full ='1' and write_not_empty = '1' then
+				next_state <= STATE_WRITE_FIFO;
+			elsif tx_not_full ='0' and write_not_empty = '1' then
+				next_state <= STATE_IDLE;
+			else 
+				next_state <= STATE_IDLE;
+			end if;
+			
+		when STATE_WRITE_FIFO =>
+			if tx_not_full ='1' and write_not_empty = '1' then
+				next_state <= STATE_WRITE_FIFO;
+			elsif tx_not_full ='0' and write_not_empty = '1' then
+				next_state <= STATE_WRITE_FAILED;
+			else 
+				next_state <= STATE_IDLE;
+			end if;
+			
+		when STATE_WRITE_FAILED =>
+			next_state <= STATE_IDLE;
+	end case;
+end process;
+
 -- Synchronize input signals
 in_sample: process(reset, clock)
 begin
 	if reset = '1' then
-		read_data_sync	<= (others => '0');
+		read_data		<= (others => '0');
 		tx_not_full		<= '0';
 		rx_not_empty	<= '0';
 		ft_suspend		<= '0';
 	elsif rising_edge(clock) then
-		read_data_sync	<= std_ulogic_vector(adbus);
+		read_data		<= std_ulogic_vector(adbus);
 		tx_not_full		<= not txe_n;
 		rx_not_empty	<= not rxf_n;
 		ft_suspend		<= not suspend_n;
 	end if;
 end process;
-
-ft_read	<= rx_not_empty;
-oe		<= ft_read;
 
 -- Synchronize output signals
 out_sync: process(reset, clock)
@@ -107,50 +176,43 @@ begin
 		wr_n			<= '1';
 		oe_n			<= '1';
 	elsif rising_edge(clock) then
-		write_data_sync	<= write_data_int;
-		rd_n			<= not ft_read;
-		wr_n			<= not (ft_write and tx_not_full);
+		write_data_sync	<= write_data;
+		rd_n			<= not read;
+		wr_n			<= not ft_write;
 		oe_n			<= not oe;
 	end if;
 end process;
 
-in_sync: process(reset, clock)
+-- Old values
+old_values: process(reset, clock)
 begin
 	if reset = '1' then
-		read_data	<= (others => '0');
-		read_valid	<= '0';
-		read_ok		<= '0';
+		read_old		<= '0';
+		read_old_old	<= '0';
 	elsif rising_edge(clock) then
-		read_data	<= std_ulogic_vector(adbus);
-		read_ok		<= ft_read;
-		read_valid	<= read_ok;
+		read_old		<= read;
+		read_old_old	<= read_old;
 	end if;
 end process;
 
-try_out: process(reset, clock)
-begin
-	if reset = '1' then
-		write_try		<= '0';
-	elsif rising_edge(clock) then
-		write_try		<= ft_write and tx_not_full;
-	end if;	
-end process;
-write_failed	<= write_try and not tx_not_full;
-write_ok		<= write_try and tx_not_full;
+with state select oe <=
+		'1' when STATE_WAIT_READ1 | STATE_WAIT_READ2 | STATE_READ,
+		'0' when others;
 
-write_full		<= not tx_not_full;
-process(reset, clock)
-begin
-	if reset = '1' then
-		write_data_int			<= (others => '0');
-		ft_write				<= '0';
-	elsif rising_edge(clock) then
-		ft_write				<= '0';
-		if write = '1' then
-			write_data_int		<= write_data;
-			ft_write			<= '1';
-		end if;
-	end if;	
-end process;
+with state select read <=
+		'1' when STATE_WAIT_READ2 | STATE_READ,
+		'0' when others;
 
+with state select ft_write <=
+		'1' when STATE_WRITE_FIRST | STATE_WRITE_FIFO,
+		'0' when others;
+		
+with state select read_valid <=
+		read_old_old and rx_not_empty when STATE_READ,
+		'0' when others;
+		
+with state select write_read <=
+		write_not_empty and not(rx_not_empty) when STATE_WRITE_FIRST | STATE_WRITE_FIFO | STATE_IDLE,
+		'0' when others;
+		
 end rtl;
