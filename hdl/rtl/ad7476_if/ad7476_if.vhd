@@ -30,7 +30,46 @@ port
 end ad7476_if;
 
 architecture rtl of ad7476_if is
+	signal cs			: std_ulogic;
+	signal c_counter	: unsigned(2 downto 0);
+	signal w_counter	: unsigned(4 downto 0);
 begin
 
+n_cs <= not cs;
+
+bit_divider: process(reset, clock)
+begin
+	if reset = '1' then
+		c_counter <= (others => '0');
+	elsif rising_edge(clock) then
+		c_counter <= c_counter + 1;
+		if c_counter = 5 then
+			c_counter <= (others => '0');
+		end if;
+	end if;
+end process;
+sclk <= c_counter(c_counter'left);
+
+word_divider: process(reset, clock)
+begin
+	if reset = '1' then
+		w_counter <= (others => '0');
+	elsif rising_edge(clock) then
+		if c_counter = 0 then
+			w_counter <= w_counter + 1;
+			if w_counter = 19 then
+				w_counter <= (others => '0');
+			end if;
+		end if;
+	end if;
+end process;
+
+cs_gen: process(w_counter)
+begin
+	cs <= '0';
+	if w_counter < 15 then
+		cs <= '1';
+	end if;
+end process;
 
 end rtl;
