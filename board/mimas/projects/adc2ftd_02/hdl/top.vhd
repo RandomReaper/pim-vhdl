@@ -50,14 +50,12 @@ architecture rtl of top is
 	
 	signal read_data		: std_ulogic_vector(FT_DATA'range);
 	signal read_valid		: std_ulogic;
-	signal write_data		: std_ulogic_vector(FT_DATA'range);
-	signal write_read		: std_ulogic;
-	signal status_not_empty	: std_ulogic;
+	signal ftd_data			: std_ulogic_vector(FT_DATA'range);
+	signal ftd_read			: std_ulogic;
+	signal ftd_empty		: std_ulogic;
 	
 	signal adc_data			: std_ulogic_vector(g_parallel*12-1 downto 0);
 	signal adc_data_valid	: std_ulogic;
-	signal tx_data			: std_ulogic_vector(FT_DATA'range);
-	signal tx_data_valid	: std_ulogic;
 begin
 
 i_ft245: entity work.ft245_sync_if
@@ -75,12 +73,13 @@ port map
 	suspend_n		=> FT_nSUSPEND,
 	
 	reset			=> reset,
+	
 	read_data		=> read_data,
 	read_valid		=> read_valid,
 	
-	write_data		=> write_data,
-	write_read		=> write_read,
-	write_not_empty	=> status_not_empty
+	write_data		=> ftd_data,
+	write_read		=> ftd_read,
+	write_empty		=> ftd_empty
 );
 
 i_ad7476_p_if: entity work.ad7476_parallel_if
@@ -115,8 +114,9 @@ port map
 	adc_data		=> adc_data,
 	adc_data_valid	=> adc_data_valid,
 	
-	tx_data			=> tx_data,
-	tx_data_valid	=> tx_data_valid
+	ft_data			=> ftd_data,
+	ft_empty		=> ftd_empty,
+	ft_read			=> ftd_read
 );
 
 led_proc: process(reset, clock)

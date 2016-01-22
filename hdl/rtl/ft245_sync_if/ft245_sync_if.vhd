@@ -32,7 +32,7 @@ port
 	reset			: in	std_ulogic;
 	
 	write_data		: in	std_ulogic_vector(7 downto 0);
-	write_not_empty	: in	std_ulogic;
+	write_empty		: in	std_ulogic;
 	write_read		: out	std_ulogic;
 	
 	read_data		: out	std_ulogic_vector(7 downto 0);
@@ -100,7 +100,7 @@ begin
 	end if;
 end process;
 
-state_machine_next: process(state, write_not_empty, rx_not_empty, tx_not_full, ft_write)
+state_machine_next: process(state, write_empty, rx_not_empty, tx_not_full, ft_write)
 begin
 	next_state <= state;
 	
@@ -109,7 +109,7 @@ begin
 				next_state <= STATE_IDLE;
 
 		when STATE_IDLE =>
-			if write_not_empty = '1' then
+			if write_empty = '0' then
 				next_state <= STATE_WRITE_FIRST;
 			end if;
 		
@@ -129,18 +129,18 @@ begin
 			end if;
 			
 		when STATE_WRITE_FIRST =>
-			if tx_not_full ='1' and write_not_empty = '1' then
+			if tx_not_full ='1' and write_empty = '0' then
 				next_state <= STATE_WRITE_FIFO;
-			elsif tx_not_full ='0' and write_not_empty = '1' then
+			elsif tx_not_full ='0' and write_empty = '0' then
 				next_state <= STATE_IDLE;
 			else 
 				next_state <= STATE_IDLE;
 			end if;
 			
 		when STATE_WRITE_FIFO =>
-			if tx_not_full ='1' and write_not_empty = '1' then
+			if tx_not_full ='1' and write_empty = '0' then
 				next_state <= STATE_WRITE_FIFO;
-			elsif tx_not_full ='0' and write_not_empty = '1' then
+			elsif tx_not_full ='0' and write_empty = '0' then
 				next_state <= STATE_WRITE_FAILED;
 			else 
 				next_state <= STATE_IDLE;
@@ -212,7 +212,7 @@ with state select read_valid <=
 		'0' when others;
 		
 with state select write_read <=
-		write_not_empty and not(rx_not_empty) when STATE_WRITE_FIRST | STATE_WRITE_FIFO | STATE_IDLE,
+		not write_empty and not(rx_not_empty) when STATE_WRITE_FIRST | STATE_WRITE_FIFO | STATE_IDLE,
 		'0' when others;
 		
 end rtl;
