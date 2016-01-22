@@ -5,6 +5,10 @@
 -- author(s)	: marc at pignat dot org
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
+--
+-- limitations	: Only implemented for "N downto 0" ranges (with N > 0)
+--
+-- remarks		: MSB first !
 -----------------------------------------------------------------------------
 
 library ieee;
@@ -56,6 +60,13 @@ end width_changer;
 architecture rtl of width_changer is
 
 begin
+	assert
+		    (in_data'right = 0)
+		and (out_data'right = 0)
+		and (in_data'left > 0)
+		and (out_data'left > 0)
+	report "Unsupported feature, feel free to improve this code" severity failure;
+
 smaller: if out_data'left < in_data'left generate
 	assert (in_data'left mod out_data'left) = 0 report "width_changer smaller : modulo size failed" severity failure;
 
