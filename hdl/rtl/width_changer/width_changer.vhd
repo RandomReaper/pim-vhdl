@@ -86,7 +86,7 @@ end generate;
 
 bigger: if out_data'left > in_data'left generate
 	assert (out_data'left mod in_data'left) = 0 report "width_changer bigger : modulo size failed" severity failure;
-	i_smaller: entity work.width_changer_internal(rtl_bigger)
+	i_bigger: entity work.width_changer_internal(rtl_bigger)
 	port map
 	(
 		clock			=> clock,
