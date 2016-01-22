@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2016-01-22T11:13:29</DateModified>
+  <DateModified>2016-01-22T13:20:31</DateModified>
   <ModuleName>tb</ModuleName>
   <SummaryTimeStamp>Unknown</SummaryTimeStamp>
-  <SavedFilePath>/home/pim/git/hw/tb/adc2ftd_v02/iseconfig/tb.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/pim/git/hw/tb/adc2ftd_v02/tmp/</ImplementationReportsDirectory>
+  <SavedFilePath>/home/pim/git/hw/board/mimas/projects/adc2ftd_02/tb/full/iseconfig/tb.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/pim/git/hw/board/mimas/projects/adc2ftd_02/tb/full/tmp/</ImplementationReportsDirectory>
   <DateInitialized>2016-01-19T13:13:16</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
