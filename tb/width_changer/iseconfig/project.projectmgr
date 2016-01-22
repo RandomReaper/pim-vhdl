@@ -58,13 +58,13 @@
          <ClosedNodesVersion>2</ClosedNodesVersion>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem>tb - bhv (/home/pim/git/hw/tb/ft245_sync_if_counter/hdl/tb.vhd)</SelectedItem>
+         <SelectedItem>xc6slx9-3tqg144</SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff0000000000000001000000010000000000000000000000000000000002020000000100000001000000640000017c000000020000000000000000000000000200000064ffffffff0000008100000003000000020000017c0000000100000003000000000000000100000003</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000202000000010000000100000064000001f1000000020000000000000000000000000200000064ffffffff000000810000000300000002000001f10000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >true</UserChangedColumnWidths>
-      <CurrentItem>tb - bhv (/home/pim/git/hw/tb/ft245_sync_if_counter/hdl/tb.vhd)</CurrentItem>
+      <CurrentItem>xc6slx9-3tqg144</CurrentItem>
    </ItemView>
    <ItemView engineview="BehavioralSim" sourcetype="" guiview="Process" >
       <ClosedNodes>
