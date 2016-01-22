@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pim/git/hw/tb/ad7476/tmp/tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="16" />
+   <wvobject fp_name="/tb/i_adc_if/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/prescaler" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">prescaler</obj_property>
+      <obj_property name="ObjectShortName">prescaler</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider24" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/sclk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sclk</obj_property>
+      <obj_property name="ObjectShortName">sclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/n_cs" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">n_cs</obj_property>
+      <obj_property name="ObjectShortName">n_cs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/sdata" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sdata</obj_property>
+      <obj_property name="ObjectShortName">sdata</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data[11:0]</obj_property>
+      <obj_property name="ObjectShortName">data[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/data_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data_valid</obj_property>
+      <obj_property name="ObjectShortName">data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/cs" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">cs</obj_property>
+      <obj_property name="ObjectShortName">cs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/c_counter" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">c_counter[1:0]</obj_property>
+      <obj_property name="ObjectShortName">c_counter[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/b_counter" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">b_counter[4:0]</obj_property>
+      <obj_property name="ObjectShortName">b_counter[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/sclk_int" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sclk_int</obj_property>
+      <obj_property name="ObjectShortName">sclk_int</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/sclk_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sclk_old</obj_property>
+      <obj_property name="ObjectShortName">sclk_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/sample" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sample</obj_property>
+      <obj_property name="ObjectShortName">sample</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_adc_if/prescaler" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">prescaler</obj_property>
+      <obj_property name="ObjectShortName">prescaler</obj_property>
+   </wvobject>
+</wave_config>
