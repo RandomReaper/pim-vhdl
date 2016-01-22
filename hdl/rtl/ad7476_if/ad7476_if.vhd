@@ -16,7 +16,7 @@ library ieee;
 entity ad7476_if is
 generic
 (
-	prescaler : natural := 1
+	g_prescaler : natural := 1
 );
 port
 (
@@ -37,7 +37,7 @@ end ad7476_if;
 
 architecture rtl of ad7476_if is
 	signal cs			: std_ulogic;
-	signal c_counter	: unsigned((2**prescaler)-1 downto 0);
+	signal c_counter	: unsigned((2**g_prescaler)-1 downto 0);
 	signal b_counter	: unsigned(4 downto 0);
 	
 	signal sclk_int		: std_ulogic;

@@ -12,6 +12,10 @@ library ieee;
 	use ieee.numeric_std.all;
 	
 entity tb is
+generic
+(
+	g_parallel	: natural := 2
+);
 end tb;
 
 architecture bhv of tb is
@@ -20,13 +24,14 @@ architecture bhv of tb is
 	
 	signal sclk				: std_ulogic;
 	signal n_cs				: std_ulogic;
-	signal sdata			: std_ulogic;
+	signal sdata			: std_ulogic_vector(g_parallel-1 downto 0);
 begin
 
-i_adc_if : entity work.ad7476_if
+i_adc_if : entity work.ad7476_parallel_if
 generic map
 (
-	prescaler	=> 1
+	g_prescaler	=> 1,
+	g_parallel	=> g_parallel
 )
 port map
 (
@@ -41,7 +46,11 @@ port map
 	data_valid	=> open
 );
 
-i_adc_sim : entity work.ad7476_sim
+i_adc_sim : entity work.ad7476_parallel_sim
+generic map
+(
+	g_parallel	=> g_parallel
+)
 port map
 (
 	sclk	=> sclk,
