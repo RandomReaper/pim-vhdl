@@ -39,45 +39,44 @@ architecture bhv of ft245_sync_sim is
 	signal data_in		: std_ulogic_vector(adbus'range);
 	signal data_in_pre	: std_ulogic_vector(adbus'range);
 	signal data_in_in	: std_ulogic_vector(adbus'range);
+	signal d_data_out_in	: std_ulogic_vector(adbus'range);
 	signal clock		: std_ulogic;
 	signal tx_full		: std_ulogic;
-	signal tx_full_old	: std_ulogic;
-	signal tx_counter	: unsigned(3 downto 0);
 	signal status_empty	: std_ulogic;
 	signal status_empty_in	: std_ulogic;
 	signal status_full	: std_ulogic;
 	signal rd_empty		: std_ulogic;
 	signal rd_old		: std_ulogic;
+	signal wr			: std_ulogic;
+	signal tx_enable	: std_ulogic;
+	signal tx_fifo_empty: std_ulogic;
+	signal txe			: std_ulogic;
+	
+	
 begin
 
 reset		<= not reset_n;
 oe			<= not oe_n;
+wr			<= not wr_n and txe;
 clkout		<= clock;
 rxf_n		<= status_empty;
-txe_n		<= tx_full;
+txe_n		<= not txe;
 suspend_n	<= '0';
 d_data_full <= status_full;
 
 tx_counter_gen: process(reset, clock)
 begin
 	if reset = '1' then
-		tx_counter <= (others => '0');
+		tx_enable	<= '0';
+		txe			<= '0';
 	elsif rising_edge(clock) then
-		tx_counter <= tx_counter + 1;
-	end if;
-end process;
-tx_full <= '1' when tx_counter = 0 else '0';
-
-debug_out: process(reset, clock)
-begin
-	if reset = '1' then
-		d_data_out <= (others => '-');
-		tx_full_old <= '0';
-	elsif rising_edge(clock) then
-		tx_full_old <= tx_full;
-		d_data_out <= (others => '-');
-		if tx_full = '0' and wr_n = '0' then
-			d_data_out <= std_ulogic_vector(adbus);
+		if tx_full = '1' then
+			tx_enable <= '1';
+			txe		  <= '0';
+		end if;
+		if tx_fifo_empty = '1' then
+			tx_enable <= '0';
+			txe		  <= '1';
 		end if;
 	end if;
 end process;
@@ -94,7 +93,7 @@ i_clock: entity work.clock
 		clock	=> clock
 	);
 	
-i_tx_fifo: entity work.fifo
+i_from_host_fifo: entity work.fifo
 generic map
 (
 	g_depth_log2 => 4
@@ -116,12 +115,42 @@ port map
 	--status
 	status_full	=> status_full,
 	status_empty	=> status_empty_in
-	--status_write_error	: out std_ulogic;
-	--status_read_error	: out std_ulogic;
-	
-	--free 				: out std_ulogic_vector(g_depth_log2 downto 0);
-	--used 				: out std_ulogic_vector(g_depth_log2 downto 0)	
+);
 
+data_out_gen: process(reset, clock)
+begin
+	if reset = '1' then
+		d_data_out	<= (others => '-');
+	elsif rising_edge(clock) then
+		d_data_out	<= (others => '-');
+		if tx_enable = '1' then
+			d_data_out <= d_data_out_in;
+		end if;
+	end if;
+end process;
+
+i_to_host_fifo: entity work.fifo
+generic map
+(
+	g_depth_log2 => 2
+)
+port map
+(
+	clock		=> clock,
+	reset		=> reset,
+
+	-- input
+	sync_reset	=> '0',
+	write		=> wr,
+	write_data	=> std_ulogic_vector(adbus),
+
+	-- outputs
+	read		=> tx_enable,
+	read_data	=> d_data_out_in,
+
+	--status
+	status_full	=> tx_full,
+	status_empty	=> tx_fifo_empty
 );
 
 iface:process(reset, clock)
