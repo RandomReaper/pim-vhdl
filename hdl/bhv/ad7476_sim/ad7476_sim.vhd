@@ -31,12 +31,14 @@ begin
 
 cs <= not(n_cs);
 
-gen_data: process(reset, cs)
+gen_data: process(reset, clock)
 begin
 	if reset = '1' then
-		data <= (0 => '1', others => '0');
-	elsif falling_edge(cs) then
-		data <= rotate_left(data, 1);
+		data <= (data'left => '1', others => '0');
+	elsif falling_edge(clock) then
+		if cs = '1' and cs_old = '0' then
+			data <= rotate_left(data, 1);
+		end if;
 	end if;
 end process;
 
@@ -59,10 +61,10 @@ begin
 		
 		case to_integer(counter) is
 			when 3+0 to 3+11 =>
-				sdata <= data(to_integer(counter-3));
+				sdata <= data(11-to_integer(counter-3));
 			
 			when others =>
-				sdata <= 'U';
+				sdata <= '0';
 		end case;
 		
 	end if;

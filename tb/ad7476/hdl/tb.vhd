@@ -24,6 +24,10 @@ architecture bhv of tb is
 begin
 
 i_adc_if : entity work.ad7476_if
+generic map
+(
+	prescaler	=> 1
+)
 port map
 (
 	reset	=> reset,
@@ -48,7 +52,7 @@ port map
 i_clock : entity work.clock
 generic map
 (
-	frequency	=> 120.0e6
+	frequency	=> 80.0e6
 )
 port map
 (

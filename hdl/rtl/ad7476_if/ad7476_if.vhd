@@ -6,12 +6,18 @@
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
 --
+-- limitations	: uses a 2^prescaler clock (prescaler >= 1)
+--
 -----------------------------------------------------------------------------
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
 entity ad7476_if is
+generic
+(
+	prescaler : natural := 1
+);
 port
 (
 	clock	: in	std_ulogic;
@@ -31,43 +37,78 @@ end ad7476_if;
 
 architecture rtl of ad7476_if is
 	signal cs			: std_ulogic;
-	signal c_counter	: unsigned(2 downto 0);
-	signal w_counter	: unsigned(4 downto 0);
+	signal c_counter	: unsigned((2**prescaler)-1 downto 0);
+	signal b_counter	: unsigned(4 downto 0);
+	
+	signal sclk_int		: std_ulogic;
+	signal sclk_old		: std_ulogic;
+	signal sample		: std_ulogic;
 begin
 
+-- Internal to external signal mapping
 n_cs <= not cs;
+sclk <= sclk_int;
 
-bit_divider: process(reset, clock)
+clock_prescale: process(reset, clock)
 begin
 	if reset = '1' then
 		c_counter <= (others => '0');
 	elsif rising_edge(clock) then
 		c_counter <= c_counter + 1;
-		if c_counter = 5 then
-			c_counter <= (others => '0');
-		end if;
 	end if;
 end process;
-sclk <= c_counter(c_counter'left);
 
-word_divider: process(reset, clock)
+sclk_int <= c_counter(c_counter'left);
+
+bit_counter: process(reset, clock)
 begin
 	if reset = '1' then
-		w_counter <= (others => '0');
+		b_counter <= (others => '0');
 	elsif rising_edge(clock) then
 		if c_counter = 0 then
-			w_counter <= w_counter + 1;
-			if w_counter = 19 then
-				w_counter <= (others => '0');
+			b_counter <= b_counter + 1;
+			if b_counter = 19 then
+				b_counter <= (others => '0');
 			end if;
 		end if;
 	end if;
 end process;
 
-cs_gen: process(w_counter)
+sclk_rising: process(reset, clock)
+begin
+	if reset = '1' then
+		sclk_old <= '0';
+	elsif rising_edge(clock) then
+		sclk_old <= sclk_int;
+	end if;
+end process;
+sample <= sclk_int and not sclk_old;
+
+sample_gen: process(reset, clock)
+begin
+	if reset = '1' then
+		data	<= (others => '0');
+		data_valid	<= '0';
+	elsif rising_edge(clock) then
+		data_valid <= '0';
+
+		if sample = '1' then
+			case to_integer(b_counter) is
+				when 5+0 to 5+10 =>
+					data(11-to_integer(b_counter-5)) <= sdata;
+				when 5+11 =>
+					data(11-to_integer(b_counter-5)) <= sdata;
+					data_valid <= '1';
+				when others =>
+			end case;
+		end if;
+	end if;
+end process;
+
+cs_gen: process(b_counter)
 begin
 	cs <= '0';
-	if w_counter < 15 then
+	if b_counter < 15 then
 		cs <= '1';
 	end if;
 end process;
