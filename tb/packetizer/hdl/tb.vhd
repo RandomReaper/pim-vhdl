@@ -18,18 +18,23 @@ architecture bhv of tb is
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
 	
-	signal counter			: unsigned(9 downto 0);
+	signal counter			: unsigned(7 downto 0);
 	signal ft_read			: std_ulogic;
 	signal ft_empty			: std_ulogic;
 	signal ft_valid			: std_ulogic;
+	signal adc_data			: std_ulogic_vector(7 downto 0);
 	signal adc_data_valid	: std_ulogic;
+	signal read_data		: std_ulogic_vector(7 downto 0);
+	signal status_full		: std_ulogic;
+	signal d_in				: std_ulogic_vector(7 downto 0);
+	signal d_out			: std_ulogic_vector(7 downto 0);
 begin
 
 i_packetizer : entity work.packetizer
 generic map
 (
 	g_nrdata_log2		=> 3,
-	g_depth_in_log2		=> 2,
+	g_depth_in_log2		=> 3,
 	g_depth_out_log2	=> 5
 )
 port map
@@ -37,23 +42,28 @@ port map
 	reset	=> reset,
 	clock	=> clock,
 	
-	adc_data		=> std_ulogic_vector(counter(counter'left downto counter'left-7)),
-	adc_data_valid	=> adc_data_valid,
-	ft_empty		=> ft_empty,
-	ft_data			=> open,
-	ft_read			=> ft_read
+	write_data		=> adc_data,
+	write			=> adc_data_valid,
+	status_empty	=> ft_empty,
+	read_data		=> read_data,
+	read			=> ft_read,
+	status_full		=> status_full
 );
 
 ft_read <= not ft_empty;
+adc_data <= std_ulogic_vector(counter);
 
-adc_data_valid <= '1' when counter(counter'left-8 downto 0) = 0 else '0';
-
+d_out <= read_data when ft_valid ='1' else (others => '-');
+d_in <= adc_data when adc_data_valid ='1' else (others => '-');
+adc_data_valid <= not status_full;
 process(reset, clock)
 begin
 	if reset = '1' then
 		counter <= (others => '0');
 	elsif rising_edge(clock) then
-		counter <= counter + 1;
+		if status_full = '0' then
+			counter <= counter + 1;
+		end if;
 	end if;
 end process;
 

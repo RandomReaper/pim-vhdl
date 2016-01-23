@@ -6,8 +6,6 @@
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
 --
--- limitations	: uses a 2^prescaler clock (prescaler >= 1)
---
 -----------------------------------------------------------------------------
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -25,21 +23,26 @@ port
 	clock			: in	std_ulogic;
 	reset			: in	std_ulogic;
 	
-	adc_data		: in	std_ulogic_vector(7 downto 0);
-	adc_data_valid	: in	std_ulogic;
-	ft_empty		: out	std_ulogic;
-	ft_data			: out	std_ulogic_vector(7 downto 0);
-	ft_read			: in	std_ulogic
+	write			: in	std_ulogic;
+	write_data		: in	std_ulogic_vector(7 downto 0);
+
+	read_data		: out	std_ulogic_vector(7 downto 0);
+	read			: in	std_ulogic;
+	
+	status_empty	: out	std_ulogic;
+	status_full		: out	std_ulogic
 );
 end packetizer;
 
 architecture rtl of packetizer is
 	signal tx_write		: std_ulogic;
-	signal tx_data		: std_ulogic_vector(ft_data'range);
+	signal tx_data		: std_ulogic_vector(read_data'range);
+	signal tx_full		: std_ulogic;
 	signal rx_read		: std_ulogic;
 	signal rx_read_old	: std_ulogic;
 	signal rx_empty		: std_ulogic;
-	signal rx_data		: std_ulogic_vector(adc_data'range);
+	signal rx_data		: std_ulogic_vector(write_data'range);
+	signal rx_full		: std_ulogic;
 	
 	signal packet_count : unsigned(7 downto 0);
 	signal in_count		: unsigned(g_nrdata_log2 downto 0);
@@ -61,7 +64,7 @@ architecture rtl of packetizer is
 	signal state		: state_t;
 	signal next_state	: state_t;
 		
-	signal header		: std_ulogic_vector(ft_data'range);
+	signal header		: std_ulogic_vector(read_data'range);
 begin
 
 state_machine: process(reset, clock)
@@ -100,14 +103,14 @@ begin
 				next_state.counter <= state.counter+1;
 			end if;
 			
-			if state.counter = (2**g_nrdata_log2) then
+			if state.counter = (2**g_nrdata_log2) - 1 then
 				next_state.name <= STATE_IDLE;
 				next_state.counter <= (others => '0');
 			end if;
 	end case;
 end process;
 
-with state.name select rx_read <=
+with next_state.name select rx_read <=
 	not rx_empty	when STATE_DATA,
 	'0'				when others;
 	
@@ -141,6 +144,8 @@ with to_integer(state.counter) select header <=
 	x"00"			when 11,
 	
 	(others => '0')	when others;
+
+status_full <= rx_full or tx_full;
 
 rx_read_old_gen: process(reset, clock)
 begin
@@ -183,12 +188,13 @@ port map
 	reset		=> reset,
 	clock		=> clock,
 	sync_reset	=> '0',
-	write		=> adc_data_valid,
-	write_data	=> adc_data,
+	write		=> write,
+	write_data	=> write_data,
 
 	read		=> rx_read,
 	read_data	=> rx_data,
-	status_empty=> rx_empty
+	status_empty=> rx_empty,
+	status_full	=> rx_full
 );
 
 i_fifo_out: entity work.fifo
@@ -204,9 +210,10 @@ port map
 	write		=> tx_write,
 	write_data	=> tx_data,
 
-	read		=> ft_read,
-	read_data	=> ft_data,
-	status_empty=> ft_empty
+	read		=> read,
+	read_data	=> read_data,
+	status_empty=> status_empty,
+	status_full	=> tx_full
 );
 
 end rtl;

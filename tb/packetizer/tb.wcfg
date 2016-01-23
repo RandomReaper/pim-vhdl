@@ -11,7 +11,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="10" />
+   <WVObjectSize size="19" />
    <wvobject fp_name="/tb/i_packetizer/clock" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -20,39 +20,81 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_packetizer/adc_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">adc_data[7:0]</obj_property>
-      <obj_property name="ObjectShortName">adc_data[7:0]</obj_property>
+   <wvobject fp_name="divider43" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/d_in" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d_in[7:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_packetizer/adc_data_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">adc_data_valid</obj_property>
-      <obj_property name="ObjectShortName">adc_data_valid</obj_property>
+   <wvobject fp_name="/tb/d_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d_out[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_packetizer/ft_empty" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">ft_empty</obj_property>
-      <obj_property name="ObjectShortName">ft_empty</obj_property>
+   <wvobject fp_name="/tb/i_packetizer/i_fifo_in/read_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">read_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">read_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_packetizer/state.name" type="other" db_ref_id="1">
       <obj_property name="ElementShortName">.name</obj_property>
       <obj_property name="ObjectShortName">state.name</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_packetizer/ft_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">ft_data[7:0]</obj_property>
-      <obj_property name="ObjectShortName">ft_data[7:0]</obj_property>
+   <wvobject fp_name="/tb/i_packetizer/i_fifo_out/write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write</obj_property>
+      <obj_property name="ObjectShortName">write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/i_fifo_in/read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read</obj_property>
+      <obj_property name="ObjectShortName">read</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider44" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write</obj_property>
+      <obj_property name="ObjectShortName">write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/write_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data[7:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/ft_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">ft_valid</obj_property>
-      <obj_property name="ObjectShortName">ft_valid</obj_property>
+   <wvobject fp_name="/tb/i_packetizer/read_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">read_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">read_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_packetizer/ft_read" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">ft_read</obj_property>
-      <obj_property name="ObjectShortName">ft_read</obj_property>
+   <wvobject fp_name="/tb/i_packetizer/read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read</obj_property>
+      <obj_property name="ObjectShortName">read</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_packetizer/in_count" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">in_count[3:0]</obj_property>
-      <obj_property name="ObjectShortName">in_count[3:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   <wvobject fp_name="/tb/i_packetizer/status_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">status_empty</obj_property>
+      <obj_property name="ObjectShortName">status_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/i_fifo_in/write_error" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_error</obj_property>
+      <obj_property name="ObjectShortName">write_error</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/status_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">status_full</obj_property>
+      <obj_property name="ObjectShortName">status_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/tx_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_full</obj_property>
+      <obj_property name="ObjectShortName">tx_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/rx_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_full</obj_property>
+      <obj_property name="ObjectShortName">rx_full</obj_property>
    </wvobject>
 </wave_config>
