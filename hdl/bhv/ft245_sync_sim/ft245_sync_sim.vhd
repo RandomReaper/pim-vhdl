@@ -49,10 +49,9 @@ architecture bhv of ft245_sync_sim is
 	signal rd_old		: std_ulogic;
 	signal wr			: std_ulogic;
 	signal tx_enable	: std_ulogic;
+	signal tx_enable_old: std_ulogic;
 	signal tx_fifo_empty: std_ulogic;
 	signal txe			: std_ulogic;
-	
-	
 begin
 
 reset		<= not reset_n;
@@ -69,7 +68,9 @@ begin
 	if reset = '1' then
 		tx_enable	<= '0';
 		txe			<= '0';
+		tx_enable_old<= '0';
 	elsif rising_edge(clock) then
+		tx_enable_old<= tx_enable;
 		if tx_full = '1' then
 			tx_enable <= '1';
 			txe		  <= '0';
@@ -123,7 +124,7 @@ begin
 		d_data_out	<= (others => '-');
 	elsif rising_edge(clock) then
 		d_data_out	<= (others => '-');
-		if tx_enable = '1' then
+		if tx_enable = '1' and tx_enable_old = '1' then
 			d_data_out <= d_data_out_in;
 		end if;
 	end if;
@@ -132,7 +133,7 @@ end process;
 i_to_host_fifo: entity work.fifo
 generic map
 (
-	g_depth_log2 => 2
+	g_depth_log2 => 4
 )
 port map
 (

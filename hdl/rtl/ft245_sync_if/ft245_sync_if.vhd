@@ -51,9 +51,9 @@ architecture rtl of ft245_sync_if is
 		STATE_WAIT_READ1,
 		STATE_WAIT_READ2,
 		STATE_READ,
-		STATE_WRITE_FIRST,
-		STATE_WRITE_FIFO,
-		STATE_WRITE_FAILED
+		STATE_WRITE,
+		STATE_WRITE_FAILED,
+		STATE_WRITE_OLD
 	);
 	
 	signal state			: state_e;
@@ -68,6 +68,11 @@ architecture rtl of ft245_sync_if is
 	signal ft_suspend		: std_ulogic;
 	signal read_old			: std_ulogic;
 	signal read_old_old		: std_ulogic;
+	
+	type old_t is array(3 downto 0) of std_ulogic_vector(write_data'range);
+	signal failed			: std_ulogic;
+	signal write_data_old	: old_t;
+	signal old_counter		: unsigned(1 downto 0);
 	
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
@@ -100,7 +105,7 @@ begin
 	end if;
 end process;
 
-state_machine_next: process(state, write_empty, rx_not_empty, tx_not_full, ft_write)
+state_machine_next: process(state, write_empty, rx_not_empty, tx_not_full, ft_write, failed, old_counter)
 begin
 	next_state <= state;
 	
@@ -109,8 +114,12 @@ begin
 				next_state <= STATE_IDLE;
 
 		when STATE_IDLE =>
-			if write_empty = '0' then
-				next_state <= STATE_WRITE_FIRST;
+			if write_empty = '0' and tx_not_full = '1' then
+				next_state <= STATE_WRITE;
+			end if;
+		
+			if failed = '1' and tx_not_full = '1' then
+				next_state <= STATE_WRITE_OLD;
 			end if;
 		
 			if rx_not_empty = '1' then
@@ -128,18 +137,14 @@ begin
 				next_state <= STATE_IDLE;
 			end if;
 			
-		when STATE_WRITE_FIRST =>
-			if tx_not_full ='1' and write_empty = '0' then
-				next_state <= STATE_WRITE_FIFO;
-			elsif tx_not_full ='0' and write_empty = '0' then
-				next_state <= STATE_IDLE;
-			else 
+		when STATE_WRITE_OLD =>
+			if old_counter = write_data_old'left then
 				next_state <= STATE_IDLE;
 			end if;
 			
-		when STATE_WRITE_FIFO =>
+		when STATE_WRITE =>
 			if tx_not_full ='1' and write_empty = '0' then
-				next_state <= STATE_WRITE_FIFO;
+				next_state <= STATE_WRITE;
 			elsif tx_not_full ='0' and write_empty = '0' then
 				next_state <= STATE_WRITE_FAILED;
 			else 
@@ -177,6 +182,9 @@ begin
 		oe_n			<= '1';
 	elsif rising_edge(clock) then
 		write_data_sync	<= write_data;
+		if state = STATE_WRITE_OLD then
+			write_data_sync <= write_data_old(write_data_old'left);
+		end if;
 		rd_n			<= not read;
 		wr_n			<= not ft_write;
 		oe_n			<= not oe;
@@ -204,15 +212,48 @@ with state select read <=
 		'0' when others;
 
 with state select ft_write <=
-		'1' when STATE_WRITE_FIRST | STATE_WRITE_FIFO,
+		tx_not_full when STATE_WRITE | STATE_WRITE_OLD,
 		'0' when others;
 		
 with state select read_valid <=
 		read_old_old and rx_not_empty when STATE_READ,
 		'0' when others;
 		
-with state select write_read <=
-		not write_empty and not(rx_not_empty) when STATE_WRITE_FIRST | STATE_WRITE_FIFO | STATE_IDLE,
+with next_state select write_read <=
+		tx_not_full when STATE_WRITE,
 		'0' when others;
+		
+process(reset, clock)
+begin
+	if reset = '1' then
+		write_data_old <= (others => (others => '0'));
+		failed <= '0';
+		old_counter <= (others => '0');
+	elsif rising_edge(clock) then
+
+		if state = STATE_WRITE then
+			for i in write_data_old'left downto 1 loop
+				write_data_old(i) <= write_data_old(i-1);
+			end loop;
+			write_data_old(0) <= write_data;
+		end if;
+		
+		if state = STATE_WRITE and next_state = STATE_WRITE_FAILED then
+			failed <= '1';
+		end if;
+
+		if state = STATE_WRITE_OLD and next_state = STATE_IDLE then
+			old_counter <= (others => '0');
+			failed <= '0';
+		end if;
+		
+		if state = STATE_WRITE_OLD then
+			old_counter <= old_counter + 1;
+			for i in write_data_old'left downto 1 loop
+				write_data_old(i) <= write_data_old(i-1);
+			end loop;
+		end if;
+	end if;
+end process;
 		
 end rtl;

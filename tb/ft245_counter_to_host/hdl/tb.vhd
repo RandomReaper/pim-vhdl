@@ -41,74 +41,22 @@ architecture bhv of tb is
 	signal counter_valid	: std_ulogic;
 begin
 
-reset_n <= not reset;
-
-i_ft_if : entity work.ft245_sync_if
+i_top : entity work.top
 port map
 (
-	adbus			=> adbus,
-	rxf_n			=> rxf_n,
-	txe_n			=> txe_n,
-	rd_n			=> rd_n,
-	wr_n			=> wr_n,
-	clkout			=> clock,
-	oe_n			=> oe_n,
-	siwu			=> siwu,
-	reset_n			=> '0',
-	suspend_n		=> suspend_n,
-	
-	reset			=> reset,
-	read_data		=> open,
-	read_valid		=> open,
-	
-	write_data		=> write_data,
-	write_read		=> write_read,
-	write_empty		=> status_empty
+	adbus		=> adbus,
+	rxf_n		=> rxf_n,
+	txe_n		=> txe_n,
+	rd_n		=> rd_n,
+	wr_n		=> wr_n,
+	clkout		=> clock,
+	oe_n		=> oe_n,
+	siwu		=> siwu,
+	reset_n		=> reset_n,
+	suspend_n	=> suspend_n,
+
+	reset		=> reset
 );
-
-i_fifo : entity work.fifo
-generic map
-(
-	g_depth_log2 => 4
-)
-port map
-(
-	clock		=> clock,
-	reset		=> reset,
-
-	-- input
-	sync_reset	=> '0',
-	write		=> counter_valid,
-	write_data	=> std_ulogic_vector(counter),
-
-	-- outputs
-	read		=> write_read,
-	read_data	=> write_data,
-
-	--status
-	status_full	=> status_full,
-	status_empty	=> status_empty
-	--status_write_error	: out std_ulogic;
-	--status_read_error	: out std_ulogic;
-	
-	--free 				: out std_ulogic_vector(g_depth_log2 downto 0);
-	--used 				: out std_ulogic_vector(g_depth_log2 downto 0)	
-
-);
-
-gen_data: process(reset, clock)
-begin
-	if reset = '1' then
-		counter <= (others => '1');
-		counter_valid <= '0';
-	elsif rising_edge(clock) then
-		counter_valid <= '0';
-		if status_full = '0' then
-			counter <= counter + 1;
-			counter_valid <= '1';
-		end if;
-	end if;
-end process;
 
 i_ft_sim : entity work.ft245_sync_sim
 port map

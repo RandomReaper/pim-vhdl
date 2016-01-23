@@ -26,15 +26,14 @@ end top_hw;
 architecture bhv of top_hw is
 	alias clock			: std_ulogic is FT_CLKOUT;
 	signal reset		: std_ulogic;
-	
-	signal write_data	: std_ulogic_vector(FT_DATA'range);
-	signal write		: std_ulogic;
-	signal write_full	: std_ulogic;
-	signal read_data	: std_ulogic_vector(FT_DATA'range);
-	signal read_valid	: std_ulogic;
 begin
 
-i_ft245_sync_if : entity work.ft245_sync_if
+
+
+-- FIXME reset should be generated
+reset <= '0';
+
+i_top : entity work.top
 port map
 (
 	-- Interface to the ftdi chip
@@ -49,40 +48,10 @@ port map
 	reset_n			=> FT_nRESET, 
 	suspend_n		=> FT_nSUSPEND,
 	
-	-- Interface to the internal logic
 	reset			=> reset,
 	
-	write_data		=> write_data,
-	write			=> write,
-	write_full		=> write_full,
-	
-	read_data		=> read_data,
-	read_valid		=> read_valid
+	led				=> led
 );
-
--- FIXME reset should be generated
-reset <= '0';
-
-i_top : entity work.top
-port map
-(
-	clock			=> FT_CLKOUT,
-	reset			=> reset,
-	data			=> write_data,
-	write_full		=> write_full,
-	write			=> write
-);
-
-led_out: process(reset, clock)
-begin
-	if reset = '1' then
-		led <= (others => '0');
-	elsif rising_edge(clock) then
-		if read_valid = '1' then
-			led <= read_data;
-		end if;
-	end if;
-end process;
 
 end bhv;
 

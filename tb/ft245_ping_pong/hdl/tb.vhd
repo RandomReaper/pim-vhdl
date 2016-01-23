@@ -130,7 +130,7 @@ begin
 		d_data_write <= '0';
 		if d_data_full = '0' then
 			d_counter <= d_counter + 1;
-			if d_counter(d_counter'left downto d_counter'left-4) = 0 then
+			if d_counter(d_counter'left downto d_counter'left-3) = 0 then
 				d_data_write <= '1';
 				d_data_in <= std_ulogic_vector(d_counter);			
 			end if;

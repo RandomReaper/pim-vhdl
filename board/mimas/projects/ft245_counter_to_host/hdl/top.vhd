@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: top.vhd 
 --
--- brief		: Test bench
+-- brief		: Counter to ft245
 -- author(s)	: marc at pignat dot org
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
@@ -11,21 +11,29 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 	
-entity tb is
-end tb;
+entity top is
+port
+(
+	adbus			: inout	std_logic_vector(7 downto 0);
+	rxf_n			: in	std_ulogic;
+	txe_n			: in	std_ulogic;
+	rd_n			: out	std_ulogic;
+	wr_n			: out	std_ulogic;
+	clkout			: in	std_ulogic;
+	oe_n			: out	std_ulogic;
+	siwu			: out	std_ulogic;
+	reset_n			: out	std_ulogic;
+	suspend_n		: in	std_ulogic;
+	
+	led				: out	std_ulogic_vector(7 downto 0);
+	
+	reset			: in	std_ulogic
+);
+end top;
 
-architecture bhv of tb is
-	signal reset			: std_ulogic;
-	signal clock			: std_ulogic;
-	signal adbus			: std_logic_vector(7 downto 0);
-	signal txe_n			: std_ulogic;
-	signal rxf_n			: std_ulogic;
-	signal wr_n				: std_ulogic;
-	signal rd_n				: std_ulogic;
-	signal oe_n				: std_ulogic;
-	signal siwu				: std_ulogic;
-	signal suspend_n		: std_ulogic;
-	signal reset_n			: std_ulogic;
+architecture rtl of top is
+	alias clock is clkout;
+
 	signal d_counter		: unsigned(7 downto 0);
 	signal d_data_in		: std_ulogic_vector(7 downto 0);
 	signal d_data_write		: std_ulogic;
@@ -36,9 +44,10 @@ architecture bhv of tb is
 	signal write_data		: std_ulogic_vector(7 downto 0);
 	signal write_read		: std_ulogic;
 	signal read_valid		: std_ulogic;
+	
+	signal counter			: unsigned(7 downto 0);
+	signal counter_valid	: std_ulogic;
 begin
-
-reset_n <= not reset;
 
 i_ft_if : entity work.ft245_sync_if
 port map
@@ -51,7 +60,7 @@ port map
 	clkout			=> clock,
 	oe_n			=> oe_n,
 	siwu			=> siwu,
-	reset_n			=> '0',
+	reset_n			=> reset_n,
 	suspend_n		=> suspend_n,
 	
 	reset			=> reset,
@@ -75,8 +84,8 @@ port map
 
 	-- input
 	sync_reset	=> '0',
-	write		=> read_valid,
-	write_data	=> read_data,
+	write		=> counter_valid,
+	write_data	=> std_ulogic_vector(counter),
 
 	-- outputs
 	read		=> write_read,
@@ -93,49 +102,29 @@ port map
 
 );
 
-i_ft_sim : entity work.ft245_sync_sim
-port map
-(
-	adbus		=> adbus,
-	rxf_n		=> rxf_n,
-	txe_n		=> txe_n,
-	rd_n		=> rd_n,
-	wr_n		=> wr_n,
-	clkout		=> clock,
-	oe_n		=> oe_n,
-	siwu		=> siwu,
-	reset_n		=> reset_n,
-	suspend_n	=> suspend_n,
-	
-	d_data_in	=> d_data_in,
-	d_data_write=> d_data_write,
-	d_data_full	=> d_data_full
-);
-
-i_reset : entity work.reset
-port map
-(
-	reset	=> reset,
-	clock	=> clock
-);
-
-sim_pc: process(reset, clock)
+gen_data: process(reset, clock)
 begin
 	if reset = '1' then
-		d_data_in <= (others => '-');
-		d_data_write <= '0';
-		d_counter <= (others => '0');
+		counter <= (others => '1');
+		counter_valid <= '0';
 	elsif rising_edge(clock) then
-		d_data_in <= (others => '-');
-		d_data_write <= '0';
-		if d_data_full = '0' then
-			d_counter <= d_counter + 1;
-			if d_counter(d_counter'left downto d_counter'left-4) = 0 then
-				d_data_write <= '1';
-				d_data_in <= std_ulogic_vector(d_counter);			
-			end if;
+		counter_valid <= '0';
+		if status_full = '0' then
+			counter <= counter + 1;
+			counter_valid <= '1';
 		end if;
 	end if;
 end process;
 
-end bhv;
+led_out: process(reset, clock)
+begin
+	if reset = '1' then
+		led <= (others => '0');
+	elsif rising_edge(clock) then
+		if read_valid = '1' then
+			led <= read_data;
+		end if;
+	end if;
+end process;
+
+end rtl;
