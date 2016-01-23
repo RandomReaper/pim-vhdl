@@ -34,15 +34,12 @@ end top;
 architecture rtl of top is
 	alias clock is clkout;
 
-	signal d_counter		: unsigned(7 downto 0);
-	signal d_data_in		: std_ulogic_vector(7 downto 0);
-	signal d_data_write		: std_ulogic;
-	signal d_data_full		: std_ulogic;
 	signal status_full		: std_ulogic;
 	signal status_empty		: std_ulogic;
 	signal read_data		: std_ulogic_vector(7 downto 0);
-	signal write_data		: std_ulogic_vector(7 downto 0);
-	signal write_read		: std_ulogic;
+	signal tx_data			: std_ulogic_vector(7 downto 0);
+	signal read				: std_ulogic;
+	signal write			: std_ulogic;
 	signal read_valid		: std_ulogic;
 	
 	signal counter			: unsigned(7 downto 0);
@@ -64,54 +61,43 @@ port map
 	suspend_n		=> suspend_n,
 	
 	reset			=> reset,
+	
 	read_data		=> read_data,
 	read_valid		=> read_valid,
 	
-	write_data		=> write_data,
-	write_read		=> write_read,
+	write_data		=> tx_data,
+	write_read		=> read,
 	write_empty		=> status_empty
 );
 
-i_fifo : entity work.fifo
+i_packetizer : entity work.packetizer
 generic map
 (
-	g_depth_log2 => 4
+	g_nrdata_log2		=> 3,
+	g_depth_in_log2		=> 3,
+	g_depth_out_log2	=> 5
 )
 port map
 (
-	clock		=> clock,
-	reset		=> reset,
-
-	-- input
-	sync_reset	=> '0',
-	write		=> counter_valid,
-	write_data	=> std_ulogic_vector(counter),
-
-	-- outputs
-	read		=> write_read,
-	read_data	=> write_data,
-
-	--status
-	status_full	=> status_full,
-	status_empty	=> status_empty
-	--status_write_error	: out std_ulogic;
-	--status_read_error	: out std_ulogic;
+	reset			=> reset,
+	clock			=> clock,
 	
-	--free 				: out std_ulogic_vector(g_depth_log2 downto 0);
-	--used 				: out std_ulogic_vector(g_depth_log2 downto 0)	
-
+	write_data		=> std_ulogic_vector(counter),
+	write			=> write,
+	status_empty	=> status_empty,
+	read_data		=> tx_data,
+	read			=> read,
+	status_full		=> status_full
 );
 
-gen_data: process(reset, clock)
+write <= not status_full;
+process(reset, clock)
 begin
 	if reset = '1' then
-		counter <= (others => '1');
-		counter_valid <= '0';
+		counter <= (others => '0');
 	elsif rising_edge(clock) then
-		counter_valid <= '0';
 		if status_full = '0' then
 			counter <= counter + 1;
-			counter_valid <= '1';
 		end if;
 	end if;
 end process;

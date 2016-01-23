@@ -54,7 +54,6 @@ architecture bhv of ft245_sync_sim is
 	signal txe			: std_ulogic;
 begin
 
-reset		<= not reset_n;
 oe			<= not oe_n;
 wr			<= not wr_n and txe;
 clkout		<= clock;
@@ -172,5 +171,12 @@ end process;
 data_in <= data_in_in when rd_old = '1' else data_in_pre;
 rd_empty <= not(status_empty_in) and status_empty;
 rd <= rd_empty or not rd_n;
+
+i_reset : entity work.reset
+port map
+(
+	reset	=> reset,
+	clock	=> clock
+);
 
 end architecture bhv;
