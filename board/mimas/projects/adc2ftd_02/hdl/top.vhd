@@ -136,12 +136,12 @@ port map
 	reset			=> reset,
 	clock			=> clock,
 	
-	adc_data		=> adc_data8,
-	adc_data_valid	=> adc_data8_valid,
+	write_data		=> adc_data8,
+	write			=> adc_data8_valid,
 	
-	ft_data			=> ftd_data,
-	ft_empty		=> ftd_empty,
-	ft_read			=> ftd_read
+	read_data		=> ftd_data,
+	status_empty	=> ftd_empty,
+	read			=> ftd_read
 );
 
 led_proc: process(reset, clock)
