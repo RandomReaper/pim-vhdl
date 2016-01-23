@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pim/git/hw/tb/packetizer/tmp/tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="10" />
+   <wvobject fp_name="/tb/i_packetizer/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/adc_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">adc_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/adc_data_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">adc_data_valid</obj_property>
+      <obj_property name="ObjectShortName">adc_data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/ft_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ft_empty</obj_property>
+      <obj_property name="ObjectShortName">ft_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/state.name" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">.name</obj_property>
+      <obj_property name="ObjectShortName">state.name</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/ft_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ft_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">ft_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/ft_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ft_valid</obj_property>
+      <obj_property name="ObjectShortName">ft_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/ft_read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ft_read</obj_property>
+      <obj_property name="ObjectShortName">ft_read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_packetizer/in_count" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">in_count[3:0]</obj_property>
+      <obj_property name="ObjectShortName">in_count[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

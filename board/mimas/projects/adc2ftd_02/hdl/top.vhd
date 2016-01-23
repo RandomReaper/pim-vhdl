@@ -54,8 +54,11 @@ architecture rtl of top is
 	signal ftd_read			: std_ulogic;
 	signal ftd_empty		: std_ulogic;
 	
-	signal adc_data			: std_ulogic_vector(g_parallel*12-1 downto 0);
+	signal adc_data48		: std_ulogic_vector(g_parallel*12-1 downto 0);
+	signal adc_data64		: std_ulogic_vector(g_parallel*16-1 downto 0);
 	signal adc_data_valid	: std_ulogic;
+	signal adc_data8		: std_ulogic_vector(7 downto 0);
+	signal adc_data8_valid	: std_ulogic;
 begin
 
 i_ft245: entity work.ft245_sync_if
@@ -97,22 +100,44 @@ port map
 	n_cs	=> n_cs,
 	sdata	=> sdata,
 	
-	data		=> adc_data,
+	data		=> adc_data48,
 	data_valid	=> adc_data_valid
+);
+
+process(adc_data48)
+begin
+	for i in 0 to g_parallel-1 loop
+		adc_data64((16*(i+1))-1 downto 16*i) <= adc_data48((12*(i+1))-1 downto 12*i) & "0000";
+	end loop;
+end process;
+
+i_wc: entity work.width_changer
+port map
+(
+	clock			=> clock,
+	reset			=> reset,
+	
+	in_data			=> adc_data64,
+	in_data_valid	=> adc_data_valid,
+	in_data_ready	=> open,
+	out_data		=> adc_data8,
+	out_data_valid	=> adc_data8_valid
 );
 
 i_packetizer: entity work.packetizer
 generic map
 (
-	g_parallel	=> g_parallel
+	g_nrdata_log2		=> 5,
+	g_depth_in_log2		=> 2,
+	g_depth_out_log2	=> 5
 )
 port map
 (
 	reset			=> reset,
 	clock			=> clock,
 	
-	adc_data		=> adc_data,
-	adc_data_valid	=> adc_data_valid,
+	adc_data		=> adc_data8,
+	adc_data_valid	=> adc_data8_valid,
 	
 	ft_data			=> ftd_data,
 	ft_empty		=> ftd_empty,

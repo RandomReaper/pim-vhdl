@@ -16,15 +16,16 @@ library ieee;
 entity packetizer is
 generic
 (
-	g_parallel		: natural := 1;
-	g_nrdata_log2	: natural := 5
+	g_nrdata_log2		: natural := 5;
+	g_depth_in_log2		: natural := 2;
+	g_depth_out_log2	: natural := 5
 );
 port
 (
 	clock			: in	std_ulogic;
 	reset			: in	std_ulogic;
 	
-	adc_data		: in	std_ulogic_vector(g_parallel*12-1 downto 0);
+	adc_data		: in	std_ulogic_vector(7 downto 0);
 	adc_data_valid	: in	std_ulogic;
 	ft_empty		: out	std_ulogic;
 	ft_data			: out	std_ulogic_vector(7 downto 0);
@@ -36,6 +37,7 @@ architecture rtl of packetizer is
 	signal tx_write		: std_ulogic;
 	signal tx_data		: std_ulogic_vector(ft_data'range);
 	signal rx_read		: std_ulogic;
+	signal rx_read_old	: std_ulogic;
 	signal rx_empty		: std_ulogic;
 	signal rx_data		: std_ulogic_vector(adc_data'range);
 	
@@ -46,54 +48,107 @@ architecture rtl of packetizer is
 	(
 		STATE_RESET,
 		STATE_IDLE,
-		STATE_NEW_PACKET,
-		STATE_HEADER0,
-		STATE_HEADER1,
-		STATE_HEADERN,
+		STATE_HEADER,
 		STATE_DATA
 	);
 	
-	signal state		: state_e;
-	signal next_state	: state_e;
+	type state_t is
+	record
+		name	: state_e;
+		counter	: unsigned(7 downto 0);
+	end record;
+	
+	signal state		: state_t;
+	signal next_state	: state_t;
+		
+	signal header		: std_ulogic_vector(ft_data'range);
 begin
 
 state_machine: process(reset, clock)
 begin
 	if reset = '1' then
-		state <= STATE_RESET;
+		state.name		<= STATE_RESET;
+		state.counter	<= (others => '0');
 	elsif rising_edge(clock) then
-		state <= next_state;
+		state			<= next_state;
 	end if;
 end process;
 
-state_machine_next: process(state)
+state_machine_next: process(state, rx_empty, rx_read)
 begin
 	next_state <= state;
 	
-	case state is
+	case state.name is
 		when STATE_RESET =>
-			next_state <= STATE_IDLE;
+			next_state.name <= STATE_IDLE;
 			
 		when STATE_IDLE =>
-			if rx_empty = '1' then
-				next_state <= STATE_NEW_PACKET;
-			end if;
+			if rx_empty = '0' then
+				next_state.name <= STATE_HEADER;
+				next_state.counter <= (others => '0');
+			end if;	
 		
-		when STATE_NEW_PACKET =>
-			next_state <= STATE_HEADER0;
-			
-		when STATE_HEADER0 =>
-			next_state <= STATE_HEADER1;
-
-		when STATE_HEADER1 =>
-			next_state <= STATE_HEADERN;
-			
-		when STATE_HEADERN =>
-			next_state <= STATE_HEADERN;
+		when STATE_HEADER =>
+			next_state.counter <= state.counter+1;
+			if state.counter = 12-1 then
+				next_state.name <= STATE_DATA;
+				next_state.counter <= (others => '0');				
+			end if;
 			
 		when STATE_DATA =>
-			next_state <= STATE_IDLE;
+			if rx_read = '1' then
+				next_state.counter <= state.counter+1;
+			end if;
+			
+			if state.counter = (2**g_nrdata_log2) then
+				next_state.name <= STATE_IDLE;
+				next_state.counter <= (others => '0');
+			end if;
 	end case;
+end process;
+
+with state.name select rx_read <=
+	not rx_empty	when STATE_DATA,
+	'0'				when others;
+	
+with state.name select tx_data <=
+	header			when STATE_HEADER,
+	rx_data			when STATE_DATA,
+	(others => '0')	when others;
+	
+with state.name select tx_write <=
+	'1'			when STATE_HEADER,
+	rx_read_old	when STATE_DATA,
+	'0'			when others;
+
+with to_integer(state.counter) select header <=
+	-- ASCII "yoho"
+	x"79"								when 0,
+	x"6f"								when 1,
+	x"68"								when 2,
+	x"6f"								when 3,
+	
+	-- Version, type data, packet count, 0
+	x"00"								when 4,
+	x"00"								when 5,
+	std_ulogic_vector(packet_count)		when 6, 
+	x"00"								when 7,
+	
+	-- 16 bit packet size, 0,0
+	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) /   (2**8),8))		when 8,
+	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) mod (2**8),8))		when 9,
+	x"00"			when 10,
+	x"00"			when 11,
+	
+	(others => '0')	when others;
+
+rx_read_old_gen: process(reset, clock)
+begin
+	if reset = '1' then
+		rx_read_old <= '0';
+	elsif rising_edge(clock) then
+		rx_read_old <= rx_read;
+	end if;
 end process;
 
 packet_count_gen: process(reset, clock)
@@ -101,7 +156,7 @@ begin
 	if reset = '1' then
 		packet_count <= (others => '0');
 	elsif rising_edge(clock) then
-		if state = STATE_NEW_PACKET then
+		if state.name = STATE_IDLE and next_state.name = STATE_HEADER then
 			packet_count <= packet_count + 1;
 		end if;
 	end if;
@@ -119,6 +174,10 @@ begin
 end process;
 
 i_fifo_in: entity work.fifo
+generic map
+(
+	g_depth_log2	=> g_depth_in_log2
+)
 port map
 (
 	reset		=> reset,
@@ -133,6 +192,10 @@ port map
 );
 
 i_fifo_out: entity work.fifo
+generic map
+(
+	g_depth_log2	=> g_depth_out_log2
+)
 port map
 (
 	reset		=> reset,
