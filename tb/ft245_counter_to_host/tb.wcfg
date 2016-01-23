@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pim/git/hw/tb/ft245_counter_to_host/tmp/tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="28" />
+   <wvobject fp_name="/tb/i_ft_if/adbus" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">adbus[7:0]</obj_property>
+      <obj_property name="ObjectShortName">adbus[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_sim/d_data_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d_data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d_data_out[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/rxf_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rxf_n</obj_property>
+      <obj_property name="ObjectShortName">rxf_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/txe_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">txe_n</obj_property>
+      <obj_property name="ObjectShortName">txe_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/clkout" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clkout</obj_property>
+      <obj_property name="ObjectShortName">clkout</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/oe_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_n</obj_property>
+      <obj_property name="ObjectShortName">oe_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/siwu" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">siwu</obj_property>
+      <obj_property name="ObjectShortName">siwu</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/reset_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/suspend_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">suspend_n</obj_property>
+      <obj_property name="ObjectShortName">suspend_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/write_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/write_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_empty</obj_property>
+      <obj_property name="ObjectShortName">write_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/write_read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_read</obj_property>
+      <obj_property name="ObjectShortName">write_read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/read_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">read_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">read_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/read_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read_valid</obj_property>
+      <obj_property name="ObjectShortName">read_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/next_state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">next_state</obj_property>
+      <obj_property name="ObjectShortName">next_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/oe" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe</obj_property>
+      <obj_property name="ObjectShortName">oe</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read</obj_property>
+      <obj_property name="ObjectShortName">read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/write_data_sync" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data_sync[7:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data_sync[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/tx_not_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_not_full</obj_property>
+      <obj_property name="ObjectShortName">tx_not_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/rx_not_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_not_empty</obj_property>
+      <obj_property name="ObjectShortName">rx_not_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/ft_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ft_write</obj_property>
+      <obj_property name="ObjectShortName">ft_write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/ft_suspend" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">ft_suspend</obj_property>
+      <obj_property name="ObjectShortName">ft_suspend</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/read_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read_old</obj_property>
+      <obj_property name="ObjectShortName">read_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_ft_if/read_old_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read_old_old</obj_property>
+      <obj_property name="ObjectShortName">read_old_old</obj_property>
+   </wvobject>
+</wave_config>
