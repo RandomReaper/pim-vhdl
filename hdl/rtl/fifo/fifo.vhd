@@ -153,6 +153,11 @@ fifo_out_proc : process(clock)
 begin
 	if rising_edge(clock) then
 		read_data <= mem(to_integer(read_ptr(mem_range_r)));
+		--pragma synthesis_off
+		if read = '0' then
+			read_data <= (others => 'U');
+		end if;
+		--pragma synthesis_on
 	end if;
 end process;
 
