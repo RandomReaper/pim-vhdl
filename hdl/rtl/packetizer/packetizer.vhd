@@ -39,7 +39,6 @@ architecture rtl of packetizer is
 	signal tx_data		: std_ulogic_vector(read_data'range);
 	signal tx_full		: std_ulogic;
 	signal rx_read		: std_ulogic;
-	signal rx_read_old	: std_ulogic;
 	signal rx_empty		: std_ulogic;
 	signal rx_data		: std_ulogic_vector(write_data'range);
 	signal rx_full		: std_ulogic;
@@ -77,7 +76,7 @@ begin
 	end if;
 end process;
 
-state_machine_next: process(state, rx_empty, rx_read)
+state_machine_next: process(state, rx_empty, tx_full, rx_read)
 begin
 	next_state <= state;
 	
@@ -92,7 +91,9 @@ begin
 			end if;	
 		
 		when STATE_HEADER =>
-			next_state.counter <= state.counter+1;
+			if tx_full = '0' then
+				next_state.counter <= state.counter+1;
+			end if;
 			if state.counter = 12-1 then
 				next_state.name <= STATE_DATA;
 				next_state.counter <= (others => '0');				
@@ -110,9 +111,9 @@ begin
 	end case;
 end process;
 
-with next_state.name select rx_read <=
-	not rx_empty	when STATE_DATA,
-	'0'				when others;
+with state.name select rx_read <=
+	(not rx_empty) and (not tx_full)	when STATE_DATA,
+	'0'									when others;
 	
 with state.name select tx_data <=
 	header			when STATE_HEADER,
@@ -120,8 +121,8 @@ with state.name select tx_data <=
 	(others => '0')	when others;
 	
 with state.name select tx_write <=
-	'1'			when STATE_HEADER,
-	rx_read_old	when STATE_DATA,
+	not tx_full	when STATE_HEADER,
+	rx_read when STATE_DATA,
 	'0'			when others;
 
 with to_integer(state.counter) select header <=
@@ -141,20 +142,11 @@ with to_integer(state.counter) select header <=
 	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) /   (2**8),8))		when 8,
 	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) mod (2**8),8))		when 9,
 	x"00"			when 10,
-	x"00"			when 11,
+	x"aa"			when 11,
 	
 	(others => '0')	when others;
 
-status_full <= rx_full or tx_full;
-
-rx_read_old_gen: process(reset, clock)
-begin
-	if reset = '1' then
-		rx_read_old <= '0';
-	elsif rising_edge(clock) then
-		rx_read_old <= rx_read;
-	end if;
-end process;
+status_full <= rx_full;
 
 packet_count_gen: process(reset, clock)
 begin
@@ -178,7 +170,7 @@ begin
 	end if;
 end process;
 
-i_fifo_in: entity work.fifo
+i_fifo_in: entity work.fifo_preread
 generic map
 (
 	g_depth_log2	=> g_depth_in_log2
