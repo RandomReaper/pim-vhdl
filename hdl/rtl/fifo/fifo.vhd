@@ -20,33 +20,33 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity fifo is
-	generic
-	(
-		g_depth_log2 : natural := 1 -- Log2 of the depth
-	);
-	port
-	(
-		clock				: in std_ulogic;
-		reset				: in std_ulogic;
+generic
+(
+	g_depth_log2 : natural := 1 -- Log2 of the depth
+);
+port
+(
+	clock				: in std_ulogic;
+	reset				: in std_ulogic;
 
-		-- input
-		sync_reset			: in std_ulogic;
-		write				: in std_ulogic;
-		write_data			: in std_ulogic_vector;
+	-- input
+	sync_reset			: in std_ulogic;
+	write				: in std_ulogic;
+	write_data			: in std_ulogic_vector;
 
-		-- outputs
-		read				: in std_ulogic;
-		read_data			: out std_ulogic_vector;
+	-- outputs
+	read				: in std_ulogic;
+	read_data			: out std_ulogic_vector;
 
-		--status
-		status_full			: out std_ulogic;
-		status_empty		: out std_ulogic;
-		status_write_error	: out std_ulogic;
-		status_read_error	: out std_ulogic;
-		
-		free 				: out std_ulogic_vector(g_depth_log2 downto 0);
-		used 				: out std_ulogic_vector(g_depth_log2 downto 0)
-	);
+	--status
+	status_full			: out std_ulogic;
+	status_empty		: out std_ulogic;
+	status_write_error	: out std_ulogic;
+	status_read_error	: out std_ulogic;
+	
+	free 				: out std_ulogic_vector(g_depth_log2 downto 0);
+	used 				: out std_ulogic_vector(g_depth_log2 downto 0)
+);
 end fifo;
 
 architecture rtl of fifo is
@@ -152,16 +152,25 @@ fifo_out_proc : process(clock)
 begin
 	if rising_edge(clock) then
 		read_data <= mem(to_integer(read_ptr(mem_range_r)));
+		
 		--pragma synthesis_off
 		if read = '0' then
 			read_data <= (others => 'U');
 		end if;
 		--pragma synthesis_on
+		
 	end if;
 end process;
 
 fifo_in_proc : process(clock)
 begin
+
+	--pragma synthesis_off
+	if reset = '1' then
+		mem <= (others => (others =>'U'));
+	end if;
+	--pragma synthesis_on
+
 	if rising_edge(clock) then
 		if write = '1' and full = '0' then
 			mem(to_integer(write_ptr(mem_range_r))) <= write_data;
