@@ -69,6 +69,7 @@ begin
 		read_data_int	<= (others => '0');
 		read_fifo_old	<= '0';
 		data_ready		<= '0';
+		status_read_error<= '0';
 		
 		--pragma synthesis_off
 		read_data_int	<= (others => 'U');
@@ -83,6 +84,11 @@ begin
 		
 		if read = '1' and status_empty_fifo = '1' then
 			data_ready		<= '0';
+		end if;
+		
+		status_read_error <= '0';
+		if read = '1' and data_ready = '0' then
+			status_read_error <= '1';
 		end if;
 	end if;
 end process;
@@ -110,7 +116,7 @@ port map
 	status_full			=> status_full,
 	status_empty		=> status_empty_fifo,
 	status_write_error	=> status_write_error,
-	status_read_error	=> status_read_error,
+	status_read_error	=> open,
 	
 	free 				=> free,
 	used 				=> used
