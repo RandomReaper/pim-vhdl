@@ -26,17 +26,17 @@ entity fifo is
 	);
 	port
 	(
-		clock		: in std_ulogic;
-		reset		: in std_ulogic;
+		clock				: in std_ulogic;
+		reset				: in std_ulogic;
 
 		-- input
-		sync_reset	: in std_ulogic;
-		write		: in std_ulogic;
-		write_data	: in std_ulogic_vector;
+		sync_reset			: in std_ulogic;
+		write				: in std_ulogic;
+		write_data			: in std_ulogic_vector;
 
 		-- outputs
-		read		: in std_ulogic;
-		read_data	: out std_ulogic_vector;
+		read				: in std_ulogic;
+		read_data			: out std_ulogic_vector;
 
 		--status
 		status_full			: out std_ulogic;
@@ -47,13 +47,12 @@ entity fifo is
 		free 				: out std_ulogic_vector(g_depth_log2 downto 0);
 		used 				: out std_ulogic_vector(g_depth_log2 downto 0)
 	);
-
-type mem_t is array ( (2 **g_depth_log2 ) - 1 downto 0) of std_ulogic_vector(write_data'range);
-subtype mem_range_r is natural range (g_depth_log2 - 1) downto 0;
-subtype ptr_range_r is natural range (g_depth_log2 - 0) downto 0;
 end fifo;
 
 architecture rtl of fifo is
+	type mem_t is array ( (2 **g_depth_log2 ) - 1 downto 0) of std_ulogic_vector(write_data'range);
+	subtype mem_range_r is natural range (g_depth_log2 - 1) downto 0;
+	subtype ptr_range_r is natural range (g_depth_log2 - 0) downto 0;
 
 	signal mem 				: mem_t := (others => (others => '0'));
                         	
