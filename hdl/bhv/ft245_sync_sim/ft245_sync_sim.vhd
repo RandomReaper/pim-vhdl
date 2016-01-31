@@ -157,7 +157,7 @@ iface:process(reset, clock)
 begin
 	if reset = '1' then
 		data_in_pre <= (others => '0');
-		status_empty <= '0';
+		status_empty <= '1';
 		rd_old <= '0';
 	elsif rising_edge(clock) then
 		rd_old <= not rd_n;
