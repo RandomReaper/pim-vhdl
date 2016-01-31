@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: clock.vhd 
+-- file			: reset.vhd 
 --
 -- brief		: Reset generator (for simulation)
 -- author(s)	: marc at pignat dot org
