@@ -94,14 +94,15 @@ begin
 	end if;
 end process;
 
-i_clock : entity work.clock
+i_clock : entity work.clock_stop
 generic map
 (
 	frequency	=> 80.0e6
 )
 port map
 (
-	clock	=> clock
+	clock	=> clock,
+	stop	=> counter(counter'left)
 );
 
 i_reset : entity work.reset

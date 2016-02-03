@@ -89,6 +89,10 @@ begin
 		status_read_error <= '0';
 		if read = '1' and data_ready = '0' then
 			status_read_error <= '1';
+			
+			--pragma synthesis_off
+			assert (false) report "status_write_error" severity warning;
+			--pragma synthesis_on
 		end if;
 	end if;
 end process;
@@ -121,5 +125,4 @@ port map
 	free 				=> free,
 	used 				=> used
 );
-
 end architecture rtl;

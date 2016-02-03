@@ -131,6 +131,11 @@ begin
 				write_ptr <= write_ptr_next;
 			else
 				write_error <= '1';
+				
+			--pragma synthesis_off
+			assert (false) report "status_write_error" severity warning;
+			--pragma synthesis_on
+
 			end if;
 		end if;
 		if read = '1' then
@@ -138,6 +143,11 @@ begin
 				read_ptr <= read_ptr_next;
 			else
 				read_error <= '1';
+				
+			--pragma synthesis_off
+			assert (false) report "status_read_error" severity warning;
+			--pragma synthesis_on
+
 			end if;
 		end if;
 
