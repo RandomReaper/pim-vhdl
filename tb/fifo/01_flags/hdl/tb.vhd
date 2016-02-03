@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- file			: tb.vhd 
 --
--- brief		: Test bench
+-- brief		: Test bench for the fifo (flags and free/used outputs).
 -- author(s)	: marc at pignat dot org
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
