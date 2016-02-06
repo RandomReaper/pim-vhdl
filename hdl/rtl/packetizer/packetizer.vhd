@@ -94,7 +94,7 @@ begin
 			if tx_full = '0' then
 				next_state.counter <= state.counter+1;
 			end if;
-			if state.counter = 12-1 then
+			if state.counter = 16-1 then
 				next_state.name <= STATE_DATA;
 				next_state.counter <= (others => '0');				
 			end if;
@@ -137,13 +137,19 @@ with to_integer(state.counter) select header <=
 	x"00"								when 5,
 	std_ulogic_vector(packet_count)		when 6, 
 	x"00"								when 7,
-	
+
 	-- 16 bit packet size, 0,0
 	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) /   (2**8),8))		when 8,
 	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) mod (2**8),8))		when 9,
 	x"00"			when 10,
-	x"aa"			when 11,
-	
+	x"00"			when 11,
+
+	-- junk (0x89abcdef)
+	x"89"			when 12,
+	x"ab"			when 13,
+	x"cd"			when 14,
+	x"ef"			when 15,
+
 	(others => '0')	when others;
 
 status_full <= rx_full;
