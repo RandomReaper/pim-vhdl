@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pim/Dropbox/drittsekk/01_pim/10_git/hw/tb/ft245_sync_if/00_xfer/tmp/tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="21" />
+   <wvobject fp_name="/tb/i_dut/adbus" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">adbus[7:0]</obj_property>
+      <obj_property name="ObjectShortName">adbus[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/clkout" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clkout</obj_property>
+      <obj_property name="ObjectShortName">clkout</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/rxf" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rxf</obj_property>
+      <obj_property name="ObjectShortName">rxf</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/oe" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe</obj_property>
+      <obj_property name="ObjectShortName">oe</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/rd" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd</obj_property>
+      <obj_property name="ObjectShortName">rd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/read_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read_valid</obj_property>
+      <obj_property name="ObjectShortName">read_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/read_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">read_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">read_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/txe" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">txe</obj_property>
+      <obj_property name="ObjectShortName">txe</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/wr" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr</obj_property>
+      <obj_property name="ObjectShortName">wr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_failed" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_failed</obj_property>
+      <obj_property name="ObjectShortName">write_failed</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_data_old" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data_old[2:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data_old[2:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <wvobject fp_name="/tb/i_dut/write_data_old[2]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[2]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/i_dut/write_data_old[1]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[1]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/i_dut/write_data_old[0]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_read_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_read_old</obj_property>
+      <obj_property name="ObjectShortName">write_read_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_read_int" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_read_int</obj_property>
+      <obj_property name="ObjectShortName">write_read_int</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_fifo/read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read</obj_property>
+      <obj_property name="ObjectShortName">read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/tx_possible" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_possible</obj_property>
+      <obj_property name="ObjectShortName">tx_possible</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_old</obj_property>
+      <obj_property name="ObjectShortName">write_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_old_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_old_old</obj_property>
+      <obj_property name="ObjectShortName">write_old_old</obj_property>
+   </wvobject>
+</wave_config>
