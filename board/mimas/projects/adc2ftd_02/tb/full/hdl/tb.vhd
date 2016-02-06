@@ -22,7 +22,7 @@ architecture bhv of tb is
 	signal reset			: std_ulogic;
 
 	signal FT_CLKOUT		: std_ulogic;
-	alias  clock is FT_CLKOUT;
+	signal clock			: std_ulogic;
 	signal FT_DATA			: std_logic_vector(7 downto 0);
 	signal FT_nRESET		: std_ulogic;
 	signal FT_nTXE			: std_ulogic;

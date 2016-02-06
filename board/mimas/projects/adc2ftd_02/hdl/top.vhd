@@ -46,7 +46,7 @@ entity top is
 begin end;
 
 architecture rtl of top is
-	alias  clock			is FT_CLKOUT;
+	signal clock			: std_ulogic;
 	
 	signal read_data		: std_ulogic_vector(FT_DATA'range);
 	signal read_valid		: std_ulogic;
@@ -61,6 +61,8 @@ architecture rtl of top is
 	signal adc_data8_valid	: std_ulogic;
 begin
 
+clock <= not FT_CLKOUT;
+
 i_ft245: entity work.ft245_sync_if
 port map
 (
@@ -69,7 +71,7 @@ port map
 	txe_n			=> FT_nTXE,
 	rd_n			=> FT_nRD,
 	wr_n			=> FT_nWR,
-	clkout			=> clock,
+	clock			=> clock,
 	oe_n			=> FT_nOE,
 	siwu			=> FT_SIWUA,
 	reset_n			=> FT_nRESET,

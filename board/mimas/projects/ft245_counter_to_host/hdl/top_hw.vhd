@@ -1,5 +1,6 @@
 library ieee;
 	use ieee.std_logic_1164.all;
+	use ieee.numeric_std.all;
 
 entity top_hw is
 	port
@@ -26,12 +27,19 @@ end top_hw;
 architecture bhv of top_hw is
 	alias clock			: std_ulogic is FT_CLKOUT;
 	signal reset		: std_ulogic;
+	signal counter		: unsigned(2 downto 0) := (others => '0');
 begin
 
-
-
--- FIXME reset should be generated
-reset <= '0';
+gen_reset: process(clock)
+begin
+	if rising_edge(clock) then
+		reset	<= '0';
+		if counter /= 7 then
+			reset	<= '1';
+			counter <= counter+1;
+		end if;
+	end if;
+end process;
 
 i_top : entity work.top
 port map

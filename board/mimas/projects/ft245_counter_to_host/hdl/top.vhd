@@ -32,7 +32,7 @@ port
 end top;
 
 architecture rtl of top is
-	alias clock is clkout;
+	signal clock			: std_ulogic;
 
 	signal status_full		: std_ulogic;
 	signal status_empty		: std_ulogic;
@@ -45,6 +45,7 @@ architecture rtl of top is
 	signal counter			: unsigned(7 downto 0);
 	signal counter_valid	: std_ulogic;
 begin
+clock <= not clkout;
 
 i_ft_if : entity work.ft245_sync_if
 port map
@@ -54,7 +55,7 @@ port map
 	txe_n			=> txe_n,
 	rd_n			=> rd_n,
 	wr_n			=> wr_n,
-	clkout			=> clock,
+	clock			=> clock,
 	oe_n			=> oe_n,
 	siwu			=> siwu,
 	reset_n			=> reset_n,
@@ -73,7 +74,7 @@ port map
 i_packetizer : entity work.packetizer
 generic map
 (
-	g_nrdata_log2		=> 3,
+	g_nrdata_log2		=> 7,
 	g_depth_in_log2		=> 3,
 	g_depth_out_log2	=> 5
 )
@@ -81,7 +82,7 @@ port map
 (
 	reset			=> reset,
 	clock			=> clock,
-	
+
 	write_data		=> std_ulogic_vector(counter),
 	write			=> write,
 	status_empty	=> status_empty,
@@ -105,7 +106,7 @@ end process;
 led_out: process(reset, clock)
 begin
 	if reset = '1' then
-		led <= (others => '0');
+		led <= x"aa";
 	elsif rising_edge(clock) then
 		if read_valid = '1' then
 			led <= read_data;

@@ -77,6 +77,18 @@ port map
 	d_data_full	=> d_data_full
 );
 
+d_data_in		<= std_ulogic_vector(d_counter) when d_data_write = '1' else (others => '-');
+d_data_write	<= not d_data_full when d_counter = 11 else '0';
+
+process(reset, clock)
+begin
+	if reset = '1' then
+		d_counter <= (others => '0');
+	elsif rising_edge(clock) then
+		d_counter <= d_counter + 1;
+	end if;
+end process;
+
 i_reset : entity work.reset
 port map
 (
