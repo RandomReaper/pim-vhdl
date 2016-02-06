@@ -84,6 +84,9 @@ begin
 		
 		if read = '1' and status_empty_fifo = '1' then
 			data_ready		<= '0';
+			--pragma synthesis_off
+			read_data_int	<= (others => 'U');
+			--pragma synthesis_on
 		end if;
 		
 		status_read_error <= '0';
@@ -91,7 +94,7 @@ begin
 			status_read_error <= '1';
 			
 			--pragma synthesis_off
-			assert (false) report "status_write_error" severity warning;
+			assert (false) report "status_read_error" severity warning;
 			--pragma synthesis_on
 		end if;
 	end if;
