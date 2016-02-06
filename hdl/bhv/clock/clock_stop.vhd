@@ -38,6 +38,8 @@ begin
 	
 	clock <= '0';
 	
+	assert false report "Simulation Done" severity note;
+
 	wait;
 	
 end process;
