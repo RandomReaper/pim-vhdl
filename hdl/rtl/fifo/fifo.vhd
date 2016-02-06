@@ -165,7 +165,7 @@ begin
 		
 		--pragma synthesis_off
 		if read = '0' then
-			read_data <= (others => 'U');
+			read_data(read_data'range) <= (others => 'U');
 		end if;
 		--pragma synthesis_on
 		
