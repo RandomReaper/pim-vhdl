@@ -49,8 +49,31 @@ entity width_changer is
 	);
 end width_changer;
 
-architecture rtl of width_changer is
+library ieee;
+	use ieee.std_logic_1164.all;
+	use ieee.numeric_std.all;
 
+entity width_changer_gen is
+	generic
+	(
+		g_in_width		: positive;
+		g_out_width		: positive
+	);
+	port
+	(
+		clock			: in	std_ulogic;
+		reset			: in	std_ulogic;
+		
+		in_data			: in	std_ulogic_vector;
+		in_data_valid	: in	std_ulogic;
+		in_data_ready	: out	std_ulogic;
+		
+		out_data		: out	std_ulogic_vector;
+		out_data_valid	: out	std_ulogic
+	);
+end width_changer_gen;
+
+architecture rtl of width_changer_gen is
 begin
 	assert
 		    (in_data'right = 0)
@@ -59,7 +82,7 @@ begin
 		and (out_data'left > 0)
 	report "Unsupported feature, feel free to improve this code" severity failure;
 
-smaller: if out_data'length < in_data'length generate
+smaller: if g_out_width < g_in_width generate
 	assert (in_data'length mod out_data'length) = 0 report "width_changer smaller : modulo size failed" severity failure;
 
 	i_smaller: entity work.width_changer_internal(rtl_smaller)
@@ -76,7 +99,7 @@ smaller: if out_data'length < in_data'length generate
 	);
 end generate;
 
-bigger: if out_data'length > in_data'length generate
+bigger: if g_out_width > g_in_width generate
 	assert (out_data'length mod in_data'length) = 0 report "width_changer bigger : modulo size failed" severity failure;
 	i_bigger: entity work.width_changer_internal(rtl_bigger)
 	port map
@@ -92,12 +115,33 @@ bigger: if out_data'length > in_data'length generate
 	);
 end generate;
 
-same: if out_data'left = in_data'left generate
+same: if g_out_width = g_in_width generate
 	in_data_ready	<= '1';
 	out_data		<= in_data;
 	out_data_valid	<= in_data_valid;
 end generate;
 
+end rtl;
+
+architecture rtl of width_changer is
+begin
+	i_changer: entity work.width_changer_gen
+	generic map
+	(
+		g_in_width		=> in_data'length,
+		g_out_width		=> out_data'length
+	)
+	port map
+	(
+		clock			=> clock,
+		reset			=> reset,
+		
+		in_data			=> in_data,
+		in_data_valid	=> in_data_valid,
+		in_data_ready	=> in_data_ready,
+		out_data		=> out_data,
+		out_data_valid	=> out_data_valid
+	);
 end rtl;
 
 architecture rtl_smaller of width_changer_internal is
@@ -113,7 +157,8 @@ begin
 	elsif rising_edge(clock) then
 		state <= std_ulogic_vector(unsigned(state) srl 1);
 		if in_data_valid = '1' then
-			state <= (state'left => '1', others => '0');
+			state <= (others => '0');
+			state(state'left) <= '1';
 			memory <= in_data(memory'range);
 			
 			assert unsigned(state) = 0 report "in_data_valid while not empty" severity warning;
@@ -155,7 +200,8 @@ in_data_ready <= '1';
 state_proc: process(reset, clock)
 begin
 	if reset = '1' then
-		state <= (state'left => '1', others => '0');
+		state <= (others => '0');
+		state(state'left) <= '1';
 		state_changed <= '0';
 	elsif rising_edge(clock) then
 		state_changed <= '0';
@@ -181,8 +227,7 @@ begin
 	end if;
 end process;
 
-out_data(in_data'range) <= in_data;
-out_data(out_data'left downto in_data'left + 1) <= memory;
+out_data <= memory & in_data;
 out_data_valid <= in_data_valid when state(0) = '1' and in_data_valid = '1' else '0';
 
 end rtl_bigger;
