@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="/home/pim/git/hw/tb/width_changer/tmp/tb_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="/home/pim/Dropbox/drittsekk/01_pim/10_git/hw/tb/width_changer/tmp/tb_isim_beh.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="numeric_std" />
             <top_module name="std_logic_1164" />
@@ -11,7 +11,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="12" />
+   <WVObjectSize size="6" />
    <wvobject fp_name="/tb/reset" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
@@ -29,39 +29,12 @@
    <wvobject fp_name="/tb/data4" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">data4[3:0]</obj_property>
       <obj_property name="ObjectShortName">data4[3:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/data12" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">data12[11:0]</obj_property>
-      <obj_property name="ObjectShortName">data12[11:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/data12_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">data12_valid</obj_property>
-      <obj_property name="ObjectShortName">data12_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/data6" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">data6[5:0]</obj_property>
-      <obj_property name="ObjectShortName">data6[5:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/data6_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">data6_valid</obj_property>
-      <obj_property name="ObjectShortName">data6_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/data24" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">data24[23:0]</obj_property>
-      <obj_property name="ObjectShortName">data24[23:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/data24_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">data24_valid</obj_property>
-      <obj_property name="ObjectShortName">data24_valid</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/data4_bis" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">data4_bis[3:0]</obj_property>
       <obj_property name="ObjectShortName">data4_bis[3:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/data4_bis_valid" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">data4_bis_valid</obj_property>

@@ -15,10 +15,6 @@
   <version xil_pn:ise_version="14.7" xil_pn:schema_version="2"/>
 
   <files>
-    <file xil_pn:name="../../hdl/bhv/clock/clock.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="1"/>
-    </file>
     <file xil_pn:name="../../hdl/bhv/reset/reset.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="2"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="2"/>
@@ -30,6 +26,10 @@
     <file xil_pn:name="../../hdl/rtl/width_changer/width_changer.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="1"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="16"/>
+    </file>
+    <file xil_pn:name="../../hdl/bhv/clock/clock_stop.vhd" xil_pn:type="FILE_VHDL">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="15"/>
     </file>
   </files>
 
@@ -80,6 +80,7 @@
     <property xil_pn:name="Create Mask File" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Create ReadBack Data Files" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Cross Clock Analysis" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Custom Simulation Command File" xil_pn:value="../run_all.cmd" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Custom Waveform Configuration File Behav" xil_pn:value="../tb.wcfg" xil_pn:valueState="non-default"/>
     <property xil_pn:name="DSP Utilization Ratio" xil_pn:value="100" xil_pn:valueState="default"/>
     <property xil_pn:name="Delay Values To Be Read from SDF" xil_pn:value="Setup Time" xil_pn:valueState="default"/>
@@ -268,7 +269,7 @@
     <property xil_pn:name="Revision Select" xil_pn:value="00" xil_pn:valueState="default"/>
     <property xil_pn:name="Revision Select Tristate" xil_pn:value="Disable" xil_pn:valueState="default"/>
     <property xil_pn:name="Run Design Rules Checker (DRC)" xil_pn:value="true" xil_pn:valueState="default"/>
-    <property xil_pn:name="Run for Specified Time" xil_pn:value="true" xil_pn:valueState="default"/>
+    <property xil_pn:name="Run for Specified Time" xil_pn:value="false" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Run for Specified Time Map" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Run for Specified Time Par" xil_pn:value="true" xil_pn:valueState="default"/>
     <property xil_pn:name="Run for Specified Time Translate" xil_pn:value="true" xil_pn:valueState="default"/>
@@ -314,7 +315,7 @@
     <property xil_pn:name="Use Custom Project File Post-Map" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Use Custom Project File Post-Route" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Use Custom Project File Post-Translate" xil_pn:value="false" xil_pn:valueState="default"/>
-    <property xil_pn:name="Use Custom Simulation Command File Behavioral" xil_pn:value="false" xil_pn:valueState="default"/>
+    <property xil_pn:name="Use Custom Simulation Command File Behavioral" xil_pn:value="true" xil_pn:valueState="non-default"/>
     <property xil_pn:name="Use Custom Simulation Command File Map" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Use Custom Simulation Command File Par" xil_pn:value="false" xil_pn:valueState="default"/>
     <property xil_pn:name="Use Custom Simulation Command File Translate" xil_pn:value="false" xil_pn:valueState="default"/>
