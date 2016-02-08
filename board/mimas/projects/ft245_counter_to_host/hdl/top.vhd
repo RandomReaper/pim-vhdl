@@ -32,7 +32,7 @@ port
 end top;
 
 architecture rtl of top is
-	signal clock			: std_ulogic;
+	alias  clock is clkout;
 
 	signal status_full		: std_ulogic;
 	signal status_empty		: std_ulogic;
@@ -45,7 +45,6 @@ architecture rtl of top is
 	signal counter			: unsigned(7 downto 0);
 	signal counter_valid	: std_ulogic;
 begin
-clock <= not clkout;
 
 i_ft_if : entity work.ft245_sync_if
 port map

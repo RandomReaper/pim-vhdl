@@ -16,8 +16,8 @@ end tb;
 
 architecture bhv of tb is
 	signal reset			: std_ulogic;
+	
 	signal clock			: std_ulogic;
-	signal clkout			: std_ulogic;
 	signal adbus			: std_logic_vector(7 downto 0);
 	signal txe_n			: std_ulogic;
 	signal rxf_n			: std_ulogic;
@@ -40,7 +40,6 @@ architecture bhv of tb is
 begin
 
 reset_n <= not reset;
-clock <= not clkout;
 i_ft_if : entity work.ft245_sync_if
 port map
 (
@@ -102,7 +101,7 @@ port map
 	txe_n		=> txe_n,
 	rd_n		=> rd_n,
 	wr_n		=> wr_n,
-	clkout		=> clkout,
+	clock		=> clock,
 	oe_n		=> oe_n,
 	siwu		=> siwu,
 	reset_n		=> reset_n,
@@ -138,5 +137,15 @@ begin
 		end if;
 	end if;
 end process;
+
+i_clock: entity work.clock
+generic map
+(
+	frequency => 60.0e6
+)
+port map
+(
+	clock	=> clock
+);
 
 end bhv;

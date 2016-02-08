@@ -25,11 +25,13 @@ entity top_hw is
 end top_hw;
 
 architecture bhv of top_hw is
-	alias clock			: std_ulogic is FT_CLKOUT;
+	signal clock		: std_ulogic;
 	signal reset		: std_ulogic;
 	signal counter		: unsigned(2 downto 0) := (others => '0');
 begin
 
+
+clock <= FT_CLKOUT;
 gen_reset: process(clock)
 begin
 	if rising_edge(clock) then

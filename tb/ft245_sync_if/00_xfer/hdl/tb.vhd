@@ -23,7 +23,6 @@ architecture bhv of tb is
 	signal txe_n			: std_ulogic;
 	signal rd_n				: std_ulogic;
 	signal wr_n				: std_ulogic;
-	signal clkout			: std_ulogic;
 	signal oe_n				: std_ulogic;
 	
 	signal write_data		: std_ulogic_vector(7 downto 0);
@@ -84,11 +83,9 @@ oe	<= not oe_n;
 i_clock: entity work.clock_stop
 port map
 (
-	clock	=> clkout,
+	clock	=> clock,
 	stop	=> stop
 );
-
-clock <= not clkout;
 
 i_fifo : entity work.fifo
 generic map
@@ -114,7 +111,7 @@ port map
 bus_safety: process(adbus)
 begin
 	for i in adbus'range loop
-		assert (adbus(i) /= 'X')	report "adbus MUST never be X" severity failure;
+		--assert (adbus(i) /= 'X')	report "adbus MUST never be X" severity failure;
 	end loop;
 end process;
 
@@ -131,7 +128,7 @@ tbp: process
 	begin
 	
 	while sig /= val loop
-		wait until rising_edge(clock);
+		wait until falling_edge(clock);
 		
 		assert timeout > 0 report "Timeout while waiting for: '" & m & "' = '" & std_ulogic'image(val)& "'" severity failure;
 		
@@ -151,9 +148,12 @@ adbus_wr		<= (others => 'Z');
 fifo_data		<= (others => '0');
 fifo_write		<= '0';
 
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 
 reset			<= '0';
+
+wait until falling_edge(clock);
+
 -----------------------------------------------------------------------------
 -- Verify all outputs after reset
 -----------------------------------------------------------------------------
@@ -166,25 +166,22 @@ assert (oe						= '0')			report "ouch !?!" severity failure;
 -----------------------------------------------------------------------------
 adbus_wr			<= (others => 'Z');
 rxf	<= '1';
+adbus_wr	<= x"aa";
 
-waitFor(clkout, oe, '1', 10, "oe");
-
-assert (adbus					= (adbus'left downto adbus'right => 'Z'))	report "adbus MUST be Hi-Z (1)" severity failure;
-adbus_wr	<= x"aa"; wait for 1 ns;
+waitFor(clock, oe, '1', 10, "oe");
 assert (rd						= '0')			report "oe MUST be set at least one clock before read" severity failure;
-assert (adbus					= x"aa")		report "adbus MUST be Hi-Z (2)" severity failure;
 
-waitFor(clkout, rd, '1', 10, "rd");
+waitFor(clock, rd, '1', 10, "rd");
+wait until falling_edge(clock);
 adbus_wr	<= x"cc";
 rxf	<= '0';
 
-waitFor(clkout, read_valid, '1', 10, "read_valid");
-assert (read_data					= x"aa")		report "read_data => wrong data" severity failure;
-
-wait until rising_edge(clkout);
+waitFor(clock, read_valid, '1', 10, "read_valid");
+assert (read_data					= x"aa")		report "read_data => wrong data (0xaa)" severity failure;
+wait until falling_edge(clock);
 assert (read_valid					= '0')			report "read_valid => wrong duration" severity failure;
 
-waitFor(clkout, rd, '0', 10, "rd");
+waitFor(clock, rd, '0', 10, "rd");
 
 -----------------------------------------------------------------------------
 -- Host sends two bytes
@@ -192,46 +189,49 @@ waitFor(clkout, rd, '0', 10, "rd");
 adbus_wr			<= (others => 'Z');
 rxf	<= '1';
 
-waitFor(clkout, oe, '1', 10, "oe");
+waitFor(clock, oe, '1', 10, "oe");
+assert (rd						= '0')			report "oe MUST be set at least one clock before read" severity failure;
 
 assert (adbus					= (adbus'left downto adbus'right => 'Z'))	report "adbus MUST be Hi-Z (1)" severity failure;
-adbus_wr	<= x"55"; wait for 0.1 ns;
-assert (rd						= '0')			report "oe MUST be set at least one clock before read" severity failure;
+adbus_wr	<= x"55";
+wait on adbus;
 assert (adbus					= x"55")		report "adbus MUST be Hi-Z (2)" severity failure;
 
-waitFor(clkout, rd, '1', 10, "rd");
---wait until rising_edge(clkout);
-adbus_wr	<= x"66"; wait for 0.1 ns;
+
+waitFor(clock, rd, '1', 10, "rd");
+wait until falling_edge(clock);
+adbus_wr	<= x"66";
+wait on adbus;
 assert (adbus					= x"66")		report "read_data => wrong data" severity failure;
 
-waitFor(clkout, read_valid, '1', 10, "read_valid");
+waitFor(clock, read_valid, '1', 10, "read_valid");
 assert (read_data					= x"55")		report "read_data => wrong data (0x55)" severity failure;
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (read_data					= x"66")		report "read_data => wrong data (0x66)" severity failure;
 rxf	<= '0';
 adbus_wr	<= x"cc";
 
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (read_valid					= '0')			report "read_valid => wrong duration" severity failure;
 
-waitFor(clkout, rd, '0', 10, "rd");
+waitFor(clock, rd, '0', 10, "rd");
 
 -----------------------------------------------------------------------------
 -- Send one byte to host, host as much space
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"aa";
 txe <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"aa")		report "adbus => wrong data" severity failure;
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 wait until falling_edge(clock);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
 txe <= '0';
@@ -240,44 +240,44 @@ txe <= '0';
 -- Send one byte to host, host as only one space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"bb";
 txe <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus				= x"bb")		report "adbus => wrong data" severity failure;
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 txe <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
 
 -----------------------------------------------------------------------------
 -- Send two bytes to host, host as much space
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"cc";
 txe <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"dd";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"cc")	report "adbus => wrong data (0xcc)" severity failure;
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (adbus					= x"dd")	report "adbus => wrong data (0xdd)" severity failure;
 assert (wr						= '1')		report "wr => wrong duration" severity failure;
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
 txe <= '0';
 
@@ -285,90 +285,92 @@ txe <= '0';
 -- Send two bytes to host, host one space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"ee";
 txe <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"ff";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
-waitFor(clkout, wr, '1', 10, "wr");
-txe <= '0';
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"ee")	report "adbus => wrong data (0xee)" severity failure;
-waitFor(clkout, wr, '0', 10, "wr");
-txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+wait until falling_edge(clock);
 txe <= '0';
+waitFor(clock, wr, '0', 10, "wr");
+txe <= '1';
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"ff")	report "adbus => wrong data (0xff)" severity failure;
+wait until falling_edge(clock);
+txe <= '0';
 
 -----------------------------------------------------------------------------
 -- Send 3 bytes to host, host one space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"01";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"02";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"03";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 txe <= '0';
 assert (adbus					= x"01")	report "adbus => wrong data (0x01)" severity failure;
-waitFor(clkout, wr, '0', 10, "wr");
+waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"02")	report "adbus => wrong data (0x02)" severity failure;
-wait until rising_edge(clkout);
-waitFor(clkout, wr, '1', 10, "wr");
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"03")	report "adbus => wrong data (0x03)" severity failure;
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
 txe <= '0';
 -----------------------------------------------------------------------------
 -- Send 4 bytes to host, host one space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"11";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"12";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"13";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"14";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 txe <= '0';
 assert (adbus					= x"11")	report "adbus => wrong data (0x11)" severity failure;
-waitFor(clkout, wr, '0', 10, "wr");
+waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"12")	report "adbus => wrong data (0x12)" severity failure;
-wait until rising_edge(clkout);
-waitFor(clkout, wr, '1', 10, "wr");
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"13")	report "adbus => wrong data (0x13)" severity failure;
-wait until rising_edge(clkout);
-waitFor(clkout, wr, '1', 10, "wr");
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"14")	report "adbus => wrong data (0x14)" severity failure;
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
 txe <= '0';
 
@@ -376,82 +378,82 @@ txe <= '0';
 -- Send 3 bytes to host, host two space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"21";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"22";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"23";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"21")	report "adbus => wrong data (0x21)" severity failure;
 txe <= '0';
-waitFor(clkout, wr, '0', 10, "wr");
+waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"22")	report "adbus => wrong data (0x22)" severity failure;
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (adbus					= x"23")	report "adbus => wrong data (0x23)" severity failure;
+wait until falling_edge(clock);
 txe <= '0';
-wait until rising_edge(clkout);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
 
 -----------------------------------------------------------------------------
 -- Send 4 bytes to host, host 3 space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_reset <= '0';
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '1';
 fifo_data <= x"31";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"32";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"33";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_data <= x"34";
-wait until rising_edge(clock);
+wait until falling_edge(clock);
 fifo_write <= '0';
 
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"31")	report "adbus => wrong data (0x21)" severity failure;
-wait until rising_edge(clkout);
-waitFor(clkout, wr, '1', 10, "wr");
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"32")	report "adbus => wrong data (0x21)" severity failure;
-wait until rising_edge(clkout);
-waitFor(clkout, wr, '1', 10, "wr");
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"33")	report "adbus => wrong data (0x21)" severity failure;
 
 txe <= '0';
-waitFor(clkout, wr, '0', 10, "wr");
-wait until rising_edge(clkout);
+waitFor(clock, wr, '0', 10, "wr");
+wait until falling_edge(clock);
 txe <= '1';
-waitFor(clkout, wr, '1', 10, "wr");
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"34")	report "adbus => wrong data (0x22)" severity failure;
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 txe <= '0';
-wait until rising_edge(clkout);
+wait until falling_edge(clock);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
 
 -----------------------------------------------------------------------------
 -- End of test
 -----------------------------------------------------------------------------
 
-wait until rising_edge(clock);
-wait until rising_edge(clock);
-wait until rising_edge(clock);
-wait until rising_edge(clock);
-wait until rising_edge(clock);
-wait until rising_edge(clock);
-wait until rising_edge(clock);
+wait until falling_edge(clock);
+wait until falling_edge(clock);
+wait until falling_edge(clock);
+wait until falling_edge(clock);
+wait until falling_edge(clock);
+wait until falling_edge(clock);
+wait until falling_edge(clock);
 
 stop			<= '1';
 

@@ -12,13 +12,13 @@
       </db_ref>
    </db_ref_list>
    <WVObjectSize size="18" />
-   <wvobject fp_name="/tb/i_ft_sim/clkout" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">clkout</obj_property>
-      <obj_property name="ObjectShortName">clkout</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb/i_ft_sim/reset_n" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">reset_n</obj_property>
       <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_ft_sim/adbus" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">adbus[7:0]</obj_property>

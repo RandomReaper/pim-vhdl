@@ -19,7 +19,7 @@ entity ft245_sync_sim is
 		txe_n		: out	std_ulogic;
 		rd_n		: in	std_ulogic;
 		wr_n		: in	std_ulogic;
-		clkout		: out	std_ulogic;
+		clock		: in	std_ulogic;
 		oe_n		: in	std_ulogic;
 		siwu		: in	std_ulogic;
 		reset_n		: in	std_ulogic;
@@ -40,7 +40,6 @@ architecture bhv of ft245_sync_sim is
 	signal data_in		: std_ulogic_vector(adbus'range);
 	signal data_in_pre	: std_ulogic_vector(adbus'range);
 	signal d_data_out_in	: std_ulogic_vector(adbus'range);
-	signal clock		: std_ulogic;
 	signal tx_full		: std_ulogic;
 	signal status_empty	: std_ulogic;
 	signal status_full	: std_ulogic;
@@ -55,7 +54,6 @@ begin
 
 oe			<= not oe_n;
 wr			<= not wr_n and txe and not tx_full;
-clkout		<= clock;
 rxf_n		<= status_empty;
 txe_n		<= not txe or tx_full;
 suspend_n	<= '0';
@@ -82,16 +80,6 @@ end process;
 
 adbus <= std_logic_vector(data_in) when oe = '1' else (others => 'Z');
 
-i_clock: entity work.clock
-	generic map
-	(
-		frequency => 60.0e6
-	)
-	port map
-	(
-		clock	=> clock
-	);
-	
 i_from_host_fifo: entity work.fifo_preread
 generic map
 (

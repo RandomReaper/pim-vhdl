@@ -66,7 +66,7 @@ port map
 	txe_n		=> txe_n,
 	rd_n		=> rd_n,
 	wr_n		=> wr_n,
-	clkout		=> clock,
+	clock		=> clock,
 	oe_n		=> oe_n,
 	siwu		=> siwu,
 	reset_n		=> reset_n,
@@ -93,6 +93,16 @@ i_reset : entity work.reset
 port map
 (
 	reset	=> reset,
+	clock	=> clock
+);
+
+i_clock: entity work.clock
+generic map
+(
+	frequency => 60.0e6
+)
+port map
+(
 	clock	=> clock
 );
 

@@ -70,7 +70,6 @@ architecture rtl of ft245_sync_if is
 	
 	signal state			: state_e;
 	signal next_state		: state_e;
-	signal state_old		: state_e;
 	
 	signal ft_oe			: std_ulogic;
 	signal oe				: std_ulogic;
@@ -231,14 +230,12 @@ begin
 		read_old_old	<= '0';
 		write_old		<= '0';
 		write_old_old	<= '0';
-		state_old		<= STATE_RESET;
 		write_read_old	<= '0';
 	elsif rising_edge(clock) then
 		read_old		<= read;
 		read_old_old	<= read_old;
 		write_old		<= ft_write;
 		write_old_old	<= write_old;
-		state_old		<= state;
 		write_read_old	<= write_read_int;
 	end if;
 end process;
@@ -261,7 +258,7 @@ with state select ft_write <=
 		'0' when others;
 		
 read_valid <= read_valid_int;
-read_valid_int <= read_old and rx_req;
+read_valid_int <= read_old_old and rx_req;
 
 write_read <= write_read_int;
 with next_state select write_read_int <=
@@ -290,20 +287,16 @@ begin
 				write_data_old(i) <= write_data_old(i-1);
 			end loop;
 			write_data_old(0).data <= write_data;
-			write_data_old(0).failed <= '1';
+			write_data_old(0).failed <= '0';
 		end if;
 
-		if write_old = '1' and tx_possible = '1' then
-			if write_read_old = '1' then
-				write_data_old(1).failed <= '0';
-			else
-				write_data_old(0).failed <= '0';
-			end if;
-		end if;
-
-		if state_old = STATE_WRITE and tx_possible = '0' then
-			--write_data_old(0).failed <= '1';
+		if write_old_old = '1' and tx_possible = '0' then
 			write_failed <= '1';
+			if write_read_old = '1' then
+				write_data_old(1).failed <= '1';
+			else
+				write_data_old(0).failed <= '1';
+			end if;
 		end if;
 		
 		if state = STATE_WRITE_OLD then

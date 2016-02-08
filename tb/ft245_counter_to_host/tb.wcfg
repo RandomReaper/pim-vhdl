@@ -11,7 +11,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="19" />
+   <WVObjectSize size="24" />
    <wvobject fp_name="/tb/i_ft_sim/clock" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -98,5 +98,41 @@
       <obj_property name="ElementShortName">old_counter[1:0]</obj_property>
       <obj_property name="ObjectShortName">old_counter[1:0]</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_top/i_ft_if/write_data_old" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data_old[2:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data_old[2:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <wvobject fp_name="/tb/i_top/i_ft_if/write_data_old[2]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[2]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/i_top/i_ft_if/write_data_old[1]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[1]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/i_top/i_ft_if/write_data_old[0]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[0]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/tb/i_top/i_ft_if/tx_possible" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_possible</obj_property>
+      <obj_property name="ObjectShortName">tx_possible</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_top/i_ft_if/write_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_old</obj_property>
+      <obj_property name="ObjectShortName">write_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_top/i_ft_if/write_old_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_old_old</obj_property>
+      <obj_property name="ObjectShortName">write_old_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_top/i_ft_if/write_read_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_read_old</obj_property>
+      <obj_property name="ObjectShortName">write_read_old</obj_property>
    </wvobject>
 </wave_config>
