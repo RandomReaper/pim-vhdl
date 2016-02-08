@@ -21,17 +21,16 @@ end tb;
 architecture bhv of tb is
 	signal reset			: std_ulogic;
 
-	signal FT_CLKOUT		: std_ulogic;
 	signal clock			: std_ulogic;
-	signal FT_DATA			: std_logic_vector(7 downto 0);
-	signal FT_nRESET		: std_ulogic;
-	signal FT_nTXE			: std_ulogic;
-	signal FT_nRXF			: std_ulogic;
-	signal FT_nWR			: std_ulogic;
-	signal FT_nRD			: std_ulogic;
-	signal FT_SIWUA			: std_ulogic;
-	signal FT_nOE			: std_ulogic;
-	signal FT_nSUSPEND		: std_ulogic;
+	signal adbus			: std_logic_vector(7 downto 0);
+	signal reset_n			: std_ulogic;
+	signal txe_n			: std_ulogic;
+	signal rxf_n			: std_ulogic;
+	signal wr_n				: std_ulogic;
+	signal rd_n				: std_ulogic;
+	signal siwu				: std_ulogic;
+	signal oe_n				: std_ulogic;
+	signal suspend_n		: std_ulogic;
 	
 	-- ADCs
 	signal sclk				: std_ulogic;
@@ -47,21 +46,19 @@ generic map
 port map
 (
 	-- Mimas
-	clk				=> '0',
-	sw				=> x"0",
 	led				=> open,
 	
 	-- FT2232h
-	FT_CLKOUT		=> FT_CLKOUT,
-	FT_DATA			=> FT_DATA,
-	FT_nRESET		=> FT_nRESET,
-	FT_nTXE			=> FT_nTXE,
-	FT_nRXF			=> FT_nRXF,
-	FT_nWR			=> FT_nWR,
-	FT_nRD			=> FT_nRD,
-	FT_SIWUA		=> FT_SIWUA,
-	FT_nOE			=> FT_nOE,
-	FT_nSUSPEND		=> FT_nSUSPEND,
+	clkout			=> clock,
+	adbus			=> adbus,
+	reset_n			=> reset_n,
+	txe_n			=> txe_n,
+	rxf_n			=> rxf_n,
+	wr_n			=> wr_n,
+	rd_n			=> rd_n,
+	siwu			=> siwu,
+	oe_n			=> oe_n,
+	suspend_n		=> suspend_n,
 	
 	-- ADCs
 	sclk			=> sclk,
@@ -74,16 +71,16 @@ port map
 i_ft245_sim: entity work.ft245_sync_sim
 port map
 (
-	adbus			=> FT_DATA,
-	rxf_n			=> FT_nRXF,
-	txe_n			=> FT_nTXE,
-	rd_n			=> FT_nRD,
-	wr_n			=> FT_nWR,
-	clkout			=> FT_CLKOUT,
-	oe_n			=> FT_nOE,
-	siwu			=> FT_SIWUA,
-	reset_n			=> FT_nRESET,
-	suspend_n		=> FT_nSUSPEND,
+	adbus			=> adbus,
+	rxf_n			=> rxf_n,
+	txe_n			=> txe_n,
+	rd_n			=> rd_n,
+	wr_n			=> wr_n,
+	clock			=> clock,
+	oe_n			=> oe_n,
+	siwu			=> siwu,
+	reset_n			=> reset_n,
+	suspend_n		=> suspend_n,
 
 	d_data_out		=> open,
 	d_data_in		=> x"00",
@@ -109,4 +106,15 @@ port map
 	reset	=> reset,
 	clock	=> clock
 );
+
+i_clock: entity work.clock
+generic map
+(
+	frequency => 60.0e6
+)
+port map
+(
+	clock	=> clock
+);
+
 end bhv;

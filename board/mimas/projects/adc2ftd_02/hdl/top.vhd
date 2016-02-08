@@ -13,69 +13,62 @@ library ieee;
 	use ieee.numeric_std.all;
 	
 entity top is
-	generic
-	(
-		g_parallel : natural := 4
-	);
-	port
-	(
-		-- Mimas
-		clk				: in	std_ulogic;
-		sw				: in	std_ulogic_vector(3 downto 0);
-		led				: out	std_ulogic_vector(7 downto 0);
-		
-		-- FT2232h
-		FT_CLKOUT		: in	std_ulogic;
-		FT_DATA			: inout	std_logic_vector(7 downto 0);
-		FT_nRESET		: out	std_ulogic;
-		FT_nTXE			: in	std_ulogic;
-		FT_nRXF			: in	std_ulogic;
-		FT_nWR			: out	std_ulogic;
-		FT_nRD			: out	std_ulogic;
-		FT_SIWUA		: out	std_ulogic;
-		FT_nOE			: out	std_ulogic;
-		FT_nSUSPEND		: in	std_ulogic;
-		
-		-- ADCs
-		sclk			: out	std_ulogic;
-		n_cs			: out	std_ulogic;
-		sdata			: in	std_ulogic_vector(g_parallel-1 downto 0);
-		
-		reset			: in	std_ulogic
-	);
+generic
+(
+	g_parallel : natural := 4
+);
+port
+(
+	adbus			: inout	std_logic_vector(7 downto 0);
+	rxf_n			: in	std_ulogic;
+	txe_n			: in	std_ulogic;
+	rd_n			: out	std_ulogic;
+	wr_n			: out	std_ulogic;
+	clkout			: in	std_ulogic;
+	oe_n			: out	std_ulogic;
+	siwu			: out	std_ulogic;
+	reset_n			: out	std_ulogic;
+	suspend_n		: in	std_ulogic;
+	
+	led				: out	std_ulogic_vector(7 downto 0);
+	
+	reset			: in	std_ulogic;
+	-- ADCs
+	sclk			: out	std_ulogic;
+	n_cs			: out	std_ulogic;
+	sdata			: in	std_ulogic_vector(g_parallel-1 downto 0)
+);
 begin end;
 
 architecture rtl of top is
-	signal clock			: std_ulogic;
+	alias  clock			is clkout;
 	
-	signal read_data		: std_ulogic_vector(FT_DATA'range);
+	signal read_data		: std_ulogic_vector(adbus'range);
 	signal read_valid		: std_ulogic;
-	signal ftd_data			: std_ulogic_vector(FT_DATA'range);
+	signal ftd_data			: std_ulogic_vector(adbus'range);
 	signal ftd_read			: std_ulogic;
 	signal ftd_empty		: std_ulogic;
 	
 	signal adc_data48		: std_ulogic_vector(g_parallel*12-1 downto 0);
 	signal adc_data64		: std_ulogic_vector(g_parallel*16-1 downto 0);
 	signal adc_data_valid	: std_ulogic;
-	signal adc_data8		: std_ulogic_vector(7 downto 0);
+	signal adc_data8		: std_ulogic_vector(adbus'range);
 	signal adc_data8_valid	: std_ulogic;
 begin
-
-clock <= not FT_CLKOUT;
 
 i_ft245: entity work.ft245_sync_if
 port map
 (
-	adbus			=> FT_DATA,
-	rxf_n			=> FT_nRXF,
-	txe_n			=> FT_nTXE,
-	rd_n			=> FT_nRD,
-	wr_n			=> FT_nWR,
+	adbus			=> adbus,
+	rxf_n			=> rxf_n,
+	txe_n			=> txe_n,
+	rd_n			=> rd_n,
+	wr_n			=> wr_n,
 	clock			=> clock,
-	oe_n			=> FT_nOE,
-	siwu			=> FT_SIWUA,
-	reset_n			=> FT_nRESET,
-	suspend_n		=> FT_nSUSPEND,
+	oe_n			=> oe_n,
+	siwu			=> siwu,
+	reset_n			=> reset_n,
+	suspend_n		=> suspend_n,
 	
 	reset			=> reset,
 	
@@ -109,7 +102,7 @@ port map
 process(adc_data48)
 begin
 	for i in 0 to g_parallel-1 loop
-		adc_data64((16*(i+1))-1 downto 16*i) <= adc_data48((12*(i+1))-1 downto 12*i) & "0000";
+		adc_data64((16*(i+1))-1 downto 16*i) <= adc_data48((12*(i+1))-1 downto 12*i) & std_ulogic_vector(to_unsigned(i+1, 4));
 	end loop;
 end process;
 
