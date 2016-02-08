@@ -1,2 +1,4 @@
 tmp/
 iseconfig/
+*.log
+*.swp
