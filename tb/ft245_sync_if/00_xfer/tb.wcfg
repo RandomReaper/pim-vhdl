@@ -21,10 +21,6 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/clkout" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">clkout</obj_property>
-      <obj_property name="ObjectShortName">clkout</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb/clock" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -62,14 +58,20 @@
       <obj_property name="ElementShortName">state</obj_property>
       <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_dut/write_failed" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">write_failed</obj_property>
-      <obj_property name="ObjectShortName">write_failed</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb/i_dut/write_data_old" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">write_data_old[2:0]</obj_property>
-      <obj_property name="ObjectShortName">write_data_old[2:0]</obj_property>
+      <obj_property name="ElementShortName">write_data_old[4:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data_old[4:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
+      <wvobject fp_name="/tb/i_dut/write_data_old[4]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[4]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb/i_dut/write_data_old[3]" type="array" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">write_data_old[3]</obj_property>
+         <obj_property name="Radix">HEXRADIX</obj_property>
+      </wvobject>
       <wvobject fp_name="/tb/i_dut/write_data_old[2]" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">[2]</obj_property>
          <obj_property name="ObjectShortName">write_data_old[2]</obj_property>
@@ -114,5 +116,13 @@
    <wvobject fp_name="/tb/i_dut/write_old_old" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">write_old_old</obj_property>
       <obj_property name="ObjectShortName">write_old_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_old_old_old" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_old_old_old</obj_property>
+      <obj_property name="ObjectShortName">write_old_old_old</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_failed" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write_failed</obj_property>
+      <obj_property name="ObjectShortName">write_failed</obj_property>
    </wvobject>
 </wave_config>

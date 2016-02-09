@@ -83,6 +83,7 @@ architecture rtl of ft245_sync_if is
 	signal read_old_old		: std_ulogic;
 	signal write_old		: std_ulogic;
 	signal write_old_old	: std_ulogic;
+	signal write_old_old_old	: std_ulogic;
 	signal write_failed		: std_ulogic;
 	signal read_data_int	: std_ulogic_vector(read_data'range);
 	signal read_valid_int	: std_ulogic;
@@ -95,9 +96,9 @@ architecture rtl of ft245_sync_if is
 		failed : std_ulogic;
 	end record;
 	
-	type old_t is array(2 downto 0) of old_elem_t;
+	type old_t is array(4 downto 0) of old_elem_t;
 	signal write_data_old	: old_t;
-	signal old_counter		: unsigned(1 downto 0);
+	signal old_counter		: unsigned(2 downto 0);
 	
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
@@ -230,12 +231,15 @@ begin
 		read_old_old	<= '0';
 		write_old		<= '0';
 		write_old_old	<= '0';
+		write_old_old_old	<= '0';
+
 		write_read_old	<= '0';
 	elsif rising_edge(clock) then
 		read_old		<= read;
 		read_old_old	<= read_old;
 		write_old		<= ft_write;
 		write_old_old	<= write_old;
+		write_old_old_old <= write_old_old;
 		write_read_old	<= write_read_int;
 	end if;
 end process;
@@ -282,21 +286,20 @@ begin
 		write_failed<= '0';
 	elsif rising_edge(clock) then
 
-		if write_read_old = '1' then
+		if write_failed = '0' then
 			for i in write_data_old'left downto 1 loop
 				write_data_old(i) <= write_data_old(i-1);
 			end loop;
 			write_data_old(0).data <= write_data;
-			write_data_old(0).failed <= '0';
+			write_data_old(0).failed <= ft_write;
+
+			if write_old_old_old = '1' and tx_possible = '1' then
+				write_data_old(write_data_old'left -1 ).failed <= '0';
+			end if;
 		end if;
 
-		if write_old_old = '1' and tx_possible = '0' then
+		if write_old_old_old = '1' and tx_possible = '0' then
 			write_failed <= '1';
-			if write_read_old = '1' then
-				write_data_old(1).failed <= '1';
-			else
-				write_data_old(0).failed <= '1';
-			end if;
 		end if;
 		
 		if state = STATE_WRITE_OLD then
