@@ -28,11 +28,15 @@ architecture bhv of tb is
 	signal data16_valid		: std_ulogic;
 	signal data8			: std_ulogic_vector(7 downto 0);
 	signal data8_valid		: std_ulogic;	
-	signal data32			: std_ulogic_vector(31 downto 0);
-	signal data32_valid		: std_ulogic;	
+	signal data24			: std_ulogic_vector(23 downto 0);
+	signal data24_fifo		: std_ulogic_vector(23 downto 0);
+	signal data24_valid		: std_ulogic;	
 	signal data4_bis		: std_ulogic_vector(3 downto 0);
 	signal data4_bis_valid	: std_ulogic;
-	
+	signal data4_bis_ready	: std_ulogic;
+	signal fifo24_read		: std_ulogic;
+	signal fifo24_empty		: std_ulogic;
+	signal fifo24_read_old	: std_ulogic;
 	signal counter			: unsigned(data4'range);
 	signal delay			: unsigned(data4'range);
 begin
@@ -44,11 +48,11 @@ begin
 	stop <= '0';
 	data4_valid <= '0';
 	wait until falling_edge(reset);
+
 	wait until rising_edge(clock);
 	
 	counter <= (others => '0');
 	data4_valid <= '1';
-	wait until rising_edge(clock);
 
 	delay <= (others => '0');
 	while data4_bis_valid /= '1' loop
@@ -70,7 +74,7 @@ begin
 		
 		wait until rising_edge(clock);
 		
-		assert counter = unsigned(data4_bis)+delay report "wrong_data" severity failure;
+		assert counter = unsigned(data4_bis)+delay-1 report "wrong_data" severity failure;
 
 	end loop;
 	
@@ -115,9 +119,49 @@ port map
 	in_data			=> data8,
 	in_data_valid	=> data8_valid,
 	in_data_ready	=> open,
-	out_data		=> data32,
-	out_data_valid	=> data32_valid
+	out_data		=> data24,
+	out_data_valid	=> data24_valid
 );
+
+i_fifo_2_3: entity work.fifo
+generic map
+(
+	g_depth_log2 => 1
+)
+port map
+(
+	reset				=> reset,
+	clock				=> clock,
+
+	-- input
+	sync_reset			=> '0',
+	write				=> data24_valid,
+	write_data			=> data24,
+
+	-- outputs
+	read				=> fifo24_read,
+	read_data			=> data24_fifo,
+	
+	--status
+	status_full			=> open,
+	status_empty		=> fifo24_empty,
+	status_write_error	=> open,
+	status_read_error	=> open,
+	
+	free 				=> open,
+	used 				=> open
+);
+
+fifo24_read <= not fifo24_empty and data4_bis_ready;
+
+process(reset, clock)
+begin
+	if reset = '1' then
+		fifo24_read_old <= '0';
+	elsif rising_edge(clock) then
+		fifo24_read_old <= fifo24_read;
+	end if;
+end process;
 
 i_dut3: entity work.width_changer
 port map
@@ -125,9 +169,9 @@ port map
 	reset			=> reset,
 	clock			=> clock,
 	
-	in_data			=> data32,
-	in_data_valid	=> data32_valid,
-	in_data_ready	=> open,
+	in_data			=> data24_fifo,
+	in_data_valid	=> fifo24_read_old,
+	in_data_ready	=> data4_bis_ready,
 	out_data		=> data4_bis,
 	out_data_valid	=> data4_bis_valid
 );
