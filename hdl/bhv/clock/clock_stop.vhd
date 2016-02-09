@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- file			: clock_stop.vhd 
 --
--- brief		: Stoppable clock generator (will halt most simulator)
+-- brief		: Stoppable clock generator (will halt most simulators)
 -- author(s)	: marc at pignat dot org
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
