@@ -123,7 +123,7 @@ i_packetizer: entity work.packetizer
 generic map
 (
 	g_nrdata_log2		=> 5,
-	g_depth_in_log2		=> 2,
+	g_depth_in_log2		=> 3,
 	g_depth_out_log2	=> 5
 )
 port map
