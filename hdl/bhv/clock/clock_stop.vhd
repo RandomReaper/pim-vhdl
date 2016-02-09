@@ -12,15 +12,15 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity clock_stop is
-	generic
-	(
-		frequency	: real	:= 1.0e6
-	);
-	port
-	(
-		stop		: in	std_ulogic;
-		clock		: out	std_ulogic
-	);
+generic
+(
+	frequency	: real	:= 1.0e6
+);
+port
+(
+	stop		: in	std_ulogic;
+	clock		: out	std_ulogic
+);
 end clock_stop;
 
 architecture bhv of clock_stop is
