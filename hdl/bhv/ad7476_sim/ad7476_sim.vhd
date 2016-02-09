@@ -6,6 +6,10 @@
 -- license		: The MIT License (MIT) (http://opensource.org/licenses/MIT)
 --				  Copyright (c) 2015 Marc Pignat
 -----------------------------------------------------------------------------
+--
+-- Expected output : 2^0, 2^1 ... 2^11, 2^0, ...
+--
+-----------------------------------------------------------------------------
 
 library ieee;
 	use ieee.std_logic_1164.all;

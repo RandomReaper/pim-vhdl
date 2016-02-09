@@ -63,11 +63,11 @@ sclk_int <= c_counter(c_counter'left);
 bit_counter: process(reset, clock)
 begin
 	if reset = '1' then
-		b_counter <= (others => '0');
+		b_counter <= (others => '1');
 	elsif rising_edge(clock) then
 		if c_counter = 0 then
 			b_counter <= b_counter + 1;
-			if b_counter = 19 then
+			if b_counter >= 19 then
 				b_counter <= (others => '0');
 			end if;
 		end if;
