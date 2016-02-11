@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench
 -- author(s)	: marc at pignat dot org
@@ -21,7 +21,7 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity tb is
 generic
 (
@@ -42,11 +42,11 @@ architecture bhv of tb is
 	signal siwu				: std_ulogic;
 	signal oe_n				: std_ulogic;
 	signal suspend_n		: std_ulogic;
-	
+
 	-- ADCs
 	signal sclk				: std_ulogic;
 	signal n_cs				: std_ulogic;
-	signal sdata			: std_ulogic_vector(g_parallel-1 downto 0);	
+	signal sdata			: std_ulogic_vector(g_parallel-1 downto 0);
 begin
 
 i_top: entity work.top
@@ -58,7 +58,7 @@ port map
 (
 	-- Mimas
 	led				=> open,
-	
+
 	-- FT2232h
 	clkout			=> clock,
 	adbus			=> adbus,
@@ -70,12 +70,12 @@ port map
 	siwu			=> siwu,
 	oe_n			=> oe_n,
 	suspend_n		=> suspend_n,
-	
+
 	-- ADCs
 	sclk			=> sclk,
 	n_cs			=> n_cs,
 	sdata			=> sdata,
-	
+
 	reset			=> reset
 );
 

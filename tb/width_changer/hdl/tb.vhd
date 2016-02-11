@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench
 -- author(s)	: marc at pignat dot org
@@ -21,7 +21,7 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity tb is
 end tb;
 
@@ -32,16 +32,16 @@ architecture bhv of tb is
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
 	signal stop				: std_ulogic;
-	
+
 	signal data4			: std_ulogic_vector(3 downto 0);
 	signal data4_valid		: std_ulogic;
 	signal data16			: std_ulogic_vector(15 downto 0);
 	signal data16_valid		: std_ulogic;
 	signal data8			: std_ulogic_vector(7 downto 0);
-	signal data8_valid		: std_ulogic;	
+	signal data8_valid		: std_ulogic;
 	signal data24			: std_ulogic_vector(23 downto 0);
 	signal data24_fifo		: std_ulogic_vector(23 downto 0);
-	signal data24_valid		: std_ulogic;	
+	signal data24_valid		: std_ulogic;
 	signal data4_bis		: std_ulogic_vector(3 downto 0);
 	signal data4_bis_valid	: std_ulogic;
 	signal data4_bis_ready	: std_ulogic;
@@ -61,7 +61,7 @@ begin
 	wait until falling_edge(reset);
 
 	wait until rising_edge(clock);
-	
+
 	counter <= (others => '0');
 	data4_valid <= '1';
 
@@ -75,22 +75,22 @@ begin
 		delay <= delay + 1;
 
 		assert delay < 10 report "timeout waiting for data4_bis_valid" severity failure;
-		
+
 	end loop;
-	
+
 	assert unsigned(data4_bis) = 0 report "wrong data" severity failure;
 
 	for i in 0 to 100 loop
 		counter <= counter + 1;
-		
+
 		wait until rising_edge(clock);
-		
+
 		assert counter = unsigned(data4_bis)+delay-1 report "wrong_data" severity failure;
 
 	end loop;
-	
+
 	stop <= '1';
-	
+
 	wait;
 
 end process;
@@ -100,7 +100,7 @@ port map
 (
 	reset			=> reset,
 	clock			=> clock,
-	
+
 	in_data			=> data4,
 	in_data_valid	=> data4_valid,
 	in_data_ready	=> open,
@@ -113,7 +113,7 @@ port map
 (
 	reset			=> reset,
 	clock			=> clock,
-	
+
 	in_data			=> data16,
 	in_data_valid	=> data16_valid,
 	in_data_ready	=> open,
@@ -126,7 +126,7 @@ port map
 (
 	reset			=> reset,
 	clock			=> clock,
-	
+
 	in_data			=> data8,
 	in_data_valid	=> data8_valid,
 	in_data_ready	=> open,
@@ -152,13 +152,13 @@ port map
 	-- outputs
 	read				=> fifo24_read,
 	read_data			=> data24_fifo,
-	
+
 	--status
 	status_full			=> open,
 	status_empty		=> fifo24_empty,
 	status_write_error	=> open,
 	status_read_error	=> open,
-	
+
 	free 				=> open,
 	used 				=> open
 );
@@ -179,7 +179,7 @@ port map
 (
 	reset			=> reset,
 	clock			=> clock,
-	
+
 	in_data			=> data24_fifo,
 	in_data_valid	=> fifo24_read_old,
 	in_data_ready	=> data4_bis_ready,

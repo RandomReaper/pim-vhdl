@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: clock_stop.vhd 
+-- file			: clock_stop.vhd
 --
 -- brief		: Stoppable clock generator (will halt most simulators)
 -- author(s)	: marc at pignat dot org
@@ -46,13 +46,13 @@ begin
 		clock <= '1';
 		wait for period / 2;
 	end loop;
-	
+
 	clock <= '0';
-	
+
 	assert false report "Simulation Done" severity note;
 
 	wait;
-	
+
 end process;
 
 end architecture bhv;

@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench for the fifo (flags and free/used outputs).
 -- author(s)	: marc at pignat dot org
@@ -43,7 +43,7 @@ architecture bhv of tb is
 	signal status_read_error	: std_ulogic;
 	signal free_int				: std_ulogic_vector(g_depth_log2 downto 0);
 	signal used_int				: std_ulogic_vector(g_depth_log2 downto 0);
-	
+
 	signal free : integer;
 	signal used : integer;
 begin
@@ -75,7 +75,7 @@ begin
 
 	tb : process
 	begin
-	
+
 	-----------------------------------------------------------------------------
 	-- Full nice reset
 	-----------------------------------------------------------------------------
@@ -86,9 +86,9 @@ begin
 	write			<= '0';
 	write_data		<= x"00";
 	clock <= '0';
-	
+
 	wait for half_period; wait for half_period;
-	
+
 	reset			<= '0';
 	-----------------------------------------------------------------------------
 	-- Verify all outputs after reset
@@ -99,7 +99,7 @@ begin
 	assert (status_full				= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
-		
+
 	-----------------------------------------------------------------------------
 	-- Test a read when empty
 	-----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ begin
 	read <= '1';
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	read <= '0';
-	
+
 	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
 	assert (used					= 0)			report "fifo buggy !?!" severity failure;
 	assert (status_empty			= '1')          report "fifo buggy !?!" severity failure;
@@ -184,7 +184,7 @@ begin
 	assert (status_full				= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
-	
+
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	sync_reset		<= '0';
 	-- Now should be reset
@@ -193,7 +193,7 @@ begin
 	assert (status_empty			= '1')          report "fifo buggy !?!" severity failure;
 	assert (status_full				= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;	
+	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
 
 
 	-----------------------------------------------------------------------------
@@ -215,7 +215,7 @@ begin
 	assert (status_full				= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '1')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
-	
+
 	-----------------------------------------------------------------------------
 	-- Test read back
 	-----------------------------------------------------------------------------
@@ -229,8 +229,8 @@ begin
 	assert (status_full				= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
-	assert (read_data				= x"11")		report "fifo buggy !?!" severity failure;	
-	
+	assert (read_data				= x"11")		report "fifo buggy !?!" severity failure;
+
 	-----------------------------------------------------------------------------
 	-- Test fifo full
 	-----------------------------------------------------------------------------
@@ -247,8 +247,8 @@ begin
 	assert (status_empty			= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_full				= '1')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;	
-	
+	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
+
 	-----------------------------------------------------------------------------
 	-- Test a simultaneous read/write while full, should work
 	-----------------------------------------------------------------------------
@@ -265,8 +265,8 @@ begin
 	assert (status_empty			= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_full				= '1')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;	
-	assert (read_data				= x"00")		report "fifo buggy !?!" severity failure;	
+	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
+	assert (read_data				= x"00")		report "fifo buggy !?!" severity failure;
 
 	-----------------------------------------------------------------------------
 	-- Test write when full -> write error
@@ -284,14 +284,14 @@ begin
 	assert (status_empty			= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_full				= '1')          report "fifo buggy !?!" severity failure;
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '1')          report "fifo buggy !?!" severity failure;	
+	assert (status_write_error		= '1')          report "fifo buggy !?!" severity failure;
 
 	-----------------------------------------------------------------------------
 	-- End of test
 	-----------------------------------------------------------------------------
 
 	wait;
-	
+
 	end process;
 
 end bhv;

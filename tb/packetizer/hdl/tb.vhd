@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench
 -- author(s)	: marc at pignat dot org
@@ -21,25 +21,25 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity tb is
 end tb;
 
 architecture bhv of tb is
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
-	
+
 	signal counter			: unsigned(7 downto 0);
 	signal counter_rx		: unsigned(7 downto 0);
-	
+
 	signal read				: std_ulogic;
 	signal empty			: std_ulogic;
-	
+
 	signal write_data		: std_ulogic_vector(7 downto 0);
 	signal write			: std_ulogic;
 	signal read_data		: std_ulogic_vector(7 downto 0);
 	signal full				: std_ulogic;
-	
+
 	signal read_valid		: std_ulogic;
 	signal d_in				: std_ulogic_vector(7 downto 0);
 	signal d_out			: std_ulogic_vector(7 downto 0);
@@ -56,11 +56,11 @@ port map
 (
 	reset	=> reset,
 	clock	=> clock,
-	
+
 	write_data		=> write_data,
 	write			=> write,
 	status_empty	=> empty,
-	
+
 	read_data		=> read_data,
 	read			=> read,
 	status_full		=> full
@@ -80,7 +80,7 @@ begin
 	end if;
 end process;
 
--- Read 
+-- Read
 read <= counter_rx(3) and not empty;
 
 process(reset, clock)

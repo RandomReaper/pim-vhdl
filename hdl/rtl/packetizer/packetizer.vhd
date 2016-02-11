@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: packetizer.vhd 
+-- file			: packetizer.vhd
 --
 -- brief		: adc7476 interface
 -- author(s)	: marc at pignat dot org
@@ -32,13 +32,13 @@ port
 (
 	clock			: in	std_ulogic;
 	reset			: in	std_ulogic;
-	
+
 	write			: in	std_ulogic;
 	write_data		: in	std_ulogic_vector(7 downto 0);
 
 	read_data		: out	std_ulogic_vector(7 downto 0);
 	read			: in	std_ulogic;
-	
+
 	status_empty	: out	std_ulogic;
 	status_full		: out	std_ulogic
 );
@@ -52,10 +52,10 @@ architecture rtl of packetizer is
 	signal rx_empty		: std_ulogic;
 	signal rx_data		: std_ulogic_vector(write_data'range);
 	signal rx_full		: std_ulogic;
-	
+
 	signal packet_count : unsigned(7 downto 0);
 	signal in_count		: unsigned(g_nrdata_log2 downto 0);
-	
+
 	type state_e is
 	(
 		STATE_RESET,
@@ -63,16 +63,16 @@ architecture rtl of packetizer is
 		STATE_HEADER,
 		STATE_DATA
 	);
-	
+
 	type state_t is
 	record
 		name	: state_e;
 		counter	: unsigned(7 downto 0);
 	end record;
-	
+
 	signal state		: state_t;
 	signal next_state	: state_t;
-		
+
 	signal header		: std_ulogic_vector(read_data'range);
 begin
 
@@ -89,31 +89,31 @@ end process;
 state_machine_next: process(state, rx_empty, tx_full, rx_read)
 begin
 	next_state <= state;
-	
+
 	case state.name is
 		when STATE_RESET =>
 			next_state.name <= STATE_IDLE;
-			
+
 		when STATE_IDLE =>
 			if rx_empty = '0' then
 				next_state.name <= STATE_HEADER;
 				next_state.counter <= (others => '0');
-			end if;	
-		
+			end if;
+
 		when STATE_HEADER =>
 			if tx_full = '0' then
 				next_state.counter <= state.counter+1;
 			end if;
 			if state.counter = 16-1 then
 				next_state.name <= STATE_DATA;
-				next_state.counter <= (others => '0');				
+				next_state.counter <= (others => '0');
 			end if;
-			
+
 		when STATE_DATA =>
 			if rx_read = '1' then
 				next_state.counter <= state.counter+1;
 			end if;
-			
+
 			if state.counter = (2**g_nrdata_log2) - 1 then
 				next_state.name <= STATE_IDLE;
 				next_state.counter <= (others => '0');
@@ -124,12 +124,12 @@ end process;
 with state.name select rx_read <=
 	(not rx_empty) and (not tx_full)	when STATE_DATA,
 	'0'									when others;
-	
+
 with state.name select tx_data <=
 	header			when STATE_HEADER,
 	rx_data			when STATE_DATA,
 	(others => '0')	when others;
-	
+
 with state.name select tx_write <=
 	not tx_full	when STATE_HEADER,
 	rx_read when STATE_DATA,
@@ -141,11 +141,11 @@ with to_integer(state.counter) select header <=
 	x"6f"								when 1,
 	x"68"								when 2,
 	x"6f"								when 3,
-	
+
 	-- Version, type data, packet count, 0
 	x"00"								when 4,
 	x"00"								when 5,
-	std_ulogic_vector(packet_count)		when 6, 
+	std_ulogic_vector(packet_count)		when 6,
 	x"00"								when 7,
 
 	-- 16 bit packet size, 0,0

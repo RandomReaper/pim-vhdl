@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench for ft245_sync_if test data tx ok.
 -- author(s)	: marc at pignat dot org
@@ -35,20 +35,20 @@ architecture bhv of tb is
 	signal rd_n				: std_ulogic;
 	signal wr_n				: std_ulogic;
 	signal oe_n				: std_ulogic;
-	
+
 	signal write_data		: std_ulogic_vector(7 downto 0);
 	signal write_empty		: std_ulogic;
 	signal write_read		: std_ulogic;
-	
+
 	signal read_data		: std_ulogic_vector(7 downto 0);
 	signal read_valid		: std_ulogic;
-	
+
 	signal rxf				: std_ulogic;
 	signal txe				: std_ulogic;
 	signal rd				: std_ulogic;
 	signal wr				: std_ulogic;
 	signal oe				: std_ulogic;
-	
+
 	signal stop				: std_ulogic := '0';
 	signal adbus_wr			: std_logic_vector(7 downto 0);
 
@@ -107,13 +107,13 @@ port map
 (
 	reset			=> reset,
 	clock			=> clock,
-	
+
 	sync_reset		=> fifo_reset,
-	
+
 	write_data		=> fifo_data,
 	write			=> fifo_write,
 	status_empty	=> write_empty,
-	
+
 	read_data		=> write_data,
 	read			=> write_read,
 	status_full		=> fifo_full
@@ -137,15 +137,15 @@ tbp: process
 	) is
 		variable timeout : integer := t;
 	begin
-	
+
 	while sig /= val loop
 		wait until falling_edge(clock);
-		
+
 		assert timeout > 0 report "Timeout while waiting for: '" & m & "' = '" & std_ulogic'image(val)& "'" severity failure;
-		
+
 		timeout := timeout - 1;
 	end loop;
-	
+
 	end procedure;
 begin
 

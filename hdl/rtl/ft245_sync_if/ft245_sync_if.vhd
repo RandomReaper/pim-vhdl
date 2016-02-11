@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: ft245_sync_if.vhd 
+-- file			: ft245_sync_if.vhd
 --
 -- brief		: Interface for FTDI ft2232h in ft245 synchronous mode
 -- author(s)	: marc at pignat dot org
@@ -39,14 +39,14 @@ port
 	siwu			: out	std_ulogic;
 	reset_n			: out	std_ulogic;
 	suspend_n		: in	std_ulogic;
-	
+
 	-- Interface to the internal logic
 	reset			: in	std_ulogic;
-	
+
 	write_data		: in	std_ulogic_vector(7 downto 0);
 	write_empty		: in	std_ulogic;
 	write_read		: out	std_ulogic;
-	
+
 	read_data		: out	std_ulogic_vector(7 downto 0);
 	read_valid		: out	std_ulogic
 );
@@ -79,10 +79,10 @@ architecture rtl of ft245_sync_if is
 		STATE_WRITE,
 		STATE_WRITE_OLD
 	);
-	
+
 	signal state			: state_e;
 	signal next_state		: state_e;
-	
+
 	signal ft_oe			: std_ulogic;
 	signal oe				: std_ulogic;
 	signal read				: std_ulogic;
@@ -107,11 +107,11 @@ architecture rtl of ft245_sync_if is
 		data : std_ulogic_vector(write_data'range);
 		failed : std_ulogic;
 	end record;
-	
+
 	type old_t is array(4 downto 0) of old_elem_t;
 	signal write_data_old	: old_t;
 	signal old_counter		: unsigned(2 downto 0);
-	
+
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
 	attribute iob of write_data_sync		: signal is "FORCE";
@@ -140,7 +140,7 @@ end process;
 state_machine_next: process(state, write_empty, rx_req, tx_possible, write_failed, ft_write, old_counter)
 begin
 	next_state <= state;
-	
+
 	case state is
 		when STATE_RESET =>
 			next_state <= STATE_IDLE;
@@ -178,11 +178,11 @@ begin
 			if old_counter = write_data_old'left then
 				next_state <= STATE_IDLE;
 			end if;
-			
+
 		when STATE_WRITE =>
 			if tx_possible = '1' and write_empty = '0' then
 				next_state <= STATE_WRITE;
-			else 
+			else
 				next_state <= STATE_IDLE;
 			end if;
 	end case;
@@ -272,7 +272,7 @@ with state select ft_write <=
 		tx_possible when STATE_WRITE,
 		write_data_old(write_data_old'left).failed when STATE_WRITE_OLD,
 		'0' when others;
-		
+
 read_valid <= read_valid_int;
 read_valid_int <= read_old_old and rx_req;
 
@@ -280,7 +280,7 @@ write_read <= write_read_int;
 with next_state select write_read_int <=
 		tx_possible when STATE_WRITE,
 		'0' when others;
-		
+
 process(reset, clock)
 begin
 	if reset = '1' then
@@ -313,7 +313,7 @@ begin
 		if write_old_old_old = '1' and tx_possible = '0' then
 			write_failed <= '1';
 		end if;
-		
+
 		if state = STATE_WRITE_OLD then
 			old_counter <= old_counter + 1;
 			for i in write_data_old'left downto 1 loop

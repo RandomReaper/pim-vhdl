@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench
 -- author(s)	: marc at pignat dot org
@@ -21,7 +21,7 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity tb is
 generic
 (
@@ -68,7 +68,7 @@ begin
 		assert data = expected_data report "Wrong data" severity failure;
 		wait until falling_edge(clock);
 		assert data_valid = '0' report "Wrong data valid duration" severity failure;
-	
+
 		expected_data <= std_ulogic_vector(unsigned(expected_data) rol 1);
 
 	end loop;
@@ -88,11 +88,11 @@ port map
 (
 	reset		=> reset,
 	clock		=> clock,
-	
+
 	sclk		=> sclk,
 	n_cs		=> n_cs,
 	sdata		=> sdata,
-	
+
 	data		=> data,
 	data_valid	=> data_valid
 );

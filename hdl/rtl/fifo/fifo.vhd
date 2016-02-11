@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: fifo.vhd 
+-- file			: fifo.vhd
 --
 -- brief		: Synchronous fifo
 -- author(s)	: marc at pignat dot org
@@ -54,7 +54,7 @@ port
 	status_empty		: out std_ulogic;
 	status_write_error	: out std_ulogic;
 	status_read_error	: out std_ulogic;
-	
+
 	free 				: out std_ulogic_vector(g_depth_log2 downto 0);
 	used 				: out std_ulogic_vector(g_depth_log2 downto 0)
 );
@@ -66,7 +66,7 @@ architecture rtl of fifo is
 	subtype ptr_range_r is natural range (g_depth_log2 - 0) downto 0;
 
 	signal mem 				: mem_t := (others => (others => '0'));
-                        	
+
 	signal full				: std_ulogic;
 	signal empty			: std_ulogic;
 	signal write_error		: std_ulogic;
@@ -75,7 +75,7 @@ architecture rtl of fifo is
 	signal read_ptr_next	: unsigned(ptr_range_r);
 	signal write_ptr		: unsigned(ptr_range_r);
 	signal write_ptr_next	: unsigned(ptr_range_r);
-	
+
 	signal used_int 		: unsigned(used'range);
 begin
 
@@ -133,16 +133,16 @@ begin
 		write_ptr <= (others => '0');
 		read_ptr <= (others => '0');
 		write_error <= '0';
-		read_error <= '0';	
+		read_error <= '0';
 	elsif rising_edge(clock) then
 		write_error <= '0';
-		read_error <= '0';	
+		read_error <= '0';
 		if write = '1' then
 			if full = '0' or read = '1' then
 				write_ptr <= write_ptr_next;
 			else
 				write_error <= '1';
-				
+
 			--pragma synthesis_off
 			assert (false) report "status_write_error" severity warning;
 			--pragma synthesis_on
@@ -154,7 +154,7 @@ begin
 				read_ptr <= read_ptr_next;
 			else
 				read_error <= '1';
-				
+
 			--pragma synthesis_off
 			assert (false) report "status_read_error" severity warning;
 			--pragma synthesis_on
@@ -173,13 +173,13 @@ fifo_out_proc : process(clock)
 begin
 	if rising_edge(clock) then
 		read_data <= mem(to_integer(read_ptr(mem_range_r)));
-		
+
 		--pragma synthesis_off
 		if read = '0' then
 			read_data(read_data'range) <= (others => 'U');
 		end if;
 		--pragma synthesis_on
-		
+
 	end if;
 end process;
 

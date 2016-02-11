@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: width_changer.vhd 
+-- file			: width_changer.vhd
 --
 -- brief		: Minimal fifo for translating std_ulogic_vector widths
 -- author(s)	: marc at pignat dot org
@@ -31,11 +31,11 @@ entity width_changer_internal is
 	(
 		clock			: in	std_ulogic;
 		reset			: in	std_ulogic;
-		
+
 		in_data			: in	std_ulogic_vector;
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
-		
+
 		out_data		: out	std_ulogic_vector;
 		out_data_valid	: out	std_ulogic
 	);
@@ -50,11 +50,11 @@ entity width_changer is
 	(
 		clock			: in	std_ulogic;
 		reset			: in	std_ulogic;
-		
+
 		in_data			: in	std_ulogic_vector;
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
-		
+
 		out_data		: out	std_ulogic_vector;
 		out_data_valid	: out	std_ulogic
 	);
@@ -74,11 +74,11 @@ entity width_changer_gen is
 	(
 		clock			: in	std_ulogic;
 		reset			: in	std_ulogic;
-		
+
 		in_data			: in	std_ulogic_vector;
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
-		
+
 		out_data		: out	std_ulogic_vector;
 		out_data_valid	: out	std_ulogic
 	);
@@ -101,7 +101,7 @@ smaller: if g_out_width < g_in_width generate
 	(
 		clock			=> clock,
 		reset			=> reset,
-		
+
 		in_data			=> in_data,
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
@@ -117,7 +117,7 @@ bigger: if g_out_width > g_in_width generate
 	(
 		clock			=> clock,
 		reset			=> reset,
-		
+
 		in_data			=> in_data,
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
@@ -146,7 +146,7 @@ begin
 	(
 		clock			=> clock,
 		reset			=> reset,
-		
+
 		in_data			=> in_data,
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
@@ -171,7 +171,7 @@ begin
 			state <= (others => '0');
 			state(state'left) <= '1';
 			memory <= in_data(memory'range);
-			
+
 			assert unsigned(state) = 0 report "in_data_valid while not empty" severity warning;
 
 		end if;
@@ -183,7 +183,7 @@ begin
 	out_data_valid <= in_data_valid;
 	out_data <= in_data(in_data'left downto in_data'left - out_data'left);
 	in_data_ready <= not in_data_valid;
-	
+
 	for i in state'range loop
 		if state(i) = '1' then
 			out_data_valid <= '1';

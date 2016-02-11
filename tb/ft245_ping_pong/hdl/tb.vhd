@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench
 -- author(s)	: marc at pignat dot org
@@ -21,13 +21,13 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity tb is
 end tb;
 
 architecture bhv of tb is
 	signal reset			: std_ulogic;
-	
+
 	signal clock			: std_ulogic;
 	signal adbus			: std_logic_vector(7 downto 0);
 	signal txe_n			: std_ulogic;
@@ -64,11 +64,11 @@ port map
 	siwu			=> siwu,
 	reset_n			=> '0',
 	suspend_n		=> suspend_n,
-	
+
 	reset			=> reset,
 	read_data		=> read_data,
 	read_valid		=> read_valid,
-	
+
 	write_data		=> write_data,
 	write_read		=> write_read,
 	write_empty		=> status_empty
@@ -98,9 +98,9 @@ port map
 	status_empty	=> status_empty
 	--status_write_error	: out std_ulogic;
 	--status_read_error	: out std_ulogic;
-	
+
 	--free 				: out std_ulogic_vector(g_depth_log2 downto 0);
-	--used 				: out std_ulogic_vector(g_depth_log2 downto 0)	
+	--used 				: out std_ulogic_vector(g_depth_log2 downto 0)
 
 );
 
@@ -117,7 +117,7 @@ port map
 	siwu		=> siwu,
 	reset_n		=> reset_n,
 	suspend_n	=> suspend_n,
-	
+
 	d_data_in	=> d_data_in,
 	d_data_write=> d_data_write,
 	d_data_full	=> d_data_full
@@ -143,7 +143,7 @@ begin
 			d_counter <= d_counter + 1;
 			if d_counter(d_counter'left downto d_counter'left-3) = 0 then
 				d_data_write <= '1';
-				d_data_in <= std_ulogic_vector(d_counter);			
+				d_data_in <= std_ulogic_vector(d_counter);
 			end if;
 		end if;
 	end if;

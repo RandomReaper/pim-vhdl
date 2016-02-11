@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: ad7476_parallel_sim.vhd 
+-- file			: ad7476_parallel_sim.vhd
 --
 -- brief		: ad7476 (for simulation)
 -- author(s)	: marc at pignat dot org

@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file		: clock.vhd 
+-- file		: clock.vhd
 --
 -- brief		: Simulate a FT2232H in FT245 Synchronous fifo mode
 -- author(s)	: marc at pignat dot org
@@ -35,7 +35,7 @@ entity ft245_sync_sim is
 		siwu		: in	std_ulogic;
 		reset_n		: in	std_ulogic;
 		suspend_n	: out	std_ulogic;
-		
+
 		d_data_out	: out	std_ulogic_vector(7 downto 0);
 		d_data_out_valid : out std_ulogic;
 		d_data_in	: in	std_ulogic_vector(7 downto 0);

@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: top.vhd 
+-- file			: top.vhd
 --
 -- brief		: Counter to ft245
 -- author(s)	: marc at pignat dot org
@@ -21,7 +21,7 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity top is
 port
 (
@@ -35,9 +35,9 @@ port
 	siwu			: out	std_ulogic;
 	reset_n			: out	std_ulogic;
 	suspend_n		: in	std_ulogic;
-	
+
 	led				: out	std_ulogic_vector(7 downto 0);
-	
+
 	reset			: in	std_ulogic
 );
 end top;
@@ -52,7 +52,7 @@ architecture rtl of top is
 	signal read				: std_ulogic;
 	signal write			: std_ulogic;
 	signal read_valid		: std_ulogic;
-	
+
 	signal counter			: unsigned(7 downto 0);
 	signal counter_valid	: std_ulogic;
 begin
@@ -70,12 +70,12 @@ port map
 	siwu			=> siwu,
 	reset_n			=> reset_n,
 	suspend_n		=> suspend_n,
-	
+
 	reset			=> reset,
-	
+
 	read_data		=> read_data,
 	read_valid		=> read_valid,
-	
+
 	write_data		=> tx_data,
 	write_read		=> read,
 	write_empty		=> status_empty

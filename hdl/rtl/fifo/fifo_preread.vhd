@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: fifo_preread.vhd 
+-- file			: fifo_preread.vhd
 --
 -- brief		: Synchronous fifo pre-reading one data
 -- author(s)	: marc at pignat dot org
@@ -54,7 +54,7 @@ entity fifo_preread is
 		status_empty		: out std_ulogic;
 		status_write_error	: out std_ulogic;
 		status_read_error	: out std_ulogic;
-		
+
 		free 				: out std_ulogic_vector(g_depth_log2 downto 0);
 		used 				: out std_ulogic_vector(g_depth_log2 downto 0)
 	);
@@ -81,29 +81,29 @@ begin
 		read_fifo_old	<= '0';
 		data_ready		<= '0';
 		status_read_error<= '0';
-		
+
 		--pragma synthesis_off
 		read_data_int	<= (others => 'U');
 		--pragma synthesis_on
-		
+
 	elsif rising_edge(clock) then
 		read_fifo_old	<= read_fifo;
 		if read_fifo_old = '1' then
 			read_data_int	<= read_data_fifo;
 			data_ready		<= '1';
 		end if;
-		
+
 		if read = '1' and status_empty_fifo = '1' then
 			data_ready		<= '0';
 			--pragma synthesis_off
 			read_data_int	<= (others => 'U');
 			--pragma synthesis_on
 		end if;
-		
+
 		status_read_error <= '0';
 		if read = '1' and data_ready = '0' then
 			status_read_error <= '1';
-			
+
 			--pragma synthesis_off
 			assert (false) report "status_read_error" severity warning;
 			--pragma synthesis_on
@@ -135,7 +135,7 @@ port map
 	status_empty		=> status_empty_fifo,
 	status_write_error	=> status_write_error,
 	status_read_error	=> open,
-	
+
 	free 				=> free,
 	used 				=> used
 );

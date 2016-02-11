@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: ad7476_if.vhd 
+-- file			: ad7476_if.vhd
 --
 -- brief		: adc7476 interface
 -- author(s)	: marc at pignat dot org
@@ -34,14 +34,14 @@ port
 (
 	clock	: in	std_ulogic;
 	reset	: in	std_ulogic;
-	
+
 	-- To the adc7476
 	sclk		: out	std_ulogic;
 	n_cs		: out	std_ulogic;
 	sdata		: in	std_ulogic;
-	
+
 	-- To the internal logic
-	
+
 	data		: out	std_ulogic_vector(11 downto 0);
 	data_valid	: out	std_ulogic
 );
@@ -51,7 +51,7 @@ architecture rtl of ad7476_if is
 	signal cs			: std_ulogic;
 	signal c_counter	: unsigned((2**g_prescaler)-1 downto 0);
 	signal b_counter	: unsigned(4 downto 0);
-	
+
 	signal sclk_int		: std_ulogic;
 	signal sclk_old		: std_ulogic;
 	signal sample		: std_ulogic;

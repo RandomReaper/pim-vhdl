@@ -29,7 +29,7 @@ port
 	clk				: in	std_ulogic;
 	sw				: in	std_ulogic_vector(3 downto 0);
 	led				: out	std_ulogic_vector(7 downto 0);
-	
+
 	-- FT2232h
 	FT_CLKOUT		: in	std_ulogic;
 	FT_DATA			: inout	std_logic_vector(7 downto 0);
@@ -80,11 +80,11 @@ port map
 	clkout			=> FT_CLKOUT,
 	oe_n			=> FT_nOE,
 	siwu			=> FT_SIWUA,
-	reset_n			=> FT_nRESET, 
+	reset_n			=> FT_nRESET,
 	suspend_n		=> FT_nSUSPEND,
-	
+
 	reset			=> reset,
-	
+
 	led				=> led,
 	sclk			=> ADC_CLOCK,
 	n_cs			=> ADC_NCS,

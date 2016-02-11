@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: tb.vhd 
+-- file			: tb.vhd
 --
 -- brief		: Test bench
 -- author(s)	: marc at pignat dot org
@@ -21,7 +21,7 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity tb is
 end tb;
 
@@ -47,7 +47,7 @@ architecture bhv of tb is
 	signal write_data		: std_ulogic_vector(7 downto 0);
 	signal write_read		: std_ulogic;
 	signal read_valid		: std_ulogic;
-	
+
 	signal counter			: unsigned(7 downto 0);
 	signal counter_valid	: std_ulogic;
 begin
@@ -82,7 +82,7 @@ port map
 	siwu		=> siwu,
 	reset_n		=> reset_n,
 	suspend_n	=> suspend_n,
-	
+
 	d_data_in	=> d_data_in,
 	d_data_write=> d_data_write,
 	d_data_full	=> d_data_full

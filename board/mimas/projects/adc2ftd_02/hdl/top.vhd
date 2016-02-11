@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: top.vhd 
+-- file			: top.vhd
 --
 -- brief		: adc2ftd_02 top
 -- author(s)	: marc at pignat dot org
@@ -21,7 +21,7 @@
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
-	
+
 entity top is
 generic
 (
@@ -39,9 +39,9 @@ port
 	siwu			: out	std_ulogic;
 	reset_n			: out	std_ulogic;
 	suspend_n		: in	std_ulogic;
-	
+
 	led				: out	std_ulogic_vector(7 downto 0);
-	
+
 	reset			: in	std_ulogic;
 	-- ADCs
 	sclk			: out	std_ulogic;
@@ -52,13 +52,13 @@ begin end;
 
 architecture rtl of top is
 	alias  clock			is clkout;
-	
+
 	signal read_data		: std_ulogic_vector(adbus'range);
 	signal read_valid		: std_ulogic;
 	signal ftd_data			: std_ulogic_vector(adbus'range);
 	signal ftd_read			: std_ulogic;
 	signal ftd_empty		: std_ulogic;
-	
+
 	signal adc_data48		: std_ulogic_vector(g_parallel*12-1 downto 0);
 	signal adc_data64		: std_ulogic_vector(g_parallel*16-1 downto 0);
 	signal adc_data_valid	: std_ulogic;
@@ -79,12 +79,12 @@ port map
 	siwu			=> siwu,
 	reset_n			=> reset_n,
 	suspend_n		=> suspend_n,
-	
+
 	reset			=> reset,
-	
+
 	read_data		=> read_data,
 	read_valid		=> read_valid,
-	
+
 	write_data		=> ftd_data,
 	write_read		=> ftd_read,
 	write_empty		=> ftd_empty
@@ -100,11 +100,11 @@ port map
 (
 	reset	=> reset,
 	clock	=> clock,
-	
+
 	sclk	=> sclk,
 	n_cs	=> n_cs,
 	sdata	=> sdata,
-	
+
 	data		=> adc_data48,
 	data_valid	=> adc_data_valid
 );
@@ -121,7 +121,7 @@ port map
 (
 	clock			=> clock,
 	reset			=> reset,
-	
+
 	in_data			=> adc_data64,
 	in_data_valid	=> adc_data_valid,
 	in_data_ready	=> open,
@@ -140,10 +140,10 @@ port map
 (
 	reset			=> reset,
 	clock			=> clock,
-	
+
 	write_data		=> adc_data8,
 	write			=> adc_data8_valid,
-	
+
 	read_data		=> ftd_data,
 	status_empty	=> ftd_empty,
 	read			=> ftd_read

@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file			: ad7476_sim.vhd 
+-- file			: ad7476_sim.vhd
 --
 -- brief		: ad7476 (for simulation)
 -- author(s)	: marc at pignat dot org
@@ -67,20 +67,20 @@ begin
 		if counter = 19 then
 			counter <= counter;
 		end if;
-		
+
 		cs_old <= cs;
 		if cs = '1' and cs_old = '0' then
 			counter <= (others => '0');
 		end if;
-		
+
 		case to_integer(counter) is
 			when 3+0 to 3+11 =>
 				sdata <= data(11-to_integer(counter-3));
-			
+
 			when others =>
 				sdata <= '0';
 		end case;
-		
+
 	end if;
 end process;
 
