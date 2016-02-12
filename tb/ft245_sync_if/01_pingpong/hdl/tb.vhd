@@ -99,7 +99,6 @@ port map
 	clock			=> clock,
 	oe_n			=> oe_n,
 	siwu			=> siwu,
-	reset_n			=> '0',
 	suspend_n		=> suspend_n,
 
 	reset			=> reset,
