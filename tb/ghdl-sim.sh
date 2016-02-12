@@ -13,6 +13,6 @@ done
 $GHDL -m $OPTIONS tb
 $GHDL -e $OPTIONS tb
 $GHDL -r $OPTIONS tb
-#rm $DIR
+rm $DIR
 
 
