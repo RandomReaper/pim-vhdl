@@ -12,7 +12,7 @@ done
 
 $GHDL -m $OPTIONS tb
 $GHDL -e $OPTIONS tb
-$GHDL -r $OPTIONS tb
+$GHDL -r $OPTIONS tb --ieee-asserts=disable-at-0
 rm -r $DIR
 
 
