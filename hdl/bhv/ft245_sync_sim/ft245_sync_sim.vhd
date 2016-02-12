@@ -65,6 +65,7 @@ architecture bhv of ft245_sync_sim is
 	signal tx_fifo_empty: std_ulogic;
 	signal txe			: std_ulogic;
 	signal tx			: std_ulogic;
+	signal tmp			: std_ulogic_vector(adbus'range);
 begin
 
 oe			<= not oe_n;
@@ -134,6 +135,8 @@ begin
 	end if;
 end process;
 
+tmp <= std_ulogic_vector(adbus);
+
 i_to_host_fifo: entity work.fifo
 generic map
 (
@@ -147,7 +150,7 @@ port map
 	-- input
 	sync_reset	=> '0',
 	write		=> wr,
-	write_data	=> std_ulogic_vector(adbus),
+	write_data	=> tmp,
 
 	-- outputs
 	read		=> tx,
