@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="/home/pim/Dropbox/drittsekk/01_pim/10_git/hw/tb/ft245_ping_pong/tmp/tb_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="/home/pim/Dropbox/drittsekk/01_pim/10_git/hw/tb/ft245_sync_if/01_pingpong/tmp/tb_isim_beh.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="numeric_std" />
             <top_module name="std_logic_1164" />
@@ -11,7 +11,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="18" />
+   <WVObjectSize size="22" />
    <wvobject fp_name="/tb/i_ft_sim/reset_n" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">reset_n</obj_property>
       <obj_property name="ObjectShortName">reset_n</obj_property>
@@ -76,6 +76,10 @@
       <obj_property name="ElementShortName">wr_n</obj_property>
       <obj_property name="ObjectShortName">wr_n</obj_property>
    </wvobject>
+   <wvobject fp_name="/tb/d_data_out_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">d_data_out_valid</obj_property>
+      <obj_property name="ObjectShortName">d_data_out_valid</obj_property>
+   </wvobject>
    <wvobject fp_name="/tb/i_ft_sim/d_data_out" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">d_data_out[7:0]</obj_property>
       <obj_property name="ObjectShortName">d_data_out[7:0]</obj_property>
@@ -94,5 +98,19 @@
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">128 128 255</obj_property>
       <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/d_data_out_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">d_data_out_valid</obj_property>
+      <obj_property name="ObjectShortName">d_data_out_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/expected_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">expected_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/d_data_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d_data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d_data_out[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>

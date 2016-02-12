@@ -48,7 +48,44 @@ architecture bhv of tb is
 	signal write_data		: std_ulogic_vector(7 downto 0);
 	signal write_read		: std_ulogic;
 	signal read_valid		: std_ulogic;
+	signal stop				: std_ulogic;
+	signal expected_data	: std_ulogic_vector(7 downto 0);
+	signal d_data_out		: std_ulogic_vector(7 downto 0);
+	signal d_data_out_valid	: std_ulogic;
+
 begin
+
+tb_proc: process
+	variable timeout : integer;
+begin
+	stop <= '0';
+
+	expected_data <= (others => '0');
+
+	wait until falling_edge(reset);
+
+	for i in 0 to 15 loop
+		timeout := 100;
+		while d_data_out_valid /= '1' loop
+			wait until falling_edge(clock);
+
+			assert timeout > 0 report "Timeout waiting for data_valid" severity failure;
+
+			timeout := timeout - 1;
+		end loop;
+
+		assert d_data_out = expected_data report "Wrong data i:" &integer'image(i) severity failure;
+		expected_data <= std_ulogic_vector(unsigned(expected_data) + 1);
+		wait until falling_edge(clock);
+
+	end loop;
+
+	assert d_data_out_valid = '0' report "Wrong data valid duration" severity failure;
+
+	stop <= '1';
+
+	wait;
+end process;
 
 reset_n <= not reset;
 i_ft_if : entity work.ft245_sync_if
@@ -105,6 +142,10 @@ port map
 );
 
 i_ft_sim : entity work.ft245_sync_sim
+generic map
+(
+	g_to_host_depth_log2 => 3
+)
 port map
 (
 	adbus		=> adbus,
@@ -120,7 +161,10 @@ port map
 
 	d_data_in	=> d_data_in,
 	d_data_write=> d_data_write,
-	d_data_full	=> d_data_full
+	d_data_full	=> d_data_full,
+
+	d_data_out	=> d_data_out,
+	d_data_out_valid => d_data_out_valid
 );
 
 i_reset : entity work.reset
@@ -149,14 +193,15 @@ begin
 	end if;
 end process;
 
-i_clock: entity work.clock
+i_clock: entity work.clock_stop
 generic map
 (
 	frequency => 60.0e6
 )
 port map
 (
-	clock	=> clock
+	clock	=> clock,
+	stop	=> stop
 );
 
 end bhv;
