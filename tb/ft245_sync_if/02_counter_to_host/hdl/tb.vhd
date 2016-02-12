@@ -50,7 +50,49 @@ architecture bhv of tb is
 
 	signal counter			: unsigned(7 downto 0);
 	signal counter_valid	: std_ulogic;
+	signal d_data_out		: std_ulogic_vector(7 downto 0);
+	signal d_data_out_valid : std_ulogic;
+	signal out_data			: std_ulogic_vector(7 downto 0);
+	signal out_valid		: std_ulogic;
+
+	signal stop				: std_ulogic;
+	signal expected_data	: std_ulogic_vector(7 downto 0);
 begin
+
+tb_proc: process
+	variable timeout : integer;
+	begin
+	stop <= '0';
+
+	expected_data <= (others => '0');
+
+	wait until falling_edge(reset);
+
+	for i in 0 to 1000 loop
+
+		timeout := 100;
+		while out_valid /= '1' loop
+			wait until falling_edge(clock);
+
+			assert timeout > 0 report "Timeout waiting for out_valid" severity failure;
+
+			timeout := timeout - 1;
+		end loop;
+
+		while out_valid = '1' loop
+
+			assert out_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(out_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity failure;
+			expected_data <= std_ulogic_vector(unsigned(expected_data) + 1);
+			wait until falling_edge(clock);
+		end loop;
+
+	end loop;
+
+	stop <= '1';
+
+	wait;
+
+end process;
 
 i_top : entity work.top
 port map
@@ -76,20 +118,40 @@ generic map
 )
 port map
 (
-	adbus		=> adbus,
-	rxf_n		=> rxf_n,
-	txe_n		=> txe_n,
-	rd_n		=> rd_n,
-	wr_n		=> wr_n,
-	clock		=> clock,
-	oe_n		=> oe_n,
-	siwu		=> siwu,
-	reset_n		=> reset_n,
-	suspend_n	=> suspend_n,
+	adbus				=> adbus,
+	rxf_n				=> rxf_n,
+	txe_n				=> txe_n,
+	rd_n				=> rd_n,
+	wr_n				=> wr_n,
+	clock				=> clock,
+	oe_n				=> oe_n,
+	siwu				=> siwu,
+	reset_n				=> reset_n,
+	suspend_n			=> suspend_n,
 
-	d_data_in	=> d_data_in,
-	d_data_write=> d_data_write,
-	d_data_full	=> d_data_full
+	d_data_in			=> d_data_in,
+	d_data_write		=> d_data_write,
+	d_data_full			=> d_data_full,
+
+	d_data_out			=> d_data_out,
+	d_data_out_valid 	=> d_data_out_valid
+);
+
+i_depacketizer : entity work.depacketizer
+generic map
+(
+	g_nrdata_log2		=> 7
+)
+port map
+(
+	reset			=> reset,
+	clock			=> clock,
+
+	in_data			=> d_data_out,
+	in_valid		=> d_data_out_valid,
+
+	out_data		=> out_data,
+	out_valid		=> out_valid
 );
 
 d_data_in		<= std_ulogic_vector(d_counter) when d_data_write = '1' else (others => '-');
@@ -111,14 +173,15 @@ port map
 	clock	=> clock
 );
 
-i_clock: entity work.clock
+i_clock : entity work.clock_stop
 generic map
 (
-	frequency => 60.0e6
+	frequency	=> 60.0e6
 )
 port map
 (
-	clock	=> clock
+	clock	=> clock,
+	stop	=> stop
 );
 
 end bhv;
