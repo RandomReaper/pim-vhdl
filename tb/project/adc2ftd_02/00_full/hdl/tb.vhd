@@ -25,7 +25,8 @@ library ieee;
 entity tb is
 generic
 (
-	g_parallel : natural := 4
+	g_parallel		: natural := 4;
+	g_nrdata_log2	: natural := 5
 );
 end tb;
 
@@ -47,12 +48,65 @@ architecture bhv of tb is
 	signal sclk				: std_ulogic;
 	signal n_cs				: std_ulogic;
 	signal sdata			: std_ulogic_vector(g_parallel-1 downto 0);
+
+	signal d_data_out		: std_ulogic_vector(7 downto 0);
+	signal d_data_out_valid : std_ulogic;
+	signal out_data			: std_ulogic_vector(7 downto 0);
+	signal out_valid		: std_ulogic;
+	signal adc_data			: std_ulogic_vector(g_parallel*16-1 downto 0);
+	signal adc_data_valid	: std_ulogic;
+
+	signal stop				: std_ulogic;
+	signal tmp				: std_ulogic_vector(11 downto 0);
+	signal expected_data	: std_ulogic_vector(g_parallel*16-1 downto 0);
+
 begin
+
+tb_proc: process
+	variable timeout : integer;
+	begin
+	stop <= '0';
+
+	tmp <= (0 => '1', others => '0');
+
+	wait until falling_edge(reset);
+
+	for i in 0 to 1000 loop
+
+		for i in g_parallel - 1 downto 0 loop
+			expected_data(16*i+3 downto 16*i+0) <= std_ulogic_vector(to_unsigned(i + 1, 4));
+			expected_data(16*i+15 downto 16*i+4) <= tmp;
+		end loop;
+
+		timeout := 1000;
+		while adc_data_valid /= '1' loop
+			wait until falling_edge(clock);
+
+			assert timeout > 0 report "Timeout waiting for adc_data_valid" severity failure;
+
+			timeout := timeout - 1;
+		end loop;
+
+		while adc_data_valid = '1' loop
+
+			assert adc_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(adc_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity failure;
+			tmp <= std_ulogic_vector(rotate_left(unsigned(tmp), 1));
+			wait until falling_edge(clock);
+		end loop;
+
+	end loop;
+
+	stop <= '1';
+
+	wait;
+
+end process;
 
 i_top: entity work.top
 generic map
 (
-	g_parallel	=> g_parallel
+	g_parallel		=> g_parallel,
+	g_nrdata_log2	=> g_nrdata_log2
 )
 port map
 (
@@ -93,7 +147,8 @@ port map
 	reset_n			=> reset_n,
 	suspend_n		=> suspend_n,
 
-	d_data_out		=> open,
+	d_data_out		=> d_data_out,
+	d_data_out_valid=> d_data_out_valid,
 	d_data_in		=> x"00",
 	d_data_write	=> '0',
 	d_data_full		=> open
@@ -111,6 +166,36 @@ port map
 	sdata			=> sdata
 );
 
+i_depacketizer : entity work.depacketizer
+generic map
+(
+	g_nrdata_log2		=> g_nrdata_log2
+)
+port map
+(
+	reset			=> reset,
+	clock			=> clock,
+
+	in_data			=> d_data_out,
+	in_valid		=> d_data_out_valid,
+
+	out_data		=> out_data,
+	out_valid		=> out_valid
+);
+
+i_wc: entity work.width_changer
+port map
+(
+	reset			=> reset,
+	clock			=> clock,
+
+	in_data			=> out_data,
+	in_data_valid	=> out_valid,
+
+	out_data		=> adc_data,
+	out_data_valid	=> adc_data_valid
+);
+
 i_reset: entity work.reset
 port map
 (
@@ -118,14 +203,15 @@ port map
 	clock	=> clock
 );
 
-i_clock: entity work.clock
+i_clock: entity work.clock_stop
 generic map
 (
 	frequency => 60.0e6
 )
 port map
 (
-	clock	=> clock
+	clock	=> clock,
+	stop	=> stop
 );
 
 end bhv;

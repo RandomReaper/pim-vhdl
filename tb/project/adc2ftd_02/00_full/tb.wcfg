@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="/home/pim/git/hw/board/mimas/projects/adc2ftd_02/tb/full/tmp/tb_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="/home/pim/Dropbox/drittsekk/01_pim/10_git/hw/tb/project/adc2ftd_02/00_full/tmp/tb_isim_beh.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="numeric_std" />
             <top_module name="std_logic_1164" />
@@ -11,7 +11,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="21" />
+   <WVObjectSize size="20" />
    <wvobject fp_name="/tb/i_top/i_packetizer/clock" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -20,26 +20,6 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/adc_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">adc_data[47:0]</obj_property>
-      <obj_property name="ObjectShortName">adc_data[47:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/adc_data_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">adc_data_valid</obj_property>
-      <obj_property name="ObjectShortName">adc_data_valid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/ft_empty" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">ft_empty</obj_property>
-      <obj_property name="ObjectShortName">ft_empty</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/ft_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">ft_data[7:0]</obj_property>
-      <obj_property name="ObjectShortName">ft_data[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/ft_read" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">ft_read</obj_property>
-      <obj_property name="ObjectShortName">ft_read</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb/i_top/i_packetizer/tx_write" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">tx_write</obj_property>
       <obj_property name="ObjectShortName">tx_write</obj_property>
@@ -47,6 +27,7 @@
    <wvobject fp_name="/tb/i_top/i_packetizer/tx_data" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">tx_data[7:0]</obj_property>
       <obj_property name="ObjectShortName">tx_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_top/i_packetizer/rx_read" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">rx_read</obj_property>
@@ -57,43 +38,69 @@
       <obj_property name="ObjectShortName">rx_empty</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_top/i_packetizer/rx_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">rx_data[47:0]</obj_property>
-      <obj_property name="ObjectShortName">rx_data[47:0]</obj_property>
+      <obj_property name="ElementShortName">rx_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_top/i_packetizer/packet_count" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">packet_count[7:0]</obj_property>
       <obj_property name="ObjectShortName">packet_count[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_top/i_packetizer/in_count" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">in_count[5:0]</obj_property>
       <obj_property name="ObjectShortName">in_count[5:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/state" type="other" db_ref_id="1">
+   <wvobject fp_name="/tb/i_top/i_packetizer/state" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">state</obj_property>
       <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/next_state" type="other" db_ref_id="1">
+   <wvobject fp_name="/tb/i_top/i_packetizer/next_state" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">next_state</obj_property>
       <obj_property name="ObjectShortName">next_state</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/state_counter" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">state_counter[7:0]</obj_property>
-      <obj_property name="ObjectShortName">state_counter[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/next_state_counter" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">next_state_counter[7:0]</obj_property>
-      <obj_property name="ObjectShortName">next_state_counter[7:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_top/i_packetizer/header" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">header[7:0]</obj_property>
       <obj_property name="ObjectShortName">header[7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/g_parallel" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">g_parallel</obj_property>
-      <obj_property name="ObjectShortName">g_parallel</obj_property>
-   </wvobject>
    <wvobject fp_name="/tb/i_top/i_packetizer/g_nrdata_log2" type="other" db_ref_id="1">
       <obj_property name="ElementShortName">g_nrdata_log2</obj_property>
       <obj_property name="ObjectShortName">g_nrdata_log2</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider24" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_top/i_wc/in_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">in_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">in_data[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/tmp" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tmp[11:0]</obj_property>
+      <obj_property name="ObjectShortName">tmp[11:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/expected_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">expected_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_data[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/adc_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">adc_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/adc_data_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">adc_data_valid</obj_property>
+      <obj_property name="ObjectShortName">adc_data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider84" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
    </wvobject>
 </wave_config>

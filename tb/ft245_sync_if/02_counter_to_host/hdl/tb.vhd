@@ -23,6 +23,10 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity tb is
+generic
+(
+	g_nrdata_log2	: natural := 7
+);
 end tb;
 
 architecture bhv of tb is
@@ -95,6 +99,10 @@ tb_proc: process
 end process;
 
 i_top : entity work.top
+generic map
+(
+	g_nrdata_log2	=> g_nrdata_log2
+)
 port map
 (
 	adbus		=> adbus,
@@ -140,7 +148,7 @@ port map
 i_depacketizer : entity work.depacketizer
 generic map
 (
-	g_nrdata_log2		=> 7
+	g_nrdata_log2		=> g_nrdata_log2
 )
 port map
 (

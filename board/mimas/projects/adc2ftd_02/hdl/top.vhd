@@ -25,7 +25,8 @@ library ieee;
 entity top is
 generic
 (
-	g_parallel : natural := 4
+	g_nrdata_log2	: natural := 5;
+	g_parallel		: natural := 4
 );
 port
 (
@@ -132,7 +133,7 @@ port map
 i_packetizer: entity work.packetizer
 generic map
 (
-	g_nrdata_log2		=> 5,
+	g_nrdata_log2		=> g_nrdata_log2,
 	g_depth_in_log2		=> 3,
 	g_depth_out_log2	=> 5
 )

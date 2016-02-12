@@ -23,6 +23,10 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity top is
+generic
+(
+	g_nrdata_log2		: natural := 5
+);
 port
 (
 	adbus			: inout	std_logic_vector(7 downto 0);
@@ -84,7 +88,7 @@ port map
 i_packetizer : entity work.packetizer
 generic map
 (
-	g_nrdata_log2		=> 7,
+	g_nrdata_log2		=> g_nrdata_log2,
 	g_depth_in_log2		=> 3,
 	g_depth_out_log2	=> 5
 )
