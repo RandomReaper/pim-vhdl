@@ -59,33 +59,28 @@
       <obj_property name="ObjectShortName">state</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_dut/write_data_old" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">write_data_old[4:0]</obj_property>
-      <obj_property name="ObjectShortName">write_data_old[4:0]</obj_property>
+      <obj_property name="ElementShortName">write_data_old[3:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data_old[3:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
-      <wvobject fp_name="/tb/i_dut/write_data_old[4]" type="array" db_ref_id="1">
-         <obj_property name="ElementShortName">[4]</obj_property>
-         <obj_property name="ObjectShortName">write_data_old[4]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
       <wvobject fp_name="/tb/i_dut/write_data_old[3]" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">[3]</obj_property>
          <obj_property name="ObjectShortName">write_data_old[3]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/tb/i_dut/write_data_old[2]" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">[2]</obj_property>
          <obj_property name="ObjectShortName">write_data_old[2]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/tb/i_dut/write_data_old[1]" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">[1]</obj_property>
          <obj_property name="ObjectShortName">write_data_old[1]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/tb/i_dut/write_data_old[0]" type="array" db_ref_id="1">
          <obj_property name="ElementShortName">[0]</obj_property>
          <obj_property name="ObjectShortName">write_data_old[0]</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
    </wvobject>
    <wvobject fp_name="/tb/i_dut/write_data" type="array" db_ref_id="1">

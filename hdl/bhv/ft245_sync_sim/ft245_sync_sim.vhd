@@ -23,6 +23,10 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity ft245_sync_sim is
+	generic
+	(
+		g_to_host_depth_log2 : natural := 4 -- Log2 of the depth
+	);
 	port
 	(
 		adbus		: inout	std_logic_vector(7 downto 0);
@@ -133,7 +137,7 @@ end process;
 i_to_host_fifo: entity work.fifo
 generic map
 (
-	g_depth_log2 => 4
+	g_depth_log2 => g_to_host_depth_log2
 )
 port map
 (

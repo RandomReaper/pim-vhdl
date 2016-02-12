@@ -314,9 +314,10 @@ fifo_write <= '0';
 
 waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"ee")	report "adbus => wrong data (0xee)" severity failure;
-waitFor(clock, wr, '0', 10, "wr");
-txe <= '0';
+
 wait until falling_edge(clock);
+txe <= '0';
+waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
 
@@ -344,15 +345,13 @@ fifo_write <= '0';
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"01")	report "adbus => wrong data (0x01)" severity failure;
-wait until falling_edge(clock);
+
 wait until falling_edge(clock);
 txe <= '0';
-wait until falling_edge(clock);
-wait until falling_edge(clock);
-
 waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
+
 assert (adbus					= x"02")	report "adbus => wrong data (0x02)" severity failure;
 wait until falling_edge(clock);
 waitFor(clock, wr, '1', 10, "wr");
@@ -383,15 +382,13 @@ fifo_write <= '0';
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"11")	report "adbus => wrong data (0x11)" severity failure;
-wait until falling_edge(clock);
+
 wait until falling_edge(clock);
 txe <= '0';
-wait until falling_edge(clock);
-wait until falling_edge(clock);
-
 waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
+
 assert (adbus					= x"12")	report "adbus => wrong data (0x12)" severity failure;
 wait until falling_edge(clock);
 waitFor(clock, wr, '1', 10, "wr");
@@ -404,7 +401,7 @@ assert (wr					= '0')			report "wr => wrong duration" severity failure;
 txe <= '0';
 
 -----------------------------------------------------------------------------
--- Send 3 bytes to host, host two space left
+-- Send 5 bytes to host, host one space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
 wait until falling_edge(clock);
@@ -417,28 +414,107 @@ fifo_data <= x"22";
 wait until falling_edge(clock);
 fifo_data <= x"23";
 wait until falling_edge(clock);
+fifo_data <= x"24";
+wait until falling_edge(clock);
+fifo_data <= x"25";
+wait until falling_edge(clock);
 fifo_write <= '0';
 
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"21")	report "adbus => wrong data (0x21)" severity failure;
-wait until falling_edge(clock);
-assert (adbus					= x"22")	report "adbus => wrong data (0x22)" severity failure;
-wait until falling_edge(clock);
+
 wait until falling_edge(clock);
 txe <= '0';
-wait until falling_edge(clock);
-wait until falling_edge(clock);
 waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
+
+assert (adbus					= x"22")	report "adbus => wrong data (0x22)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"23")	report "adbus => wrong data (0x23)" severity failure;
 wait until falling_edge(clock);
-txe <= '0';
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"24")	report "adbus => wrong data (0x24)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"25")	report "adbus => wrong data (0x23)" severity failure;
+wait until falling_edge(clock);
 assert (wr					= '0')			report "wr => wrong duration" severity failure;
+txe <= '0';
 
 -----------------------------------------------------------------------------
--- Send 4 bytes to host, host 3 space left
+-- Send 10 bytes to host, host one space left
+-----------------------------------------------------------------------------
+fifo_reset <= '1';
+wait until falling_edge(clock);
+fifo_reset <= '0';
+wait until falling_edge(clock);
+fifo_write <= '1';
+fifo_data <= x"71";
+wait until falling_edge(clock);
+fifo_data <= x"72";
+wait until falling_edge(clock);
+fifo_data <= x"73";
+wait until falling_edge(clock);
+fifo_data <= x"74";
+wait until falling_edge(clock);
+fifo_data <= x"75";
+wait until falling_edge(clock);
+fifo_data <= x"76";
+wait until falling_edge(clock);
+fifo_data <= x"77";
+wait until falling_edge(clock);
+fifo_data <= x"78";
+wait until falling_edge(clock);
+fifo_data <= x"79";
+wait until falling_edge(clock);
+fifo_data <= x"7a";
+wait until falling_edge(clock);
+fifo_write <= '0';
+
+txe <= '1';
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"71")	report "adbus => wrong data (0x71)" severity failure;
+
+wait until falling_edge(clock);
+txe <= '0';
+waitFor(clock, wr, '0', 10, "wr");
+txe <= '1';
+waitFor(clock, wr, '1', 10, "wr");
+
+assert (adbus					= x"72")	report "adbus => wrong data (0x72)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"73")	report "adbus => wrong data (0x73)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"74")	report "adbus => wrong data (0x74)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"75")	report "adbus => wrong data (0x75)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"76")	report "adbus => wrong data (0x76)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"77")	report "adbus => wrong data (0x77)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"78")	report "adbus => wrong data (0x78)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"79")	report "adbus => wrong data (0x79)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"7a")	report "adbus => wrong data (0x7a)" severity failure;
+wait until falling_edge(clock);
+assert (wr					= '0')			report "wr => wrong duration" severity failure;
+txe <= '0';
+
+-----------------------------------------------------------------------------
+-- Send 3 bytes to host, host two space left
 -----------------------------------------------------------------------------
 fifo_reset <= '1';
 wait until falling_edge(clock);
@@ -451,29 +527,60 @@ fifo_data <= x"32";
 wait until falling_edge(clock);
 fifo_data <= x"33";
 wait until falling_edge(clock);
-fifo_data <= x"34";
-wait until falling_edge(clock);
 fifo_write <= '0';
 
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"31")	report "adbus => wrong data (0x31)" severity failure;
 wait until falling_edge(clock);
-waitFor(clock, wr, '1', 10, "wr");
 assert (adbus					= x"32")	report "adbus => wrong data (0x32)" severity failure;
-wait until falling_edge(clock);
-waitFor(clock, wr, '1', 10, "wr");
-assert (adbus					= x"33")	report "adbus => wrong data (0x33)" severity failure;
 
 wait until falling_edge(clock);
-wait until falling_edge(clock);
 txe <= '0';
-wait until falling_edge(clock);
-wait until falling_edge(clock);
 waitFor(clock, wr, '0', 10, "wr");
 txe <= '1';
 waitFor(clock, wr, '1', 10, "wr");
-assert (adbus					= x"34")	report "adbus => wrong data (0x34)" severity failure;
+
+assert (adbus					= x"33")	report "adbus => wrong data (0x33)" severity failure;
+wait until falling_edge(clock);
+txe <= '0';
+assert (wr					= '0')			report "wr => wrong duration" severity failure;
+
+-----------------------------------------------------------------------------
+-- Send 4 bytes to host, host 3 space left
+-----------------------------------------------------------------------------
+fifo_reset <= '1';
+wait until falling_edge(clock);
+fifo_reset <= '0';
+wait until falling_edge(clock);
+fifo_write <= '1';
+fifo_data <= x"41";
+wait until falling_edge(clock);
+fifo_data <= x"42";
+wait until falling_edge(clock);
+fifo_data <= x"43";
+wait until falling_edge(clock);
+fifo_data <= x"44";
+wait until falling_edge(clock);
+fifo_write <= '0';
+
+txe <= '1';
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"41")	report "adbus => wrong data (0x41)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"42")	report "adbus => wrong data (0x42)" severity failure;
+wait until falling_edge(clock);
+waitFor(clock, wr, '1', 10, "wr");
+assert (adbus					= x"43")	report "adbus => wrong data (0x43)" severity failure;
+
+wait until falling_edge(clock);
+txe <= '0';
+waitFor(clock, wr, '0', 10, "wr");
+txe <= '1';
+waitFor(clock, wr, '1', 10, "wr");
+
+assert (adbus					= x"44")	report "adbus => wrong data (0x34)" severity failure;
 wait until falling_edge(clock);
 txe <= '0';
 wait until falling_edge(clock);

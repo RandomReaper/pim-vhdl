@@ -70,6 +70,10 @@ port map
 );
 
 i_ft_sim : entity work.ft245_sync_sim
+generic map
+(
+	g_to_host_depth_log2 => 3
+)
 port map
 (
 	adbus		=> adbus,

@@ -104,11 +104,12 @@ architecture rtl of ft245_sync_if is
 
 	type old_elem_t is
 	record
-		data : std_ulogic_vector(write_data'range);
-		failed : std_ulogic;
+		data	: std_ulogic_vector(write_data'range);
+		valid	: std_ulogic;
+		failed	: std_ulogic;
 	end record;
 
-	type old_t is array(4 downto 0) of old_elem_t;
+	type old_t is array(3 downto 0) of old_elem_t;
 	signal write_data_old	: old_t;
 	signal old_counter		: unsigned(2 downto 0);
 
@@ -303,15 +304,19 @@ begin
 				write_data_old(i) <= write_data_old(i-1);
 			end loop;
 			write_data_old(0).data <= write_data;
-			write_data_old(0).failed <= ft_write;
+			write_data_old(0).valid <= write_read_old;
+			write_data_old(0).failed <= '0';
 
-			if write_old_old_old = '1' and tx_possible = '1' then
-				write_data_old(write_data_old'left -1 ).failed <= '0';
-			end if;
 		end if;
 
-		if write_old_old_old = '1' and tx_possible = '0' then
+		if write_old_old = '1' and tx_possible = '0' then
 			write_failed <= '1';
+		end if;
+
+		if write_failed = '1' then
+			for i in write_data_old'left - 1 downto 0 loop
+				write_data_old(i).failed <= write_data_old(i).valid;
+			end loop;
 		end if;
 
 		if state = STATE_WRITE_OLD then
@@ -321,6 +326,7 @@ begin
 			end loop;
 
 			write_data_old(0).failed <= '0';
+			write_data_old(0).valid <= '0';
 
 			--pragma synthesis_off
 			write_data_old(0).data <= (others => '-');
