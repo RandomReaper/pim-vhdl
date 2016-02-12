@@ -23,6 +23,10 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity tb is
+generic
+(
+	g_nrdata_log2		: natural := 3
+);
 end tb;
 
 architecture bhv of tb is
@@ -30,7 +34,6 @@ architecture bhv of tb is
 	signal clock			: std_ulogic;
 
 	signal counter			: unsigned(7 downto 0);
-	signal counter_rx		: unsigned(7 downto 0);
 
 	signal read				: std_ulogic;
 	signal empty			: std_ulogic;
@@ -43,12 +46,86 @@ architecture bhv of tb is
 	signal read_valid		: std_ulogic;
 	signal d_in				: std_ulogic_vector(7 downto 0);
 	signal d_out			: std_ulogic_vector(7 downto 0);
+
+	signal out_data			: std_ulogic_vector(7 downto 0);
+	signal out_valid		: std_ulogic;
+
+	signal stop				: std_ulogic;
+
+	signal expected_data	: std_ulogic_vector(7 downto 0);
+
+	signal rx				: std_ulogic;
 begin
 
-i_packetizer : entity work.packetizer
+rx_proc: process
+	variable timeout : integer;
+begin
+
+	stop <= '0';
+
+	for i in 0 to 20 loop
+		for j in 0 to 20 loop
+			rx <= '0';
+			timeout := i;
+			while timeout > 0 loop
+				timeout := timeout -1;
+				wait until falling_edge(clock);
+			end loop;
+
+			rx <= '1';
+			timeout := j;
+			while timeout > 0 loop
+				timeout := timeout -1;
+				wait until falling_edge(clock);
+			end loop;
+
+			wait until falling_edge(clock);
+		end loop;
+	end loop;
+
+	stop <= '1';
+
+	wait;
+
+end process;
+
+tb_proc: process
+variable timeout : integer;
+begin
+	expected_data <= (others => '0');
+
+	wait until falling_edge(reset);
+
+	while true loop
+
+		timeout := 10000;
+		while out_valid /= '1' loop
+			wait until falling_edge(clock);
+
+			assert timeout > 0 report "Timeout waiting for data_valid" severity failure;
+
+			timeout := timeout - 1;
+		end loop;
+
+		while out_valid = '1' loop
+
+			assert out_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(out_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity failure;
+			expected_data <= std_ulogic_vector(unsigned(expected_data) + 1);
+			wait until falling_edge(clock);
+		end loop;
+
+	end loop;
+
+	assert out_valid = '0' report "Wrong data valid duration" severity failure;
+
+	wait;
+end process;
+
+
+i_dut : entity work.packetizer
 generic map
 (
-	g_nrdata_log2		=> 3,
+	g_nrdata_log2		=> g_nrdata_log2,
 	g_depth_in_log2		=> 3,
 	g_depth_out_log2	=> 1
 )
@@ -66,6 +143,23 @@ port map
 	status_full		=> full
 );
 
+i_depacketizer : entity work.depacketizer
+generic map
+(
+	g_nrdata_log2		=> g_nrdata_log2
+)
+port map
+(
+	reset		=> reset,
+	clock		=> clock,
+
+	in_data		=> read_data,
+	in_valid	=> read_valid,
+
+	out_data	=> out_data,
+	out_valid	=> out_valid
+);
+
 -- Fill with consecutive numbers
 write_data <= std_ulogic_vector(counter);
 write <= not full;
@@ -81,16 +175,7 @@ begin
 end process;
 
 -- Read
-read <= counter_rx(3) and not empty;
-
-process(reset, clock)
-begin
-	if reset = '1' then
-		counter_rx <= (others => '0');
-	elsif rising_edge(clock) then
-		counter_rx <= counter_rx + 1;
-	end if;
-end process;
+read <= rx and not empty;
 
 -- Highlight data in/out when valid for debugging
 d_out <= read_data when read_valid = '1' else (others => '-');
@@ -105,14 +190,15 @@ begin
 	end if;
 end process;
 
-i_clock : entity work.clock
+i_clock : entity work.clock_stop
 generic map
 (
 	frequency	=> 80.0e6
 )
 port map
 (
-	clock	=> clock
+	clock	=> clock,
+	stop	=> stop
 );
 
 i_reset : entity work.reset

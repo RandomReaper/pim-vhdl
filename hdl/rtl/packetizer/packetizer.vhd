@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- file			: packetizer.vhd
 --
--- brief		: adc7476 interface
+-- brief		: packetizer
 -- author(s)	: marc at pignat dot org
 -----------------------------------------------------------------------------
 -- Copyright 2015,2016 Marc Pignat
@@ -104,7 +104,7 @@ begin
 			if tx_full = '0' then
 				next_state.counter <= state.counter+1;
 			end if;
-			if state.counter = 16-1 then
+			if tx_full = '0' and state.counter = 16-1 then
 				next_state.name <= STATE_DATA;
 				next_state.counter <= (others => '0');
 			end if;
@@ -114,7 +114,7 @@ begin
 				next_state.counter <= state.counter+1;
 			end if;
 
-			if state.counter = (2**g_nrdata_log2) - 1 then
+			if rx_read = '1' and state.counter = (2**g_nrdata_log2) - 1 then
 				next_state.name <= STATE_IDLE;
 				next_state.counter <= (others => '0');
 			end if;
