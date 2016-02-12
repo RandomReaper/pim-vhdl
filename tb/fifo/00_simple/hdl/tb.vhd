@@ -43,7 +43,44 @@ architecture bhv of tb is
 	signal read_valid		: std_ulogic;
 	signal d_in				: std_ulogic_vector(7 downto 0);
 	signal d_out			: std_ulogic_vector(7 downto 0);
+	signal stop				: std_ulogic;
+	signal expected_data	: std_ulogic_vector(7 downto 0);
 begin
+
+tb_proc: process
+	variable timeout : integer;
+	begin
+	stop <= '0';
+
+	expected_data <= (others => '0');
+
+	wait until falling_edge(reset);
+
+	for i in 0 to 1000 loop
+
+		timeout := 10;
+		while read_valid /= '1' loop
+			wait until falling_edge(clock);
+
+			assert timeout > 0 report "Timeout waiting for read_valid" severity failure;
+
+			timeout := timeout - 1;
+		end loop;
+
+		while read_valid = '1' loop
+
+			assert read_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(read_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity failure;
+			expected_data <= std_ulogic_vector(unsigned(expected_data) + 1);
+			wait until falling_edge(clock);
+		end loop;
+
+	end loop;
+
+	stop <= '1';
+
+	wait;
+
+end process;
 
 i_fifo : entity work.fifo
 generic map
@@ -113,7 +150,7 @@ generic map
 port map
 (
 	clock	=> clock,
-	stop	=> counter(counter'left)
+	stop	=> stop
 );
 
 i_reset : entity work.reset

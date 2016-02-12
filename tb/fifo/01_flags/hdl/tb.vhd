@@ -290,6 +290,8 @@ begin
 	-- End of test
 	-----------------------------------------------------------------------------
 
+	assert false report "Simulation Done" severity note;
+
 	wait;
 
 	end process;
