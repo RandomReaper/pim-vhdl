@@ -93,17 +93,15 @@ architecture rtl of ft245_sync_if is
 	signal ft_tx			: std_ulogic;
 	signal ft_rx			: std_ulogic;
 
-	--
+
+	-- Data RX
 	signal oe				: std_ulogic;
 	signal adbus_int		: std_ulogic_vector(in_data'range);
 	signal ft_read_old		: std_ulogic_vector(1 downto 0);
-	signal ft_write_old		: std_ulogic_vector(1 downto 0);
-	signal write_failed		: std_ulogic;
 	signal out_data_int		: std_ulogic_vector(in_data'range);
 	signal out_valid_int	: std_ulogic;
-	signal in_read_int		: std_ulogic;
-	signal in_read_old		: std_ulogic;
 
+	-- Data TX
 	type old_elem_t is
 	record
 		data	: std_ulogic_vector(in_data'range);
@@ -112,8 +110,12 @@ architecture rtl of ft245_sync_if is
 	end record;
 
 	type old_t is array(2 downto 0) of old_elem_t;
+	signal ft_write_old		: std_ulogic_vector(1 downto 0);
+	signal write_failed		: std_ulogic;
 	signal in_data_old		: old_t;
-	signal old_counter		: unsigned(2 downto 0);
+	signal old_counter		: unsigned(1 downto 0);
+	signal in_read_int		: std_ulogic;
+	signal in_read_old		: std_ulogic;
 
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
