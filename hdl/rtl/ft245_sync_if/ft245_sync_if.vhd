@@ -238,6 +238,8 @@ begin
 	end case;
 end process;
 
+
+-- ft_oe and oe are not driven simultaneously to avoid bus contention.
 with state select ft_oe <=
 		'1' when STATE_WAIT_READ1 | STATE_WAIT_READ2 | STATE_READ,
 		'0' when others;
