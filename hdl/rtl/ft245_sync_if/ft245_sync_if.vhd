@@ -43,12 +43,12 @@ port
 	-- Interface to the internal logic
 	reset			: in	std_ulogic;
 
-	write_data		: in	std_ulogic_vector(7 downto 0);
-	write_empty		: in	std_ulogic;
-	write_read		: out	std_ulogic;
+	in_data			: in	std_ulogic_vector(7 downto 0);
+	in_empty		: in	std_ulogic;
+	in_read			: out	std_ulogic;
 
-	read_data		: out	std_ulogic_vector(7 downto 0);
-	read_valid		: out	std_ulogic
+	out_data		: out	std_ulogic_vector(7 downto 0);
+	out_valid		: out	std_ulogic
 );
 
 	-- Force signals into IO pads
@@ -85,8 +85,8 @@ architecture rtl of ft245_sync_if is
 
 	signal ft_oe			: std_ulogic;
 	signal oe				: std_ulogic;
-	signal read				: std_ulogic;
-	signal write_data_sync	: std_ulogic_vector(write_data'range);
+	signal ft_read			: std_ulogic;
+	signal write_data_sync	: std_ulogic_vector(in_data'range);
 	signal tx_possible		: std_ulogic;
 	signal rx_req			: std_ulogic;
 	signal ft_write			: std_ulogic;
@@ -95,16 +95,16 @@ architecture rtl of ft245_sync_if is
 	signal read_old_old		: std_ulogic;
 	signal write_old		: std_ulogic;
 	signal write_old_old	: std_ulogic;
-	signal write_old_old_old	: std_ulogic;
+	signal write_old_old_old: std_ulogic;
 	signal write_failed		: std_ulogic;
-	signal read_data_int	: std_ulogic_vector(read_data'range);
-	signal read_valid_int	: std_ulogic;
-	signal write_read_int	: std_ulogic;
-	signal write_read_old	: std_ulogic;
+	signal out_data_int	: std_ulogic_vector(in_data'range);
+	signal out_valid_int	: std_ulogic;
+	signal in_read_int	: std_ulogic;
+	signal in_read_old	: std_ulogic;
 
 	type old_elem_t is
 	record
-		data	: std_ulogic_vector(write_data'range);
+		data	: std_ulogic_vector(in_data'range);
 		valid	: std_ulogic;
 		failed	: std_ulogic;
 	end record;
@@ -138,7 +138,7 @@ begin
 	end if;
 end process;
 
-state_machine_next: process(state, write_empty, rx_req, tx_possible, write_failed, ft_write, old_counter)
+state_machine_next: process(state, in_empty, rx_req, tx_possible, write_failed, ft_write, old_counter)
 begin
 	next_state <= state;
 
@@ -147,7 +147,7 @@ begin
 			next_state <= STATE_IDLE;
 
 		when STATE_IDLE =>
-			if write_empty = '0' and tx_possible = '1' then
+			if in_empty = '0' and tx_possible = '1' then
 				next_state <= STATE_WRITE;
 			end if;
 
@@ -181,7 +181,7 @@ begin
 			end if;
 
 		when STATE_WRITE =>
-			if tx_possible = '1' and write_empty = '0' then
+			if tx_possible = '1' and in_empty = '0' then
 				next_state <= STATE_WRITE;
 			else
 				next_state <= STATE_IDLE;
@@ -193,25 +193,25 @@ end process;
 in_sample: process(reset, clock)
 begin
 	if reset = '1' then
-		read_data_int	<= (others => '0');
+		out_data_int	<= (others => '0');
 		tx_possible		<= '0';
 		rx_req			<= '0';
 		ft_suspend		<= '0';
 	elsif rising_edge(clock) then
-		read_data_int	<= std_ulogic_vector(adbus);
+		out_data_int	<= std_ulogic_vector(adbus);
 		tx_possible		<= not txe_n;
 		rx_req			<= not rxf_n;
 		ft_suspend		<= not suspend_n;
 	end if;
 end process;
 
-read_data_proc: process(read_data_int, read_valid_int)
+out_data_proc: process(out_data_int, out_valid_int)
 begin
-	read_data <= read_data_int;
+	out_data <= out_data_int;
 
 	--pragma synthesis_off
-	if read_valid_int = '0' then
-		read_data <= (others => '-');
+	if out_valid_int = '0' then
+		out_data <= (others => '-');
 	end if;
 	--pragma synthesis_on
 
@@ -226,8 +226,8 @@ begin
 		wr_n			<= '1';
 		oe_n			<= '1';
 	elsif rising_edge(clock) then
-		write_data_sync	<= write_data;
-		rd_n			<= not read;
+		write_data_sync	<= in_data;
+		rd_n			<= not ft_read;
 		wr_n			<= not ft_write;
 		oe_n			<= not ft_oe;
 		if state = STATE_WRITE_OLD then
@@ -246,14 +246,14 @@ begin
 		write_old_old	<= '0';
 		write_old_old_old	<= '0';
 
-		write_read_old	<= '0';
+		in_read_old	<= '0';
 	elsif rising_edge(clock) then
-		read_old		<= read;
+		read_old		<= ft_read;
 		read_old_old	<= read_old;
 		write_old		<= ft_write;
 		write_old_old	<= write_old;
 		write_old_old_old <= write_old_old;
-		write_read_old	<= write_read_int;
+		in_read_old	<= in_read_int;
 	end if;
 end process;
 
@@ -265,7 +265,7 @@ with state select oe <=
 		'0' when STATE_WAIT_READ1 | STATE_WAIT_READ2 | STATE_READ | STATE_AFTER_READ1 | STATE_AFTER_READ2,
 		'1' when others;
 
-with state select read <=
+with state select ft_read <=
 		'1' when STATE_WAIT_READ2 | STATE_READ,
 		'0' when others;
 
@@ -274,11 +274,11 @@ with state select ft_write <=
 		write_data_old(write_data_old'left).failed when STATE_WRITE_OLD,
 		'0' when others;
 
-read_valid <= read_valid_int;
-read_valid_int <= read_old_old and rx_req;
+out_valid <= out_valid_int;
+out_valid_int <= read_old_old and rx_req;
 
-write_read <= write_read_int;
-with next_state select write_read_int <=
+in_read <= in_read_int;
+with next_state select in_read_int <=
 		tx_possible when STATE_WRITE,
 		'0' when others;
 
@@ -303,8 +303,8 @@ begin
 			for i in write_data_old'left downto 1 loop
 				write_data_old(i) <= write_data_old(i-1);
 			end loop;
-			write_data_old(0).data <= write_data;
-			write_data_old(0).valid <= write_read_old;
+			write_data_old(0).data <= in_data;
+			write_data_old(0).valid <= in_read_old;
 			write_data_old(0).failed <= '0';
 
 		end if;

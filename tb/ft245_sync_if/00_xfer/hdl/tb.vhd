@@ -76,12 +76,13 @@ port map
 	-- Interface to the internal logic
 	reset			=> reset,
 
-	write_data		=> write_data,
-	write_empty		=> write_empty,
-	write_read		=> write_read,
+	in_data			=> write_data,
+	in_read			=> write_read,
+	in_empty		=> write_empty,
 
-	read_data		=> read_data,
-	read_valid		=> read_valid
+
+	out_data		=> read_data,
+	out_valid		=> read_valid
 );
 
 adbus <= adbus_wr when oe = '1' else (others => 'Z');

@@ -25,7 +25,7 @@ library ieee;
 entity top is
 generic
 (
-	g_nrdata_log2	: natural := 5;
+	g_nrdata_log2	: natural := 7;
 	g_parallel		: natural := 4
 );
 port
@@ -83,12 +83,12 @@ port map
 
 	reset			=> reset,
 
-	read_data		=> read_data,
-	read_valid		=> read_valid,
+	out_data		=> read_data,
+	out_valid		=> read_valid,
 
-	write_data		=> ftd_data,
-	write_read		=> ftd_read,
-	write_empty		=> ftd_empty
+	in_data			=> ftd_data,
+	in_read			=> ftd_read,
+	in_empty		=> ftd_empty
 );
 
 i_ad7476_p_if: entity work.ad7476_parallel_if

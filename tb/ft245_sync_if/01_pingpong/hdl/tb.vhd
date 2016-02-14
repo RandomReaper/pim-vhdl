@@ -43,10 +43,10 @@ architecture bhv of tb is
 	signal d_data_write		: std_ulogic;
 	signal d_data_full		: std_ulogic;
 	signal status_full		: std_ulogic;
-	signal status_empty		: std_ulogic;
+	signal in_empty		: std_ulogic;
 	signal read_data		: std_ulogic_vector(7 downto 0);
-	signal write_data		: std_ulogic_vector(7 downto 0);
-	signal write_read		: std_ulogic;
+	signal in_data			: std_ulogic_vector(7 downto 0);
+	signal in_read			: std_ulogic;
 	signal read_valid		: std_ulogic;
 	signal stop				: std_ulogic;
 	signal expected_data	: std_ulogic_vector(7 downto 0);
@@ -102,12 +102,12 @@ port map
 	suspend_n		=> suspend_n,
 
 	reset			=> reset,
-	read_data		=> read_data,
-	read_valid		=> read_valid,
+	out_data		=> read_data,
+	out_valid		=> read_valid,
 
-	write_data		=> write_data,
-	write_read		=> write_read,
-	write_empty		=> status_empty
+	in_data			=> in_data,
+	in_read			=> in_read,
+	in_empty		=> in_empty
 );
 
 i_fifo : entity work.fifo
@@ -126,12 +126,12 @@ port map
 	write_data	=> read_data,
 
 	-- outputs
-	read		=> write_read,
-	read_data	=> write_data,
+	read		=> in_read,
+	read_data	=> in_data,
 
 	--status
 	status_full	=> status_full,
-	status_empty	=> status_empty
+	status_empty=> in_empty
 	--status_write_error	: out std_ulogic;
 	--status_read_error	: out std_ulogic;
 

@@ -25,7 +25,7 @@ library ieee;
 entity top is
 generic
 (
-	g_nrdata_log2		: natural := 5
+	g_nrdata_log2		: natural := 7
 );
 port
 (
@@ -77,12 +77,12 @@ port map
 
 	reset			=> reset,
 
-	read_data		=> read_data,
-	read_valid		=> read_valid,
+	out_data		=> read_data,
+	out_valid		=> read_valid,
 
-	write_data		=> tx_data,
-	write_read		=> read,
-	write_empty		=> status_empty
+	in_data			=> tx_data,
+	in_read			=> read,
+	in_empty		=> status_empty
 );
 
 i_packetizer : entity work.packetizer
