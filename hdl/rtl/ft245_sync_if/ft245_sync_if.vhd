@@ -22,6 +22,8 @@
 --			  use ftdi_set_latency_timer(ftdi, 2).
 --
 -----------------------------------------------------------------------------
+-- TODO		: implement out_data_full
+-----------------------------------------------------------------------------
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
