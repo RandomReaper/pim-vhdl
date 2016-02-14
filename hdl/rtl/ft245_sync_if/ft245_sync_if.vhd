@@ -18,7 +18,8 @@
 -- limitations under the License.
 -----------------------------------------------------------------------------
 --
--- FIXME : loses bytes when the ft245 tx fifo is full
+-- FIXME	: loose bytes when using ftdi_set_latency_timer(ftdi, 0), so
+--			  use ftdi_set_latency_timer(ftdi, 2).
 --
 -----------------------------------------------------------------------------
 library ieee;
@@ -53,15 +54,15 @@ port
 
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
-	attribute iob					: string;
-	attribute iob of rxf_n			: signal is "FORCE";
-	attribute iob of txe_n			: signal is "FORCE";
-	attribute iob of rd_n			: signal is "FORCE";
-	attribute iob of wr_n			: signal is "FORCE";
-	attribute iob of oe_n			: signal is "FORCE";
-	attribute iob of siwu			: signal is "FORCE";
-	attribute iob of reset_n		: signal is "FORCE";
-	attribute iob of suspend_n		: signal is "FORCE";
+	attribute iob				: string;
+	attribute iob of rxf_n		: signal is "FORCE";
+	attribute iob of txe_n		: signal is "FORCE";
+	attribute iob of rd_n		: signal is "FORCE";
+	attribute iob of wr_n		: signal is "FORCE";
+	attribute iob of oe_n		: signal is "FORCE";
+	attribute iob of siwu		: signal is "FORCE";
+	attribute iob of reset_n	: signal is "FORCE";
+	attribute iob of suspend_n	: signal is "FORCE";
 
 end ft245_sync_if;
 
@@ -80,27 +81,28 @@ architecture rtl of ft245_sync_if is
 		STATE_WRITE_OLD
 	);
 
+	-- State
 	signal state			: state_e;
 	signal next_state		: state_e;
 
+	-- Positive versions of ft245 control signals
 	signal ft_oe			: std_ulogic;
-	signal oe				: std_ulogic;
-	signal ft_read			: std_ulogic;
-	signal write_data_sync	: std_ulogic_vector(in_data'range);
-	signal tx_possible		: std_ulogic;
-	signal rx_req			: std_ulogic;
 	signal ft_write			: std_ulogic;
+	signal ft_read			: std_ulogic;
 	signal ft_suspend		: std_ulogic;
-	signal read_old			: std_ulogic;
-	signal read_old_old		: std_ulogic;
-	signal write_old		: std_ulogic;
-	signal write_old_old	: std_ulogic;
-	signal write_old_old_old: std_ulogic;
+	signal ft_tx			: std_ulogic;
+	signal ft_rx			: std_ulogic;
+
+	--
+	signal oe				: std_ulogic;
+	signal adbus_int		: std_ulogic_vector(in_data'range);
+	signal ft_read_old		: std_ulogic_vector(1 downto 0);
+	signal ft_write_old		: std_ulogic_vector(1 downto 0);
 	signal write_failed		: std_ulogic;
-	signal out_data_int	: std_ulogic_vector(in_data'range);
+	signal out_data_int		: std_ulogic_vector(in_data'range);
 	signal out_valid_int	: std_ulogic;
-	signal in_read_int	: std_ulogic;
-	signal in_read_old	: std_ulogic;
+	signal in_read_int		: std_ulogic;
+	signal in_read_old		: std_ulogic;
 
 	type old_elem_t is
 	record
@@ -109,25 +111,70 @@ architecture rtl of ft245_sync_if is
 		failed	: std_ulogic;
 	end record;
 
-	type old_t is array(3 downto 0) of old_elem_t;
-	signal write_data_old	: old_t;
+	type old_t is array(2 downto 0) of old_elem_t;
+	signal in_data_old		: old_t;
 	signal old_counter		: unsigned(2 downto 0);
 
 	-- Force signals into IO pads
 	-- Warning XST specific syntax
-	attribute iob of write_data_sync		: signal is "FORCE";
-	attribute iob of rx_req					: signal is "FORCE";
-	attribute iob of tx_possible			: signal is "FORCE";
-	attribute iob of ft_suspend				: signal is "FORCE";
+	attribute iob of adbus_int		: signal is "FORCE";
+	attribute iob of ft_rx			: signal is "FORCE";
+	attribute iob of ft_tx			: signal is "FORCE";
+	attribute iob of ft_suspend		: signal is "FORCE";
 
 begin
 
--- Unused output (at this time)
+-----------------------------------------------------------------------------
+-- Ports
+-----------------------------------------------------------------------------
+
+-- When the ft2232h is resest, it will exit the synchronous fifo mode
 reset_n <= '1';
+
+-- Unused output
 siwu <= '1';
 
 -- Tristate
-adbus <= std_logic_vector(write_data_sync) when oe = '1' else (others => 'Z');
+adbus <= std_logic_vector(adbus_int) when oe = '1' else (others => 'Z');
+
+-- Synchronize input signals
+in_sync: process(reset, clock)
+begin
+	if reset = '1' then
+		out_data_int	<= (others => '0');
+		ft_tx			<= '0';
+		ft_rx			<= '0';
+		ft_suspend		<= '0';
+	elsif rising_edge(clock) then
+		out_data_int	<= std_ulogic_vector(adbus);
+		ft_tx			<= not txe_n;
+		ft_rx			<= not rxf_n;
+		ft_suspend		<= not suspend_n;
+	end if;
+end process;
+
+-- Synchronize output signals
+out_sync: process(reset, clock)
+begin
+	if reset = '1' then
+		adbus_int	<= (others => '0');
+		rd_n			<= '1';
+		wr_n			<= '1';
+		oe_n			<= '1';
+	elsif rising_edge(clock) then
+		adbus_int		<= in_data;
+		rd_n			<= not ft_read;
+		wr_n			<= not ft_write;
+		oe_n			<= not ft_oe;
+		if state = STATE_WRITE_OLD then
+			adbus_int <= in_data_old(in_data_old'left).data;
+		end if;
+	end if;
+end process;
+
+-----------------------------------------------------------------------------
+-- State machine
+-----------------------------------------------------------------------------
 
 state_machine: process(reset, clock)
 begin
@@ -138,7 +185,7 @@ begin
 	end if;
 end process;
 
-state_machine_next: process(state, in_empty, rx_req, tx_possible, write_failed, ft_write, old_counter)
+state_machine_next: process(state, in_empty, ft_rx, ft_tx, write_failed, ft_write, old_counter)
 begin
 	next_state <= state;
 
@@ -147,15 +194,15 @@ begin
 			next_state <= STATE_IDLE;
 
 		when STATE_IDLE =>
-			if in_empty = '0' and tx_possible = '1' then
+			if in_empty = '0' and ft_tx = '1' then
 				next_state <= STATE_WRITE;
 			end if;
 
-			if write_failed = '1' and tx_possible = '1' then
+			if write_failed = '1' and ft_tx = '1' then
 				next_state <= STATE_WRITE_OLD;
 			end if;
 
-			if rx_req = '1' then
+			if ft_rx = '1' then
 				next_state <= STATE_WAIT_READ1;
 			end if;
 
@@ -166,7 +213,7 @@ begin
 			next_state <= STATE_READ;
 
 		when STATE_READ =>
-			if rx_req = '0' then
+			if ft_rx = '0' then
 				next_state <= STATE_AFTER_READ1;
 			end if;
 
@@ -176,85 +223,17 @@ begin
 			next_state <= STATE_IDLE;
 
 		when STATE_WRITE_OLD =>
-			if old_counter = write_data_old'left then
+			if old_counter = in_data_old'left then
 				next_state <= STATE_IDLE;
 			end if;
 
 		when STATE_WRITE =>
-			if tx_possible = '1' and in_empty = '0' then
+			if ft_tx = '1' and in_empty = '0' then
 				next_state <= STATE_WRITE;
 			else
 				next_state <= STATE_IDLE;
 			end if;
 	end case;
-end process;
-
--- Synchronize input signals
-in_sample: process(reset, clock)
-begin
-	if reset = '1' then
-		out_data_int	<= (others => '0');
-		tx_possible		<= '0';
-		rx_req			<= '0';
-		ft_suspend		<= '0';
-	elsif rising_edge(clock) then
-		out_data_int	<= std_ulogic_vector(adbus);
-		tx_possible		<= not txe_n;
-		rx_req			<= not rxf_n;
-		ft_suspend		<= not suspend_n;
-	end if;
-end process;
-
-out_data_proc: process(out_data_int, out_valid_int)
-begin
-	out_data <= out_data_int;
-
-	--pragma synthesis_off
-	if out_valid_int = '0' then
-		out_data <= (others => '-');
-	end if;
-	--pragma synthesis_on
-
-end process;
-
--- Synchronize output signals
-out_sync: process(reset, clock)
-begin
-	if reset = '1' then
-		write_data_sync	<= (others => '0');
-		rd_n			<= '1';
-		wr_n			<= '1';
-		oe_n			<= '1';
-	elsif rising_edge(clock) then
-		write_data_sync	<= in_data;
-		rd_n			<= not ft_read;
-		wr_n			<= not ft_write;
-		oe_n			<= not ft_oe;
-		if state = STATE_WRITE_OLD then
-			write_data_sync <= write_data_old(write_data_old'left).data;
-		end if;
-	end if;
-end process;
-
--- Old values
-old_values: process(reset, clock)
-begin
-	if reset = '1' then
-		read_old		<= '0';
-		read_old_old	<= '0';
-		write_old		<= '0';
-		write_old_old	<= '0';
-		write_old_old_old	<= '0';
-
-		in_read_old	<= '0';
-	elsif rising_edge(clock) then
-		read_old		<= ft_read;
-		read_old_old	<= read_old;
-		write_old		<= ft_write;
-		write_old_old	<= write_old;
-		write_old_old_old <= write_old_old;
-		in_read_old	<= in_read_int;
-	end if;
 end process;
 
 with state select ft_oe <=
@@ -270,27 +249,84 @@ with state select ft_read <=
 		'0' when others;
 
 with state select ft_write <=
-		tx_possible when STATE_WRITE,
-		write_data_old(write_data_old'left).failed when STATE_WRITE_OLD,
+		ft_tx when STATE_WRITE,
+		in_data_old(in_data_old'left).failed when STATE_WRITE_OLD,
 		'0' when others;
-
-out_valid <= out_valid_int;
-out_valid_int <= read_old_old and rx_req;
 
 in_read <= in_read_int;
 with next_state select in_read_int <=
-		tx_possible when STATE_WRITE,
+		ft_tx when STATE_WRITE,
 		'0' when others;
+
+-----------------------------------------------------------------------------
+-- RX data
+-----------------------------------------------------------------------------
+
+old_rx: process(reset, clock)
+begin
+	if reset = '1' then
+		for i in ft_read_old'range loop
+			ft_read_old(i) <= '0';
+		end loop;
+	elsif rising_edge(clock) then
+		for i in ft_read_old'left downto 1 loop
+			ft_read_old(i) <= ft_read_old(i-1);
+		end loop;
+		ft_read_old(0)	<= ft_read;
+	end if;
+end process;
+
+out_valid <= out_valid_int;
+out_valid_int <= ft_read_old(1) and ft_rx;
+
+out_data_proc: process(out_data_int, out_valid_int)
+begin
+	out_data <= out_data_int;
+
+	--pragma synthesis_off
+	if out_valid_int = '0' then
+		out_data <= (others => '-');
+	end if;
+	--pragma synthesis_on
+
+end process;
+
+-----------------------------------------------------------------------------
+-- TX data
+-----------------------------------------------------------------------------
+
+old_tx: process(reset, clock)
+begin
+	if reset = '1' then
+		for i in ft_write_old'range loop
+			ft_write_old(i) <= '0';
+		end loop;
+	elsif rising_edge(clock) then
+		for i in ft_write_old'left downto 1 loop
+			ft_write_old(i) <= ft_write_old(i-1);
+		end loop;
+		ft_write_old(0)	<= ft_write;
+	end if;
+end process;
+
+in_read_old_proc: process(reset, clock)
+begin
+	if reset = '1' then
+		in_read_old			<= '0';
+	elsif rising_edge(clock) then
+		in_read_old			<= in_read_int;
+	end if;
+end process;
 
 process(reset, clock)
 begin
 	if reset = '1' then
-		for i in write_data_old'range loop
-			write_data_old(i).data	 <= (others => '0');
-			write_data_old(i).failed <= '0';
+		for i in in_data_old'range loop
+			in_data_old(i).data	 <= (others => '0');
+			in_data_old(i).failed <= '0';
 
 			--pragma synthesis_off
-			write_data_old(i).data <= (others => '-');
+			in_data_old(i).data <= (others => '-');
 			--pragma synthesis_on
 
 		end loop;
@@ -300,36 +336,36 @@ begin
 	elsif rising_edge(clock) then
 
 		if write_failed = '0' then
-			for i in write_data_old'left downto 1 loop
-				write_data_old(i) <= write_data_old(i-1);
+			for i in in_data_old'left downto 1 loop
+				in_data_old(i)		<= in_data_old(i-1);
 			end loop;
-			write_data_old(0).data <= in_data;
-			write_data_old(0).valid <= in_read_old;
-			write_data_old(0).failed <= '0';
+			in_data_old(0).data		<= in_data;
+			in_data_old(0).valid		<= in_read_old;
+			in_data_old(0).failed	<= '0';
 
 		end if;
 
-		if write_old_old = '1' and tx_possible = '0' then
+		if ft_write_old(1) = '1' and ft_tx = '0' then
 			write_failed <= '1';
 		end if;
 
 		if write_failed = '1' then
-			for i in write_data_old'left - 1 downto 0 loop
-				write_data_old(i).failed <= write_data_old(i).valid;
+			for i in in_data_old'left downto 0 loop
+				in_data_old(i).failed <= in_data_old(i).valid;
 			end loop;
 		end if;
 
 		if state = STATE_WRITE_OLD then
 			old_counter <= old_counter + 1;
-			for i in write_data_old'left downto 1 loop
-				write_data_old(i) <= write_data_old(i-1);
+			for i in in_data_old'left downto 1 loop
+				in_data_old(i) <= in_data_old(i-1);
 			end loop;
 
-			write_data_old(0).failed <= '0';
-			write_data_old(0).valid <= '0';
+			in_data_old(0).failed <= '0';
+			in_data_old(0).valid <= '0';
 
 			--pragma synthesis_off
-			write_data_old(0).data <= (others => '-');
+			in_data_old(0).data <= (others => '-');
 			--pragma synthesis_on
 
 			if next_state = STATE_IDLE then
