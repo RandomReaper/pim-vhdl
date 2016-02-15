@@ -85,6 +85,7 @@ port map
 
 	out_data		=> read_data,
 	out_valid		=> read_valid,
+	out_full		=> '0',
 
 	in_data			=> ftd_data,
 	in_read			=> ftd_read,

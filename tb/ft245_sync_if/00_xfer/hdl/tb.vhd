@@ -82,7 +82,8 @@ port map
 
 
 	out_data		=> read_data,
-	out_valid		=> read_valid
+	out_valid		=> read_valid,
+	out_full		=> '0'
 );
 
 adbus <= adbus_wr when oe = '1' else (others => 'Z');

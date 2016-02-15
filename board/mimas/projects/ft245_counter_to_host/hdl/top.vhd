@@ -79,6 +79,7 @@ port map
 
 	out_data		=> read_data,
 	out_valid		=> read_valid,
+	out_full		=> '0',
 
 	in_data			=> tx_data,
 	in_read			=> read,

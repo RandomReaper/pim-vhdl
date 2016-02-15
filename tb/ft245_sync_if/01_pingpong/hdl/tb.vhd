@@ -104,6 +104,7 @@ port map
 	reset			=> reset,
 	out_data		=> read_data,
 	out_valid		=> read_valid,
+	out_full		=> '0',
 
 	in_data			=> in_data,
 	in_read			=> in_read,

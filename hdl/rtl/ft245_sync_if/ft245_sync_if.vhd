@@ -22,7 +22,7 @@
 --			  use ftdi_set_latency_timer(ftdi, 2).
 --
 -----------------------------------------------------------------------------
--- TODO		: implement out_data_full
+-- TODO		: implement out_full
 -----------------------------------------------------------------------------
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -51,7 +51,8 @@ port
 	in_read			: out	std_ulogic;
 
 	out_data		: out	std_ulogic_vector(7 downto 0);
-	out_valid		: out	std_ulogic
+	out_valid		: out	std_ulogic;
+	out_full		: in	std_ulogic
 );
 
 	-- Force signals into IO pads
