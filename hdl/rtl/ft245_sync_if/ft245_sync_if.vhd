@@ -96,16 +96,17 @@ architecture rtl of ft245_sync_if is
 	signal ft_tx			: std_ulogic;
 	signal ft_rx			: std_ulogic;
 
-
-	-- Data RX
-	type read_element_t is
+	-- Store missed read/write
+	type failed_element_t is
 	record
 		data	: std_ulogic_vector(in_data'range);
 		valid	: std_ulogic;
 	end record;
 
-	type read_failed_t is array(1 downto 0) of read_element_t;
-	signal out_data_old		: read_failed_t;
+	type failed_t is array(integer range <>) of failed_element_t;
+
+	-- Data RX
+	signal out_data_old		: failed_t(1 downto 0);
 	signal read_failed		: std_ulogic;
 	signal oe				: std_ulogic;
 	signal adbus_int		: std_ulogic_vector(in_data'range);
@@ -114,14 +115,7 @@ architecture rtl of ft245_sync_if is
 	signal out_valid_int	: std_ulogic;
 
 	-- Data TX
-	type write_element_t is
-	record
-		data	: std_ulogic_vector(in_data'range);
-		valid	: std_ulogic;
-	end record;
-
-	type write_failed_t is array(2 downto 0) of write_element_t;
-	signal in_data_old		: write_failed_t;
+	signal in_data_old		: failed_t(2 downto 0);
 	signal ft_write_old		: std_ulogic_vector(1 downto 0);
 	signal write_failed		: std_ulogic;
 	signal old_counter		: unsigned(1 downto 0);
