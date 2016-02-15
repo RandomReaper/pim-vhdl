@@ -18,12 +18,11 @@
 -- limitations under the License.
 -----------------------------------------------------------------------------
 --
--- FIXME	: loose bytes when using ftdi_set_latency_timer(ftdi, 0), so
+-- FIXME	: loose bytes when using ftdi_set_latency_timer(ftdi, 1), so
 --			  use ftdi_set_latency_timer(ftdi, 2).
 --
 -----------------------------------------------------------------------------
--- TODO		: implement out_full
------------------------------------------------------------------------------
+
 library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
@@ -78,6 +77,7 @@ architecture rtl of ft245_sync_if is
 		STATE_WAIT_READ1,
 		STATE_WAIT_READ2,
 		STATE_READ,
+		STATE_READ_OLD,
 		STATE_AFTER_READ1,
 		STATE_AFTER_READ2,
 		STATE_WRITE,
@@ -98,6 +98,15 @@ architecture rtl of ft245_sync_if is
 
 
 	-- Data RX
+	type read_element_t is
+	record
+		data	: std_ulogic_vector(in_data'range);
+		valid	: std_ulogic;
+	end record;
+
+	type read_failed_t is array(1 downto 0) of read_element_t;
+	signal out_data_old		: read_failed_t;
+	signal read_failed		: std_ulogic;
 	signal oe				: std_ulogic;
 	signal adbus_int		: std_ulogic_vector(in_data'range);
 	signal ft_read_old		: std_ulogic_vector(1 downto 0);
@@ -105,17 +114,17 @@ architecture rtl of ft245_sync_if is
 	signal out_valid_int	: std_ulogic;
 
 	-- Data TX
-	type old_elem_t is
+	type write_element_t is
 	record
 		data	: std_ulogic_vector(in_data'range);
 		valid	: std_ulogic;
 		failed	: std_ulogic;
 	end record;
 
-	type old_t is array(2 downto 0) of old_elem_t;
+	type write_failed_t is array(2 downto 0) of write_element_t;
+	signal in_data_old		: write_failed_t;
 	signal ft_write_old		: std_ulogic_vector(1 downto 0);
 	signal write_failed		: std_ulogic;
-	signal in_data_old		: old_t;
 	signal old_counter		: unsigned(1 downto 0);
 	signal in_read_int		: std_ulogic;
 	signal in_read_old		: std_ulogic;
@@ -190,7 +199,7 @@ begin
 	end if;
 end process;
 
-state_machine_next: process(state, in_empty, ft_rx, ft_tx, write_failed, ft_write, old_counter)
+state_machine_next: process(state, in_empty, ft_rx, ft_tx, write_failed, ft_write, old_counter, out_full, read_failed)
 begin
 	next_state <= state;
 
@@ -207,8 +216,12 @@ begin
 				next_state <= STATE_WRITE_OLD;
 			end if;
 
-			if ft_rx = '1' then
+			if ft_rx = '1' and out_full = '0' then
 				next_state <= STATE_WAIT_READ1;
+			end if;
+
+			if read_failed = '1' and out_full = '0' then
+				next_state <= STATE_READ_OLD;
 			end if;
 
 		when STATE_WAIT_READ1 =>
@@ -218,7 +231,7 @@ begin
 			next_state <= STATE_READ;
 
 		when STATE_READ =>
-			if ft_rx = '0' then
+			if ft_rx = '0' or out_full = '1' then
 				next_state <= STATE_AFTER_READ1;
 			end if;
 
@@ -227,17 +240,23 @@ begin
 		when STATE_AFTER_READ2 =>
 			next_state <= STATE_IDLE;
 
-		when STATE_WRITE_OLD =>
-			if old_counter = in_data_old'left then
-				next_state <= STATE_IDLE;
-			end if;
-
 		when STATE_WRITE =>
 			if ft_tx = '1' and in_empty = '0' then
 				next_state <= STATE_WRITE;
 			else
 				next_state <= STATE_IDLE;
 			end if;
+
+		when STATE_WRITE_OLD =>
+			if old_counter = in_data_old'left then
+				next_state <= STATE_IDLE;
+			end if;
+
+		when STATE_READ_OLD =>
+			if out_full = '1' or read_failed = '0' then
+				next_state <= STATE_IDLE;
+			end if;
+
 	end case;
 end process;
 
@@ -252,7 +271,7 @@ with state select oe <=
 		'1' when others;
 
 with state select ft_read <=
-		'1' when STATE_WAIT_READ2 | STATE_READ,
+		not out_full when STATE_WAIT_READ2 | STATE_READ,
 		'0' when others;
 
 with state select ft_write <=
@@ -283,12 +302,47 @@ begin
 	end if;
 end process;
 
-out_valid <= out_valid_int;
-out_valid_int <= ft_read_old(1) and ft_rx;
+read_failed_proc: process(out_data_old)
+begin
+	read_failed <= '0';
+	for i in out_data_old'range loop
+		if out_data_old(i).valid = '1' then
+			read_failed <= '1';
+		end if;
+	end loop;
+end process;
 
-out_data_proc: process(out_data_int, out_valid_int)
+out_data_old_proc: process(reset, clock)
+begin
+	if reset = '1' then
+		for i in out_data_old'range loop
+			out_data_old(i).data <= (others => '0');
+			out_data_old(i).valid <= '0';
+		end loop;
+	elsif rising_edge(clock) then
+		if (ft_read_old(1) and ft_rx) = '1' or state = STATE_READ_OLD then
+			for i in out_data_old'left downto 1 loop
+				out_data_old(i) <= out_data_old(i-1);
+			end loop;
+			out_data_old(0).data	<= out_data_int;
+			out_data_old(0).valid	<= ft_read_old(1) and ft_rx;
+		end if;
+	end if;
+end process;
+
+out_valid <= out_valid_int;
+with state select out_valid_int <=
+	ft_read_old(1) and ft_rx and not out_full when STATE_READ,
+	out_data_old(out_data_old'left).valid and not out_full when STATE_READ_OLD,
+	'0' when others;
+
+out_data_proc: process(state, out_data_old, out_data_int, out_valid_int)
 begin
 	out_data <= out_data_int;
+
+	if state = STATE_READ_OLD then
+		out_data <= out_data_old(out_data_old'left).data;
+	end if;
 
 	--pragma synthesis_off
 	if out_valid_int = '0' then
@@ -347,7 +401,7 @@ begin
 				in_data_old(i)		<= in_data_old(i-1);
 			end loop;
 			in_data_old(0).data		<= in_data;
-			in_data_old(0).valid		<= in_read_old;
+			in_data_old(0).valid	<= in_read_old;
 			in_data_old(0).failed	<= '0';
 
 		end if;

@@ -42,6 +42,7 @@ architecture bhv of tb is
 
 	signal read_data		: std_ulogic_vector(7 downto 0);
 	signal read_valid		: std_ulogic;
+	signal read_full		: std_ulogic;
 
 	signal rxf				: std_ulogic;
 	signal txe				: std_ulogic;
@@ -83,7 +84,7 @@ port map
 
 	out_data		=> read_data,
 	out_valid		=> read_valid,
-	out_full		=> '0'
+	out_full		=> read_full
 );
 
 adbus <= adbus_wr when oe = '1' else (others => 'Z');
@@ -160,6 +161,7 @@ rxf				<= '0';
 adbus_wr		<= (others => 'Z');
 fifo_data		<= (others => '0');
 fifo_write		<= '0';
+read_full		<= '0';
 
 wait until falling_edge(clock);
 
@@ -175,8 +177,9 @@ assert (wr						= '0')			report "ouch !?!" severity failure;
 assert (oe						= '0')			report "ouch !?!" severity failure;
 
 -----------------------------------------------------------------------------
--- Host sends one byte
+-- Host sends one byte, slave has much space
 -----------------------------------------------------------------------------
+read_full		<= '0';
 adbus_wr			<= (others => 'Z');
 rxf	<= '1';
 adbus_wr	<= x"aa";
@@ -197,8 +200,9 @@ assert (read_valid					= '0')			report "read_valid => wrong duration" severity f
 waitFor(clock, rd, '0', 10, "rd");
 
 -----------------------------------------------------------------------------
--- Host sends two bytes
+-- Host sends two bytes, slave has much space
 -----------------------------------------------------------------------------
+read_full		<= '0';
 adbus_wr			<= (others => 'Z');
 rxf	<= '1';
 
@@ -221,6 +225,45 @@ waitFor(clock, read_valid, '1', 10, "read_valid");
 assert (read_data					= x"55")		report "read_data => wrong data (0x55)" severity failure;
 wait until falling_edge(clock);
 assert (read_data					= x"66")		report "read_data => wrong data (0x66)" severity failure;
+rxf	<= '0';
+adbus_wr	<= x"cc";
+
+wait until falling_edge(clock);
+assert (read_valid					= '0')			report "read_valid => wrong duration" severity failure;
+
+waitFor(clock, rd, '0', 10, "rd");
+
+-----------------------------------------------------------------------------
+-- Host sends two bytes, slave has one space
+-----------------------------------------------------------------------------
+read_full		<= '0';
+adbus_wr			<= (others => 'Z');
+rxf	<= '1';
+
+waitFor(clock, oe, '1', 10, "oe");
+assert (rd						= '0')			report "oe MUST be set at least one clock before read" severity failure;
+
+assert (adbus					= (adbus'left downto adbus'right => 'Z'))	report "adbus MUST be Hi-Z (1)" severity failure;
+adbus_wr	<= x"b1";
+wait on adbus;
+assert (adbus					= x"b1")		report "adbus MUST be Hi-Z (2)" severity failure;
+
+
+waitFor(clock, rd, '1', 10, "rd");
+wait until falling_edge(clock);
+adbus_wr	<= x"b2";
+wait on adbus;
+assert (adbus					= x"b2")		report "adbus MUST be Hi-Z (3)" severity failure;
+
+waitFor(clock, read_valid, '1', 10, "read_valid");
+assert (read_data					= x"b1")		report "read_data => wrong data (0xb1)" severity failure;
+wait until rising_edge(clock);
+read_full		<= '1';
+wait until falling_edge(clock);
+assert (read_valid					= '0')			report "read_valid => wrong duration" severity failure;
+read_full		<= '0';
+waitFor(clock, read_valid, '1', 10, "read_valid");
+assert (read_data					= x"b2")		report "read_data => wrong data (0xb2)" severity note;
 rxf	<= '0';
 adbus_wr	<= x"cc";
 
