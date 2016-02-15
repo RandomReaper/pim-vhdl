@@ -118,7 +118,6 @@ architecture rtl of ft245_sync_if is
 	record
 		data	: std_ulogic_vector(in_data'range);
 		valid	: std_ulogic;
-		failed	: std_ulogic;
 	end record;
 
 	type write_failed_t is array(2 downto 0) of write_element_t;
@@ -276,7 +275,7 @@ with state select ft_read <=
 
 with state select ft_write <=
 		ft_tx when STATE_WRITE,
-		in_data_old(in_data_old'left).failed when STATE_WRITE_OLD,
+		in_data_old(in_data_old'left).valid when STATE_WRITE_OLD,
 		'0' when others;
 
 in_read <= in_read_int;
@@ -384,7 +383,7 @@ begin
 	if reset = '1' then
 		for i in in_data_old'range loop
 			in_data_old(i).data	 <= (others => '0');
-			in_data_old(i).failed <= '0';
+			in_data_old(i).valid <= '0';
 
 			--pragma synthesis_off
 			in_data_old(i).data <= (others => '-');
@@ -402,18 +401,11 @@ begin
 			end loop;
 			in_data_old(0).data		<= in_data;
 			in_data_old(0).valid	<= in_read_old;
-			in_data_old(0).failed	<= '0';
 
 		end if;
 
 		if ft_write_old(1) = '1' and ft_tx = '0' then
 			write_failed <= '1';
-		end if;
-
-		if write_failed = '1' then
-			for i in in_data_old'left downto 0 loop
-				in_data_old(i).failed <= in_data_old(i).valid;
-			end loop;
 		end if;
 
 		if state = STATE_WRITE_OLD then
@@ -422,7 +414,6 @@ begin
 				in_data_old(i) <= in_data_old(i-1);
 			end loop;
 
-			in_data_old(0).failed <= '0';
 			in_data_old(0).valid <= '0';
 
 			--pragma synthesis_off
