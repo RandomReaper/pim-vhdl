@@ -104,6 +104,7 @@ generic map
 )
 port map
 (
+	reset		=> reset,
 	sclk		=> sclk,
 	n_cs		=> n_cs,
 	sdata		=> sdata
