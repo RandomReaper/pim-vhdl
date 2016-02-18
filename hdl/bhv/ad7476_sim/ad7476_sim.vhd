@@ -28,6 +28,7 @@ library ieee;
 entity ad7476_sim is
 port
 (
+	reset		: in	std_ulogic;
 	sclk		: in	std_ulogic;
 	n_cs		: in	std_ulogic;
 	sdata		: out	std_ulogic
@@ -36,7 +37,6 @@ end ad7476_sim;
 
 architecture bhv of ad7476_sim is
 	alias clock is sclk;
-	signal reset	: std_ulogic;
 	signal data		: unsigned(11 downto 0);
 	signal cs		: std_ulogic;
 	signal cs_old	: std_ulogic;
@@ -84,5 +84,4 @@ begin
 	end if;
 end process;
 
-reset <= '1', '0' after 1 ns;
 end architecture bhv;

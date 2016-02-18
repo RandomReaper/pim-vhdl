@@ -29,6 +29,8 @@ generic
 );
 port
 (
+	reset		: in	std_ulogic;
+
 	sclk		: in	std_ulogic;
 	n_cs		: in	std_ulogic;
 	sdata		: out	std_ulogic_vector(g_parallel-1 downto 0)
@@ -41,6 +43,7 @@ gen_adc_sim: for i in 0 to g_parallel-1 generate
 	i_adc_sim_x: entity work.ad7476_sim
 		port map
 		(
+			reset	=> reset,
 			sdata	=> sdata(i),
 			n_cs	=> n_cs,
 			sclk	=> sclk
