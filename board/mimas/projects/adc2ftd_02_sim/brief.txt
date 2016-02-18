@@ -1,0 +1,1 @@
+mimas board + ft2232h + 4 x adcs7478 boards (12bit 1MSPS)
