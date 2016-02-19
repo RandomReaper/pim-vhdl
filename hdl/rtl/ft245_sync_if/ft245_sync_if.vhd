@@ -22,6 +22,75 @@
 --			  use ftdi_set_latency_timer(ftdi, 2).
 --
 -----------------------------------------------------------------------------
+--
+-- Usage
+--
+-- * This block MUST be clocked by the FTDI chip
+--
+-- * FTDI Signals MUST be connected directly and tied into the IO pads.
+--   * For Xilinx FPGA, nothing has to be done since the "iob" attribute is set.
+--
+-----------------------------------------------------------------------------
+--
+-- * FPGA -> FTDI
+--   Sending data to the FTDI chip is done using in_* signals.
+--   Example: Sending 2 bytes:
+--             ____     ____        ____     ____     ____     ____
+--   clock ___/    \___/    \/\/\/\/    \___/    \___/    \___/    \____
+--
+--                ____t1                           t4__________________
+--   in_empty (in)    \____________________________/
+--
+--                                t2________________
+--   in_read (out)  _______________|                \__________________
+--
+--                                        t3
+--   in_data (in)  -------------------------< D0    >< D1    >---------
+--
+--   At t1, in_empty is set to '0'.
+--
+--   At t2, (after an unknown number of clock cycles) the ft245_sync_if is
+--          ready for sendind data and set in_read to '1'.
+--
+--   At t3, (one clock after in_read) The data (D0) is on in_data.
+--
+--   At t4, in_data contains the last data, in_empty is set '0'. The
+--          ft245_sync_if sets in_read to '0' at the same time.
+--
+--   Note : This burst can be interrupted (in_read will go to '0', when the
+--          FTDI chip FIFO is full.
+--
+-----------------------------------------------------------------------------
+--
+-- * FTDI -> FPGA
+--   Receiving data from the FTDI chip is done using out_* signals.
+--   Example: Receiving 2 bytes:
+--             ____     ____        ____     ____     ____     ____
+--   clock ___/    \___/    \/\/\/\/    \___/    \___/    \___/    \____
+--
+--                ____t1                            __________________
+--   out_full (in)    \____________________________/___________________
+--
+--                                t2________________t4
+--   out_valid (out)  _____________|                \__________________
+--
+--                                          t3
+--   out_data (out)  --------------< D0    >< D1    >---------
+--
+--   At t1, the out_full is set to '0'.
+--
+--   At t2, (after an unknown number of clock cycles) and when the FTDI chip has
+--          received data the ft245_sync_if set out_valid to '1' and set data
+--          on data out.
+--
+--   At t3, There is a new data on every clock on out_data
+--
+--   At t4, out_valid goes '0' (no more data).
+--
+--   Note : Data receive can be interrupted at any time by setting out_full to
+--          '1' at any time.
+--
+-----------------------------------------------------------------------------
 
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -30,7 +99,9 @@ library ieee;
 entity ft245_sync_if is
 port
 (
+	-----------------------------------------------------
 	-- Interface to the ftdi chip
+	-----------------------------------------------------
 	adbus			: inout	std_logic_vector(7 downto 0);
 	rxf_n			: in	std_ulogic;
 	txe_n			: in	std_ulogic;
@@ -42,13 +113,17 @@ port
 	reset_n			: out	std_ulogic;
 	suspend_n		: in	std_ulogic;
 
+	-----------------------------------------------------
 	-- Interface to the internal logic
+	-----------------------------------------------------
 	reset			: in	std_ulogic;
 
+	-- FPGA -> FTDI
 	in_data			: in	std_ulogic_vector(7 downto 0);
 	in_empty		: in	std_ulogic;
 	in_read			: out	std_ulogic;
 
+	-- FTDI -> FPGA
 	out_data		: out	std_ulogic_vector(7 downto 0);
 	out_valid		: out	std_ulogic;
 	out_full		: in	std_ulogic
