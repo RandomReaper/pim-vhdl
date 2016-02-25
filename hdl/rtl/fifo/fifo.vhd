@@ -75,6 +75,9 @@ architecture rtl of fifo is
 	signal read_ptr_next	: unsigned(ptr_range_r);
 	signal write_ptr		: unsigned(ptr_range_r);
 	signal write_ptr_next	: unsigned(ptr_range_r);
+	
+	signal full_async		: std_ulogic;
+	signal empty_async		: std_ulogic;
 
 	signal used_int 		: unsigned(used'range);
 begin
@@ -121,8 +124,8 @@ status_read_error	<= read_error;
 -- FIFO status
 -----------------------------------------------------------------------------
 
-full	<= '1' when (write_ptr(write_ptr'left) /= read_ptr(read_ptr'left)) and ((write_ptr(mem_range_r) = read_ptr(mem_range_r))) else '0';
-empty	<= '1' when (write_ptr = read_ptr) else '0';
+full_async	<= '1' when (write_ptr(write_ptr'left) /= read_ptr(read_ptr'left)) and ((write_ptr(mem_range_r) = read_ptr(mem_range_r))) else '0';
+empty_async	<= '1' when (write_ptr = read_ptr) else '0';
 
 write_ptr_next <= write_ptr + 1;
 read_ptr_next <= read_ptr + 1;
@@ -134,11 +137,14 @@ begin
 		read_ptr <= (others => '0');
 		write_error <= '0';
 		read_error <= '0';
+		full <= '0';
+		empty <= '1';
 	elsif rising_edge(clock) then
 		write_error <= '0';
 		read_error <= '0';
+
 		if write = '1' then
-			if full = '0' or read = '1' then
+			if full_async = '0' or read = '1' then
 				write_ptr <= write_ptr_next;
 			else
 				write_error <= '1';
@@ -150,11 +156,11 @@ begin
 			end if;
 		end if;
 		if read = '1' then
-			if empty = '0' then
+			if empty_async = '0' then
 				read_ptr <= read_ptr_next;
 			else
 				read_error <= '1';
-
+			
 			--pragma synthesis_off
 			assert (false) report "status_read_error" severity warning;
 			--pragma synthesis_on
@@ -162,9 +168,29 @@ begin
 			end if;
 		end if;
 
+		if read = '1' and write = '0' then
+			full <= '0';
+			if empty_async = '1' or (write_ptr = read_ptr_next) then
+				empty <= '1';
+			end if;
+		end if;
+
+		if read = '0' and write = '1' then
+			empty <= '0';
+			if full_async = '1' or ((write_ptr_next(write_ptr'left) /= read_ptr(read_ptr'left)) and ((write_ptr_next(mem_range_r) = read_ptr(mem_range_r)))) then
+				full <= '1';
+			end if;
+		end if;
+		
+		if read = '1' and write = '1' then
+			empty <= '0';
+		end if;
+
 		if sync_reset = '1' then
 			write_ptr <= (others => '0');
 			read_ptr <= (others => '0');
+			full <= '0';
+			empty <= '1';
 		end if;
 	end if;
 end process;
@@ -193,7 +219,13 @@ begin
 	--pragma synthesis_on
 
 	if rising_edge(clock) then
-		if write = '1' and (full = '0' or read = '1') then
+		--pragma synthesis_off
+		if read = '1' and empty_async = '0' then
+			mem(to_integer(read_ptr(mem_range_r))) <= (others => 'U');
+		end if;
+		--pragma synthesis_on
+
+		if write = '1' and (full_async = '0' or read = '1') then
 			mem(to_integer(write_ptr(mem_range_r))) <= write_data;
 		end if;
 	end if;
