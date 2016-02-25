@@ -193,7 +193,7 @@ begin
 	--pragma synthesis_on
 
 	if rising_edge(clock) then
-		if write = '1' and full = '0' then
+		if write = '1' and (full = '0' or read = '1') then
 			mem(to_integer(write_ptr(mem_range_r))) <= write_data;
 		end if;
 	end if;
