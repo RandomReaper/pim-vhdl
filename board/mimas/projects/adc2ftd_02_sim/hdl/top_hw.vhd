@@ -52,7 +52,6 @@ end top_hw;
 architecture bhv of top_hw is
 	signal clock		: std_ulogic;
 	signal reset		: std_ulogic;
-	signal counter		: unsigned(2 downto 0) := (others => '0');
 
 	signal sclk			: std_ulogic;
 	signal n_cs			: std_ulogic;
@@ -61,16 +60,6 @@ begin
 
 
 clock <= FT_CLKOUT;
-gen_reset: process(clock)
-begin
-	if rising_edge(clock) then
-		reset	<= '0';
-		if counter /= 7 then
-			reset	<= '1';
-			counter <= counter+1;
-		end if;
-	end if;
-end process;
 
 ADC_CLOCK	<= '0';
 ADC_NCS		<= '1';
@@ -111,5 +100,12 @@ port map
 	sdata		=> sdata
 );
 
-end bhv;
 
+i_reset : entity work.reset_xilinx_simple
+port map
+(
+	clock	=> clock,
+	reset	=> reset
+);
+
+end bhv;
