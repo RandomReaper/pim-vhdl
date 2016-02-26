@@ -22,15 +22,17 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity reset_xilinx_simple is
+-- simple reset for RAM based FPGA
+entity reset_for_ram_fpga is
 	port
 	(
 		clock : in     std_ulogic;
 		reset : out    std_ulogic := '1'
 	);
-end reset_xilinx_simple;
+end reset_for_ram_fpga;
 
-architecture rtl of reset_xilinx_simple is
+
+architecture rtl of reset_for_ram_fpga is
 begin
 
 reset_gen: process(clock)

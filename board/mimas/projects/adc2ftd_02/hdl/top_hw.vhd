@@ -79,7 +79,7 @@ port map
 	sdata			=> ADC_DATA
 );
 
-i_reset : entity work.reset_xilinx_simple
+i_reset : entity work.reset_for_ram_fpga
 port map
 (
 	clock	=> clock,
