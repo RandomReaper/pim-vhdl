@@ -106,10 +106,10 @@ begin
 
 		if sample = '1' then
 			case to_integer(b_counter) is
-				when 5+0 to 5+10 =>
-					data(11-to_integer(b_counter-5)) <= sdata;
-				when 5+11 =>
-					data(11-to_integer(b_counter-5)) <= sdata;
+				when 3+0 to 3+10 =>
+					data(11-to_integer(b_counter-3)) <= sdata;
+				when 3+11 =>
+					data(11-to_integer(b_counter-3)) <= sdata;
 					data_valid <= '1';
 				when others =>
 			end case;
@@ -120,7 +120,7 @@ end process;
 cs_gen: process(b_counter)
 begin
 	cs <= '0';
-	if b_counter < 15 then
+	if b_counter < 18 then
 		cs <= '1';
 	end if;
 end process;
