@@ -36,6 +36,7 @@ entity width_changer_internal is
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
 
+		out_data_ready	: in	std_ulogic;
 		out_data		: out	std_ulogic_vector;
 		out_data_valid	: out	std_ulogic
 	);
@@ -55,6 +56,7 @@ entity width_changer is
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
 
+		out_data_ready	: in	std_ulogic;
 		out_data		: out	std_ulogic_vector;
 		out_data_valid	: out	std_ulogic
 	);
@@ -79,6 +81,7 @@ entity width_changer_gen is
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
 
+		out_data_ready	: in	std_ulogic;
 		out_data		: out	std_ulogic_vector;
 		out_data_valid	: out	std_ulogic
 	);
@@ -89,8 +92,8 @@ begin
 	assert
 		    (in_data'right = 0)
 		and (out_data'right = 0)
-		and (in_data'left > 0)
-		and (out_data'left > 0)
+		and (in_data'left >= 0)
+		and (out_data'left >= 0)
 	report "Unsupported feature, feel free to improve this code" severity failure;
 
 smaller: if g_out_width < g_in_width generate
@@ -105,6 +108,8 @@ smaller: if g_out_width < g_in_width generate
 		in_data			=> in_data,
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
+
+		out_data_ready	=> out_data_ready,
 		out_data		=> out_data,
 		out_data_valid	=> out_data_valid
 	);
@@ -121,13 +126,15 @@ bigger: if g_out_width > g_in_width generate
 		in_data			=> in_data,
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
+
+		out_data_ready	=> out_data_ready,
 		out_data		=> out_data,
 		out_data_valid	=> out_data_valid
 	);
 end generate;
 
 same: if g_out_width = g_in_width generate
-	in_data_ready	<= '1';
+	in_data_ready	<= out_data_ready;
 	out_data		<= in_data;
 	out_data_valid	<= in_data_valid;
 end generate;
@@ -150,6 +157,8 @@ begin
 		in_data			=> in_data,
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
+
+		out_data_ready	=> out_data_ready,
 		out_data		=> out_data,
 		out_data_valid	=> out_data_valid
 	);
@@ -166,7 +175,9 @@ begin
 		state <= (others => '0');
 		memory <= (others => '0');
 	elsif rising_edge(clock) then
-		state <= std_ulogic_vector(unsigned(state) srl 1);
+		if out_data_ready = '1' then
+			state <= std_ulogic_vector(unsigned(state) srl 1);
+		end if;
 		if in_data_valid = '1' then
 			state <= (others => '0');
 			state(state'left) <= '1';
@@ -178,7 +189,7 @@ begin
 	end if;
 end process;
 
-process(state, in_data, in_data_valid, memory)
+process(state, in_data, in_data_valid, memory, out_data_ready)
 begin
 	out_data_valid <= in_data_valid;
 	out_data <= in_data(in_data'left downto in_data'left - out_data'left);
@@ -186,14 +197,14 @@ begin
 
 	for i in state'range loop
 		if state(i) = '1' then
-			out_data_valid <= '1';
+			out_data_valid <= out_data_ready;
 			in_data_ready <= '0';
 			out_data <= memory(((i+1)*out_data'length) - 1 downto (i+0)*out_data'length);
 		end if;
 	end loop;
 
 	if state(0) = '1' then
-		in_data_ready <= '1';
+		in_data_ready <= out_data_ready;
 	end if;
 
 end process;
@@ -206,7 +217,7 @@ architecture rtl_bigger of width_changer_internal is
 	signal state_changed: std_ulogic;
 begin
 
-in_data_ready <= '1';
+in_data_ready <= out_data_ready;
 
 state_proc: process(reset, clock)
 begin

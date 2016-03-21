@@ -193,6 +193,7 @@ port map
 	in_data			=> out_data,
 	in_data_valid	=> out_valid,
 
+	out_data_ready	=> '1',
 	out_data		=> adc_data,
 	out_data_valid	=> adc_data_valid
 );

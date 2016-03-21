@@ -65,6 +65,8 @@ architecture rtl of top is
 	signal adc_data_valid	: std_ulogic;
 	signal adc_data8		: std_ulogic_vector(adbus'range);
 	signal adc_data8_valid	: std_ulogic;
+	signal adc_data8_ready	: std_ulogic;
+	signal packetizer_full	: std_ulogic;
 begin
 
 i_ft245: entity work.ft245_sync_if
@@ -127,9 +129,13 @@ port map
 	in_data			=> adc_data64,
 	in_data_valid	=> adc_data_valid,
 	in_data_ready	=> open,
+
+	out_data_ready	=> adc_data8_ready,
 	out_data		=> adc_data8,
 	out_data_valid	=> adc_data8_valid
 );
+
+adc_data8_ready <= not packetizer_full;
 
 i_packetizer: entity work.packetizer
 generic map
@@ -148,6 +154,7 @@ port map
 
 	read_data		=> ftd_data,
 	status_empty	=> ftd_empty,
+	status_full		=> packetizer_full,
 	read			=> ftd_read
 );
 
