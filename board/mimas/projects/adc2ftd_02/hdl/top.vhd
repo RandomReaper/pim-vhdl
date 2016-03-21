@@ -68,6 +68,8 @@ architecture rtl of top is
 	signal adc_data8_valid	: std_ulogic;
 	signal adc_data8_ready	: std_ulogic;
 	signal packetizer_full	: std_ulogic;
+	signal in_data_valid	: std_ulogic;
+	signal in_data_ready	: std_ulogic;
 begin
 
 i_ft245: entity work.ft245_sync_if
@@ -121,6 +123,15 @@ begin
 	end loop;
 end process;
 
+process(reset, clock)
+begin
+	if reset = '1' then
+		in_data_valid <= '0';
+	elsif rising_edge(clock) then
+		in_data_valid <= adc_data_valid and in_data_ready;
+	end if;
+end process;
+
 i_wc: entity work.width_changer
 port map
 (
@@ -128,8 +139,8 @@ port map
 	reset			=> reset,
 
 	in_data			=> adc_data64,
-	in_data_valid	=> adc_data_valid,
-	in_data_ready	=> open,
+	in_data_valid	=> in_data_valid,
+	in_data_ready	=> in_data_ready,
 
 	out_data_ready	=> adc_data8_ready,
 	out_data		=> adc_data8,
