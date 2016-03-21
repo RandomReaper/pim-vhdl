@@ -26,7 +26,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity width_changer_internal is
+entity wc_int is
 	port
 	(
 		clock			: in	std_ulogic;
@@ -40,7 +40,7 @@ entity width_changer_internal is
 		out_data_valid	: out	std_ulogic;
 		out_data_ready	: in	std_ulogic
 	);
-end width_changer_internal;
+end wc_int;
 
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -66,7 +66,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity width_changer_gen is
+entity wc_gen is
 	generic
 	(
 		g_in_width		: positive;
@@ -85,9 +85,9 @@ entity width_changer_gen is
 		out_data_valid	: out	std_ulogic;
 		out_data_ready	: in	std_ulogic
 	);
-end width_changer_gen;
+end wc_gen;
 
-architecture rtl of width_changer_gen is
+architecture rtl of wc_gen is
 begin
 	assert
 		    (in_data'right = 0)
@@ -99,7 +99,7 @@ begin
 smaller: if g_out_width < g_in_width generate
 	assert (in_data'length mod out_data'length) = 0 report "width_changer smaller : modulo size failed" severity failure;
 
-	i_smaller: entity work.width_changer_internal(rtl_smaller)
+	i_smaller: entity work.wc_int(rtl_smaller)
 	port map
 	(
 		clock			=> clock,
@@ -117,7 +117,7 @@ end generate;
 
 bigger: if g_out_width > g_in_width generate
 	assert (out_data'length mod in_data'length) = 0 report "width_changer bigger : modulo size failed" severity failure;
-	i_bigger: entity work.width_changer_internal(rtl_bigger)
+	i_bigger: entity work.wc_int(rtl_bigger)
 	port map
 	(
 		clock			=> clock,
@@ -143,7 +143,7 @@ end rtl;
 
 architecture rtl of width_changer is
 begin
-	i_changer: entity work.width_changer_gen
+	i_changer: entity work.wc_gen
 	generic map
 	(
 		g_in_width		=> in_data'length,
@@ -164,7 +164,7 @@ begin
 	);
 end rtl;
 
-architecture rtl_smaller of width_changer_internal is
+architecture rtl_smaller of wc_int is
 	signal memory		: std_ulogic_vector((in_data'length - out_data'length) -1 downto 0);
 	signal state		: std_ulogic_vector((in_data'length/out_data'length) - 2 downto 0);
 begin
@@ -211,7 +211,7 @@ end process;
 
 end rtl_smaller;
 
-architecture rtl_bigger of width_changer_internal is
+architecture rtl_bigger of wc_int is
 	signal memory		: std_ulogic_vector(out_data'left downto in_data'left + 1);
 	signal state		: std_ulogic_vector((out_data'length/in_data'length) - 1  downto 0);
 	signal state_changed: std_ulogic;
