@@ -17,7 +17,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -----------------------------------------------------------------------------
--- limitations	: Only implemented for "N downto 0" ranges (with N > 0)
+-- limitations	: Only implemented for "N downto 0" ranges (with N >= 0)
 --
 -- remarks		: MSB first !
 -----------------------------------------------------------------------------
@@ -36,9 +36,9 @@ entity width_changer_internal is
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
 
-		out_data_ready	: in	std_ulogic;
 		out_data		: out	std_ulogic_vector;
-		out_data_valid	: out	std_ulogic
+		out_data_valid	: out	std_ulogic;
+		out_data_ready	: in	std_ulogic
 	);
 end width_changer_internal;
 
@@ -56,9 +56,9 @@ entity width_changer is
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
 
-		out_data_ready	: in	std_ulogic;
 		out_data		: out	std_ulogic_vector;
-		out_data_valid	: out	std_ulogic
+		out_data_valid	: out	std_ulogic;
+		out_data_ready	: in	std_ulogic
 	);
 end width_changer;
 
@@ -81,9 +81,9 @@ entity width_changer_gen is
 		in_data_valid	: in	std_ulogic;
 		in_data_ready	: out	std_ulogic;
 
-		out_data_ready	: in	std_ulogic;
 		out_data		: out	std_ulogic_vector;
-		out_data_valid	: out	std_ulogic
+		out_data_valid	: out	std_ulogic;
+		out_data_ready	: in	std_ulogic
 	);
 end width_changer_gen;
 
@@ -109,9 +109,9 @@ smaller: if g_out_width < g_in_width generate
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
 
-		out_data_ready	=> out_data_ready,
 		out_data		=> out_data,
-		out_data_valid	=> out_data_valid
+		out_data_valid	=> out_data_valid,
+		out_data_ready	=> out_data_ready
 	);
 end generate;
 
@@ -127,9 +127,9 @@ bigger: if g_out_width > g_in_width generate
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
 
-		out_data_ready	=> out_data_ready,
 		out_data		=> out_data,
-		out_data_valid	=> out_data_valid
+		out_data_valid	=> out_data_valid,
+		out_data_ready	=> out_data_ready
 	);
 end generate;
 
@@ -158,9 +158,9 @@ begin
 		in_data_valid	=> in_data_valid,
 		in_data_ready	=> in_data_ready,
 
-		out_data_ready	=> out_data_ready,
 		out_data		=> out_data,
-		out_data_valid	=> out_data_valid
+		out_data_valid	=> out_data_valid,
+		out_data_ready	=> out_data_ready
 	);
 end rtl;
 
