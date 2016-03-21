@@ -33,12 +33,19 @@ end reset_for_ram_fpga;
 
 
 architecture rtl of reset_for_ram_fpga is
+	signal counter	: unsigned(1 downto 0) := (others => '0');
 begin
 
 reset_gen: process(clock)
 begin
 	if rising_edge(clock) then
-		reset <= '0';
+		if counter /= "11" then
+			reset <= '1';
+			counter <= counter + 1;
+		else
+			counter <= counter;
+			reset <= '0';
+		end if;
 	end if;
 end process;
 
