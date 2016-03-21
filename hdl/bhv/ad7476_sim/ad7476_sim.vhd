@@ -74,8 +74,8 @@ begin
 		end if;
 
 		case to_integer(counter) is
-			when 1+0 to 1+11 =>
-				sdata <= data(11-to_integer(counter-1));
+			when 2+0 to 2+11 =>
+				sdata <= data(11-to_integer(counter-2));
 
 			when others =>
 				sdata <= '0';

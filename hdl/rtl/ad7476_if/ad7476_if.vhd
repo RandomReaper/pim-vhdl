@@ -106,10 +106,10 @@ begin
 
 		if sample = '1' then
 			case to_integer(b_counter) is
-				when 3+0 to 3+10 =>
-					data(11-to_integer(b_counter-3)) <= sdata;
-				when 3+11 =>
-					data(11-to_integer(b_counter-3)) <= sdata;
+				when 4+0 to 4+10 =>
+					data(11-to_integer(b_counter-4)) <= sdata;
+				when 4+11 =>
+					data(11-to_integer(b_counter-4)) <= sdata;
 					data_valid <= '1';
 				when others =>
 			end case;
