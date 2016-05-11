@@ -165,8 +165,8 @@ begin
 end rtl;
 
 architecture rtl_smaller of wc_int is
-	signal memory		: std_ulogic_vector((in_data'length - out_data'length) -1 downto 0);
-	signal state		: std_ulogic_vector((in_data'length/out_data'length) - 2 downto 0);
+	signal memory		: std_ulogic_vector(in_data'range);
+	signal state		: std_ulogic_vector((in_data'length/out_data'length) - 1 downto 0);
 begin
 
 state_proc: process(reset, clock)
@@ -179,9 +179,9 @@ begin
 			state <= std_ulogic_vector(unsigned(state) srl 1);
 		end if;
 		if in_data_valid = '1' then
-			state <= (others => '0');
+			state(state'range) <= (others => '0');
 			state(state'left) <= '1';
-			memory <= in_data(memory'range);
+			memory <= in_data;
 
 			assert unsigned(state) = 0 report "in_data_valid while not empty" severity warning;
 
@@ -189,24 +189,22 @@ begin
 	end if;
 end process;
 
-process(state, in_data, in_data_valid, memory, out_data_ready)
+process(state, memory, out_data_ready)
 begin
-	out_data_valid <= in_data_valid;
-	out_data <= in_data(in_data'left downto in_data'left - out_data'left);
-	in_data_ready <= not in_data_valid;
-
+	out_data_valid	<= '0';
+	in_data_ready 	<= '1';
+	out_data		<= memory((1*out_data'length) - 1 downto 0);
+	--pragma synthesis_off
+	out_data(out_data'range)	<= (others => 'U');
+	--pragma synthesis_on
+	out_data_valid <= '0';
 	for i in state'range loop
 		if state(i) = '1' then
-			out_data_valid <= out_data_ready;
-			in_data_ready <= '0';
-			out_data <= memory(((i+1)*out_data'length) - 1 downto (i+0)*out_data'length);
+			out_data_valid		<= out_data_ready;
+			in_data_ready		<= '0';
+			out_data			<= memory(((i+1)*out_data'length) - 1 downto (i+0)*out_data'length);
 		end if;
 	end loop;
-
-	if state(0) = '1' then
-		in_data_ready <= out_data_ready;
-	end if;
-
 end process;
 
 end rtl_smaller;
