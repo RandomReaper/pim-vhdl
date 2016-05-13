@@ -165,8 +165,9 @@ begin
 end rtl;
 
 architecture rtl_smaller of wc_int is
-	signal memory		: std_ulogic_vector(in_data'range);
-	signal state		: std_ulogic_vector((in_data'length/out_data'length) - 1 downto 0);
+	signal memory				: std_ulogic_vector(in_data'range);
+	signal state				: std_ulogic_vector((in_data'length/out_data'length) - 1 downto 0);
+	signal out_data_valid_int	: std_ulogic;
 begin
 
 state_proc: process(reset, clock)
@@ -178,76 +179,110 @@ begin
 		if out_data_ready = '1' then
 			state <= std_ulogic_vector(unsigned(state) srl 1);
 		end if;
+
+		--pragma synthesis_off
+		if out_data_valid_int = '1' and (unsigned(state) = 0 or unsigned(state) = 1) then
+			memory	<= (others => 'U');
+		end if;
+		--pragma synthesis_on
+
 		if in_data_valid = '1' then
 			state(state'range) <= (others => '0');
 			state(state'left) <= '1';
 			memory <= in_data;
 
-			assert unsigned(state) = 0 report "in_data_valid while not empty" severity warning;
-
+			assert unsigned(state) = 0 or unsigned(state) = 1 report "in_data_valid while not empty" severity warning;
 		end if;
+
 	end if;
 end process;
 
+out_data_valid <= out_data_valid_int;
 process(state, memory, out_data_ready)
 begin
-	out_data_valid	<= '0';
+	out_data_valid_int	<= '0';
 	in_data_ready 	<= '1';
 	out_data		<= memory((1*out_data'length) - 1 downto 0);
 	--pragma synthesis_off
 	out_data(out_data'range)	<= (others => 'U');
 	--pragma synthesis_on
-	out_data_valid <= '0';
 	for i in state'range loop
 		if state(i) = '1' then
-			out_data_valid		<= out_data_ready;
-			in_data_ready		<= '0';
+			in_data_ready 	<= '0';
+			out_data_valid_int	<= out_data_ready;
 			out_data			<= memory(((i+1)*out_data'length) - 1 downto (i+0)*out_data'length);
 		end if;
 	end loop;
+
+	if state(state'right) = '1' then
+		in_data_ready		<= out_data_ready;
+	end if;
 end process;
 
 end rtl_smaller;
 
 architecture rtl_bigger of wc_int is
-	signal memory		: std_ulogic_vector(out_data'left downto in_data'left + 1);
-	signal state		: std_ulogic_vector((out_data'length/in_data'length) - 1  downto 0);
-	signal state_changed: std_ulogic;
+	signal memory				: std_ulogic_vector(out_data'range);
+	signal state				: std_ulogic_vector((out_data'length/in_data'length) downto 0);
+	signal out_data_valid_int	: std_ulogic;
 begin
 
-in_data_ready <= out_data_ready;
-
+out_data_valid <= out_data_valid_int;
 state_proc: process(reset, clock)
 begin
 	if reset = '1' then
 		state <= (others => '0');
 		state(state'left) <= '1';
-		state_changed <= '0';
+		out_data_valid_int	<= '0';
 	elsif rising_edge(clock) then
-		state_changed <= '0';
+		out_data_valid_int	<= '0';
+
 		if in_data_valid = '1' then
-			state <= std_ulogic_vector(unsigned(state) ror 1);
-			state_changed <= '1';
+			state <= std_ulogic_vector(unsigned(state) srl 1);
+		end if;
+
+		if (state(state'right + 1) = '1' and in_data_valid = '1') or state(state'right) = '1' then
+			if out_data_ready = '1' then
+				out_data_valid_int	<= '1';
+				state <= (others => '0');
+				state(state'left) <= '1';
+			end if;
 		end if;
 	end if;
+end process;
+
+data_ready_proc: process(state, in_data_valid, out_data_ready)
+begin
+	in_data_ready	<= '1';
+
+	if state(state'right) = '1' or state(state'right + 1) = '1'then
+		in_data_ready	<= out_data_ready;
+	end if;
+
 end process;
 
 data_proc: process(reset, clock)
 begin
 	if reset = '1' then
-		memory(out_data'left downto in_data'left+1) <= (others => '-');
+		memory<= (others => '-');
 	elsif rising_edge(clock) then
+
+		--pragma synthesis_off
+		if out_data_valid_int = '1' then
+			memory <= (others => '-');
+		end if;
+		--pragma synthesis_on
+
 		if in_data_valid = '1' then
 			for i in state'left downto 1 loop
 				if state(i) = '1' then
-					memory(((i+1)*in_data'length) - 1 downto (i+0)*in_data'length) <= in_data;
+					memory(((i-0)*in_data'length) - 1 downto (i-1)*in_data'length) <= in_data;
 				end if;
 			end loop;
 		end if;
 	end if;
 end process;
 
-out_data <= memory & in_data;
-out_data_valid <= in_data_valid when state(0) = '1' and in_data_valid = '1' else '0';
+out_data <= memory;
 
 end rtl_bigger;

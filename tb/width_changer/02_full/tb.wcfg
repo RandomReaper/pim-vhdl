@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pim/git/hw/tb/width_changer/03_full/tmp/tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="29" />
+   <wvobject fp_name="/tb/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider28" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data4[3:0]</obj_property>
+      <obj_property name="ObjectShortName">data4[3:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data4_bis" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data4_bis[3:0]</obj_property>
+      <obj_property name="ObjectShortName">data4_bis[3:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data4_bis_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data4_bis_valid</obj_property>
+      <obj_property name="ObjectShortName">data4_bis_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider35" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data4" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data4[3:0]</obj_property>
+      <obj_property name="ObjectShortName">data4[3:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data4_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data4_valid</obj_property>
+      <obj_property name="ObjectShortName">data4_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data4_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data4_ready</obj_property>
+      <obj_property name="ObjectShortName">data4_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data16" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data16[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data16_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data16_valid</obj_property>
+      <obj_property name="ObjectShortName">data16_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data16_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data16_ready</obj_property>
+      <obj_property name="ObjectShortName">data16_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data8" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data8[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data8[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data8_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data8_valid</obj_property>
+      <obj_property name="ObjectShortName">data8_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data8_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data8_ready</obj_property>
+      <obj_property name="ObjectShortName">data8_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data24" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data24[23:0]</obj_property>
+      <obj_property name="ObjectShortName">data24[23:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data24_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data24_valid</obj_property>
+      <obj_property name="ObjectShortName">data24_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/data24_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">data24_ready</obj_property>
+      <obj_property name="ObjectShortName">data24_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider20" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/in_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">in_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">in_data[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/in_data_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">in_data_valid</obj_property>
+      <obj_property name="ObjectShortName">in_data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/in_data_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">in_data_ready</obj_property>
+      <obj_property name="ObjectShortName">in_data_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/out_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/out_data_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data_valid</obj_property>
+      <obj_property name="ObjectShortName">out_data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/out_data_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data_ready</obj_property>
+      <obj_property name="ObjectShortName">out_data_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/memory" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">memory[15:0]</obj_property>
+      <obj_property name="ObjectShortName">memory[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/state" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">state[1:0]</obj_property>
+      <obj_property name="ObjectShortName">state[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut1/i_changer/smaller/i_smaller/out_data_valid_int" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data_valid_int</obj_property>
+      <obj_property name="ObjectShortName">out_data_valid_int</obj_property>
+   </wvobject>
+</wave_config>

@@ -26,6 +26,8 @@ entity tb is
 end tb;
 
 architecture bhv of tb is
+	constant bug_severity : severity_level := failure;
+
 	constant clock_frequency: real := 100.0e6;
 	--constant clock_period	: time := 1.0 * sec/clock_frequency;
 
@@ -61,7 +63,7 @@ begin
 	if reset = '1' then
 		counter <= (others => '1');
 		data4_valid <= '0';
-	elsif rising_edge(clock) then
+	elsif falling_edge(clock) then
 		data4_valid <= '0';
 		if data4_ready = '1' then
 			counter <= counter + 1;
@@ -80,21 +82,20 @@ begin
 	counter_bis <= (others => '0');
 
 	for i in 0 to 100 loop
-		timeout <= 10;
+		timeout <= 20;
 		while data4_bis_valid /= '1' loop
 
 			wait until rising_edge(clock);
 
 			timeout <= timeout - 1;
 
-			assert timeout > 0 report "timeout waiting for data4_bis_valid" severity failure;
+			assert timeout > 0 report "timeout waiting for data4_bis_valid" severity bug_severity;
 
 		end loop;
-
-		assert unsigned(data4_bis) = counter_bis report "wrong data" severity failure;
+		assert unsigned(data4_bis) = counter_bis report "wrong data: is "&integer'image(to_integer(unsigned(data4_bis))) &" expected : " &integer'image(to_integer(counter_bis)) severity bug_severity;
+		counter_bis <= counter_bis + 1;
 
 		wait until rising_edge(clock);
-		counter_bis <= counter_bis + 1;
 
 	end loop;
 
