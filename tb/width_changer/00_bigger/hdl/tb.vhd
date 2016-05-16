@@ -30,30 +30,30 @@ architecture bhv of tb is
 
 	constant half_period : time := 0.5 ns;
 
-	signal reset 				: std_ulogic;
-	signal clock 				: std_ulogic;
-	signal stop 				: std_ulogic;
-	signal in_data				: std_ulogic_vector(3 downto 0);
-	signal in_data_valid		: std_ulogic;
-	signal in_data_ready		: std_ulogic;
-	signal out_data				: std_ulogic_vector(11 downto 0);
-	signal out_data_ready		: std_ulogic;
-	signal out_data_valid		: std_ulogic;
+	signal reset 		: std_ulogic;
+	signal clock 		: std_ulogic;
+	signal stop 		: std_ulogic;
+	signal in_data		: std_ulogic_vector(3 downto 0);
+	signal in_write		: std_ulogic;
+	signal in_ready		: std_ulogic;
+	signal out_data		: std_ulogic_vector(11 downto 0);
+	signal out_ready	: std_ulogic;
+	signal out_write	: std_ulogic;
 begin
 
 i_dut : entity work.width_changer
 	port map
 	(
-	clock			=> clock,
-	reset			=> reset,
+	clock		=> clock,
+	reset		=> reset,
 
-	in_data			=> in_data,
-	in_data_valid	=> in_data_valid,
-	in_data_ready	=> in_data_ready,
+	in_data		=> in_data,
+	in_write	=> in_write,
+	in_ready	=> in_ready,
 
-	out_data		=> out_data,
-	out_data_valid	=> out_data_valid,
-	out_data_ready	=> out_data_ready
+	out_data	=> out_data,
+	out_write	=> out_write,
+	out_ready	=> out_ready
 	);
 
 i_clock: entity work.clock_stop
@@ -74,21 +74,21 @@ begin
 	-----------------------------------------------------------------------------
 	-- Full nice reset
 	-----------------------------------------------------------------------------
-	stop			<= '0';
-	reset			<= '1';
-	in_data			<= (others => '-');
-	in_data_valid	<= '0';
-	out_data_ready	<= '0';
+	stop		<= '0';
+	reset		<= '1';
+	in_data		<= (others => '-');
+	in_write	<= '0';
+	out_ready	<= '0';
 
 	wait until falling_edge(clock);
 
-	reset			<= '0';
+	reset		<= '0';
 	wait until rising_edge(clock);
 	-----------------------------------------------------------------------------
 	-- Verify all outputs after reset
 	-----------------------------------------------------------------------------
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test a write with output not ready
@@ -97,131 +97,131 @@ begin
 
 	wait until falling_edge(clock);
 
-	in_data			<= x"1";
-	in_data_valid	<= '1';
-	out_data_ready	<= '0';
+	in_data		<= x"1";
+	in_write	<= '1';
+	out_ready	<= '0';
 
 	wait until falling_edge(clock);
-	in_data			<= x"2";
-	in_data_valid	<= '1';
+	in_data		<= x"2";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= x"3";
-	in_data_valid	<= '1';
+	in_data		<= x"3";
+	in_write	<= '1';
 
 	wait until falling_edge(clock);
-	in_data			<= (others => '-');
-	in_data_valid	<= '0';
+	in_data		<= (others => '-');
+	in_write	<= '0';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	out_data_ready	<= '1';
+	out_ready	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (out_data				= x"123")		report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_data			= x"123")		report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test two consecutive writes with output ready
 	-----------------------------------------------------------------------------
 	wait until falling_edge(clock);
-	in_data			<= (others => '-');
-	in_data_valid	<= '0';
-	out_data_ready	<= '1';
+	in_data		<= (others => '-');
+	in_write	<= '0';
+	out_ready	<= '1';
 
 	-- Verify initial empty state
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= x"a";
-	in_data_valid	<= '1';
+	in_data		<= x"a";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= x"b";
-	in_data_valid	<= '1';
+	in_data		<= x"b";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= x"c";
-	in_data_valid	<= '1';
+	in_data		<= x"c";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= x"d";
-	in_data_valid	<= '1';
+	in_data		<= x"d";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (out_data				= x"abc")		report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_data			= x"abc")		report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 
 	wait until falling_edge(clock);
-	in_data			<= x"e";
-	in_data_valid	<= '1';
+	in_data		<= x"e";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= x"f";
-	in_data_valid	<= '1';
+	in_data		<= x"f";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= x"f";
-	in_data_valid	<= '1';
+	in_data		<= x"f";
+	in_write	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (out_data				= x"def")		report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_data			= x"def")		report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	wait until falling_edge(clock);
-	in_data			<= (others => '-');
-	in_data_valid	<= '0';
-	out_data_ready	<= '1';
+	in_data		<= (others => '-');
+	in_write	<= '0';
+	out_ready	<= '1';
 
 	wait until rising_edge(clock);
-	assert (out_data_valid			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
-	assert (in_data_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (out_write			= '0')			report "widh_changer_bigger buggy !?!" severity bug_severity;
+	assert (in_ready			= '1')			report "widh_changer_bigger buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- End of test

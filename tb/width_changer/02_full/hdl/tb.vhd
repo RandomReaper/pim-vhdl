@@ -29,26 +29,25 @@ architecture bhv of tb is
 	constant bug_severity : severity_level := failure;
 
 	constant clock_frequency: real := 100.0e6;
-	--constant clock_period	: time := 1.0 * sec/clock_frequency;
 
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
 	signal stop				: std_ulogic;
 
 	signal data4			: std_ulogic_vector(3 downto 0);
-	signal data4_valid		: std_ulogic;
+	signal data4_write		: std_ulogic;
 	signal data4_ready		: std_ulogic;
 	signal data16			: std_ulogic_vector(15 downto 0);
-	signal data16_valid		: std_ulogic;
+	signal data16_write		: std_ulogic;
 	signal data16_ready		: std_ulogic;
 	signal data8			: std_ulogic_vector(7 downto 0);
-	signal data8_valid		: std_ulogic;
+	signal data8_write		: std_ulogic;
 	signal data8_ready		: std_ulogic;
 	signal data24			: std_ulogic_vector(23 downto 0);
-	signal data24_valid		: std_ulogic;
+	signal data24_write		: std_ulogic;
 	signal data24_ready		: std_ulogic;
 	signal data4_bis		: std_ulogic_vector(3 downto 0);
-	signal data4_bis_valid	: std_ulogic;
+	signal data4_bis_write	: std_ulogic;
 	signal data4_bis_ready	: std_ulogic;
 	signal counter			: unsigned(data4'range);
 	signal counter_bis		: unsigned(data4'range);
@@ -56,18 +55,20 @@ architecture bhv of tb is
 
 begin
 
+data4_bis_ready <= '1';
+
 -- Generate a counter on the input
 data4 <= std_ulogic_vector(counter);
 process(reset, clock)
 begin
 	if reset = '1' then
 		counter <= (others => '1');
-		data4_valid <= '0';
+		data4_write <= '0';
 	elsif falling_edge(clock) then
-		data4_valid <= '0';
+		data4_write <= '0';
 		if data4_ready = '1' then
 			counter <= counter + 1;
-			data4_valid <= '1';
+			data4_write <= '1';
 		end if;
 	end if;
 end process;
@@ -83,13 +84,13 @@ begin
 
 	for i in 0 to 100 loop
 		timeout <= 20;
-		while data4_bis_valid /= '1' loop
+		while data4_bis_write /= '1' loop
 
 			wait until rising_edge(clock);
 
 			timeout <= timeout - 1;
 
-			assert timeout > 0 report "timeout waiting for data4_bis_valid" severity bug_severity;
+			assert timeout > 0 report "timeout waiting for data4_bis_write" severity bug_severity;
 
 		end loop;
 		assert unsigned(data4_bis) = counter_bis report "wrong data: is "&integer'image(to_integer(unsigned(data4_bis))) &" expected : " &integer'image(to_integer(counter_bis)) severity bug_severity;
@@ -108,61 +109,61 @@ end process;
 i_dut0: entity work.width_changer
 port map
 (
-	reset			=> reset,
-	clock			=> clock,
+	reset		=> reset,
+	clock		=> clock,
 
-	in_data			=> data4,
-	in_data_valid	=> data4_valid,
-	in_data_ready	=> data4_ready,
+	in_data		=> data4,
+	in_write	=> data4_write,
+	in_ready	=> data4_ready,
 
-	out_data_ready	=> data16_ready,
-	out_data		=> data16,
-	out_data_valid	=> data16_valid
+	out_ready	=> data16_ready,
+	out_data	=> data16,
+	out_write	=> data16_write
 );
 
 i_dut1: entity work.width_changer
 port map
 (
-	reset			=> reset,
-	clock			=> clock,
+	reset		=> reset,
+	clock		=> clock,
 
-	in_data			=> data16,
-	in_data_valid	=> data16_valid,
-	in_data_ready	=> data16_ready,
+	in_data		=> data16,
+	in_write	=> data16_write,
+	in_ready	=> data16_ready,
 
-	out_data_ready	=> data8_ready,
-	out_data		=> data8,
-	out_data_valid	=> data8_valid
+	out_ready	=> data8_ready,
+	out_data	=> data8,
+	out_write	=> data8_write
 );
 
 i_dut2: entity work.width_changer
 port map
 (
-	reset			=> reset,
-	clock			=> clock,
+	reset		=> reset,
+	clock		=> clock,
 
-	in_data			=> data8,
-	in_data_valid	=> data8_valid,
-	in_data_ready	=> data8_ready,
+	in_data		=> data8,
+	in_write	=> data8_write,
+	in_ready	=> data8_ready,
 
-	out_data_ready	=> data24_ready,
-	out_data		=> data24,
-	out_data_valid	=> data24_valid
+	out_ready	=> data24_ready,
+	out_data	=> data24,
+	out_write	=> data24_write
 );
 
 i_dut3: entity work.width_changer
 port map
 (
-	reset			=> reset,
-	clock			=> clock,
+	reset		=> reset,
+	clock		=> clock,
 
-	in_data			=> data24,
-	in_data_valid	=> data24_valid,
-	in_data_ready	=> data24_ready,
+	in_data		=> data24,
+	in_write	=> data24_write,
+	in_ready	=> data24_ready,
 
-	out_data_ready	=> '1',
-	out_data		=> data4_bis,
-	out_data_valid	=> data4_bis_valid
+	out_ready	=> data4_bis_ready,
+	out_data	=> data4_bis,
+	out_write	=> data4_bis_write
 );
 
 i_clock : entity work.clock_stop

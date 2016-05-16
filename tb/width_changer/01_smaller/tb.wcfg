@@ -11,7 +11,7 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="11" />
+   <WVObjectSize size="9" />
    <wvobject fp_name="/tb/i_dut/clock" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
@@ -31,34 +31,25 @@
       <obj_property name="ObjectShortName">in_data[11:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_dut/in_data_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">in_data_valid</obj_property>
-      <obj_property name="ObjectShortName">in_data_valid</obj_property>
+   <wvobject fp_name="/tb/i_dut/in_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">in_write</obj_property>
+      <obj_property name="ObjectShortName">in_write</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_dut/in_data_ready" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">in_data_ready</obj_property>
-      <obj_property name="ObjectShortName">in_data_ready</obj_property>
+   <wvobject fp_name="/tb/i_dut/in_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">in_ready</obj_property>
+      <obj_property name="ObjectShortName">in_ready</obj_property>
    </wvobject>
    <wvobject fp_name="/tb/i_dut/out_data" type="array" db_ref_id="1">
       <obj_property name="ElementShortName">out_data[3:0]</obj_property>
       <obj_property name="ObjectShortName">out_data[3:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_dut/out_data_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">out_data_valid</obj_property>
-      <obj_property name="ObjectShortName">out_data_valid</obj_property>
+   <wvobject fp_name="/tb/i_dut/out_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_write</obj_property>
+      <obj_property name="ObjectShortName">out_write</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_dut/out_data_ready" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">out_data_ready</obj_property>
-      <obj_property name="ObjectShortName">out_data_ready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_dut/i_changer/smaller/i_smaller/state" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">state[1:0]</obj_property>
-      <obj_property name="ObjectShortName">state[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_dut/i_changer/smaller/i_smaller/memory" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">memory[11:0]</obj_property>
-      <obj_property name="ObjectShortName">memory[11:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+   <wvobject fp_name="/tb/i_dut/out_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_ready</obj_property>
+      <obj_property name="ObjectShortName">out_ready</obj_property>
    </wvobject>
 </wave_config>

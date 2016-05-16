@@ -187,15 +187,15 @@ port map
 i_wc: entity work.width_changer
 port map
 (
-	reset			=> reset,
-	clock			=> clock,
+	reset		=> reset,
+	clock		=> clock,
 
-	in_data			=> out_data,
-	in_data_valid	=> out_valid,
+	in_data		=> out_data,
+	in_write	=> out_valid,
 
-	out_data_ready	=> '1',
-	out_data		=> adc_data,
-	out_data_valid	=> adc_data_valid
+	out_ready	=> '1',
+	out_data	=> adc_data,
+	out_write	=> adc_data_valid
 );
 
 i_reset: entity work.reset

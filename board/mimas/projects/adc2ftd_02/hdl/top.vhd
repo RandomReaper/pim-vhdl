@@ -135,16 +135,16 @@ end process;
 i_wc: entity work.width_changer
 port map
 (
-	clock			=> clock,
-	reset			=> reset,
+	clock		=> clock,
+	reset		=> reset,
 
-	in_data			=> adc_data64,
-	in_data_valid	=> in_data_valid,
-	in_data_ready	=> in_data_ready,
+	in_data		=> adc_data64,
+	in_write	=> in_data_valid,
+	in_ready	=> in_data_ready,
 
-	out_data_ready	=> adc_data8_ready,
-	out_data		=> adc_data8,
-	out_data_valid	=> adc_data8_valid
+	out_ready	=> adc_data8_ready,
+	out_data	=> adc_data8,
+	out_write	=> adc_data8_valid
 );
 
 adc_data8_ready <= not packetizer_full;
