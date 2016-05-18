@@ -1,8 +1,6 @@
 #!/bin/bash
-set
-echo $PATH
 TEST=ghdl-sim.sh
-BASE=$(readlink -m $PWD)
+BASE=$(readlink -m .)
 RESULT=0
 while read dir
 do

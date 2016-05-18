@@ -18,7 +18,10 @@ before_install:
   - sudo apt-get -y install libgnat-4.6
 
 script:
+  - export PATH=$PWD/tb/00_scripts:$PATH
   - export PATH=$PWD/ghdl/bin:$PATH
   - cd tb
-  - ./all.sh
+  - ghdl-all.sh
 
+after_failure:
+  - ghdl-all-verbose.sh
