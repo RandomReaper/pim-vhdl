@@ -1,0 +1,21 @@
+language: C
+
+sudo: required
+dist: trusty
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+before_install:
+  - mkdir ghdl
+  - wget https://github.com/tgingold/ghdl/releases/download/2016-05-03/ghdl-0.34dev-mcode-2016-05-03.tgz -O - | tar xz -C ghdl
+  - sudo apt-get update -qq
+  - sudo apt-get -y install libgnat-4.6
+
+script:
+  - export PATH=$PWD/ghdl/bin:$PATH
+  - cd tb
+  - ./all.sh
+
