@@ -24,4 +24,4 @@ script:
   - ghdl-all.sh
 
 after_failure:
-  - ghdl-all-verbose.sh
+  - VERBOSE=1 ghdl-all.sh

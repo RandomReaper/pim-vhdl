@@ -49,7 +49,7 @@ begin
 
 	clock <= '0';
 
-	assert false report "Simulation Done" severity note;
+	assert false report "PIM_VHDL_SIMULATION_DONE" severity note;
 
 	wait;
 

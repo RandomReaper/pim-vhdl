@@ -103,7 +103,7 @@ begin
 	-----------------------------------------------------------------------------
 	-- Test a read twice when empty
 	-----------------------------------------------------------------------------
-	assert false									report "Testing read when empty, warning:status_read_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read when empty:status_read_error expected" severity note;
 
 	read <= '1';
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
@@ -116,7 +116,7 @@ begin
 	assert (status_read_error		= '1')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
 
-	assert false									report "Testing read when empty, warning:status_read_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read when empty:status_read_error expected" severity note;
 
 	read <= '1';
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
@@ -211,7 +211,7 @@ begin
 	-----------------------------------------------------------------------------
 	-- Test a simultaneous read/write while empty, (only read should fail)
 	-----------------------------------------------------------------------------
-	assert false									report "Testing read/write while empty, warning:status_read_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read/write while empty:status_read_error expected" severity note;
 
 	write <= '1';
 	read <= '1';
@@ -267,7 +267,7 @@ begin
 	-----------------------------------------------------------------------------
 	-- Test write when full twice -> write error
 	-----------------------------------------------------------------------------
-	assert false									report "Testing write when full, warning:status_write_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing write when full, status_write_error expected" severity note;
 
 	write <= '1';
 	write_data <= x"22";
@@ -282,7 +282,7 @@ begin
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '1')          report "fifo buggy !?!" severity failure;
 
-	assert false									report "Testing write when full, warning:status_write_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing write when full:status_write_error expected" severity note;
 
 	write <= '1';
 	write_data <= x"22";
@@ -319,7 +319,7 @@ begin
 	-----------------------------------------------------------------------------
 	-- Test write when full twice -> write error
 	-----------------------------------------------------------------------------
-	assert false									report "Testing write when full, warning:status_write_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing write when full:status_write_error expected" severity note;
 
 	write <= '1';
 	write_data <= x"22";
@@ -334,7 +334,7 @@ begin
 	assert (status_read_error		= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '1')          report "fifo buggy !?!" severity failure;
 
-	assert false									report "Testing write when full, warning:status_write_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing write when full:status_write_error expected" severity note;
 
 	write <= '1';
 	write_data <= x"22";
@@ -354,7 +354,7 @@ begin
 	-----------------------------------------------------------------------------
 
 	read <= '1';
-	
+
 	for i in 0 to g_depth-1 loop
 		wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 		assert read_data = std_ulogic_vector(to_unsigned(i+1, 8)) report "fifo buggy !?!" severity failure;
@@ -369,11 +369,11 @@ begin
 			assert (status_empty			= '1')		report "fifo buggy !?!" severity failure;
 		end if;
 	end loop;
-	
+
 	-----------------------------------------------------------------------------
 	-- Read twice while empty -> must fail twice
 	-----------------------------------------------------------------------------
-	assert false									report "Testing read when empty, warning:status_read_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read when empty:status_read_error expected" severity note;
 
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
@@ -383,7 +383,7 @@ begin
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_empty			= '1')          report "fifo buggy !?!" severity failure;
 
-	assert false									report "Testing read when empty, warning:status_read_error expected" severity note;
+	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read when empty:status_read_error expected" severity note;
 
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
@@ -392,14 +392,14 @@ begin
 	assert (status_read_error		= '1')          report "fifo buggy !?!" severity failure;
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
 	assert (status_empty			= '1')          report "fifo buggy !?!" severity failure;
-	
+
 	read <= '0';
-		
+
 	-----------------------------------------------------------------------------
 	-- End of test
 	-----------------------------------------------------------------------------
 
-	assert false report "Simulation Done" severity note;
+	assert false report "PIM_VHDL_SIMULATION_DONE" severity note;
 
 	wait;
 
