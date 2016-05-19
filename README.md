@@ -4,14 +4,25 @@
 Because VHDL is hard and should be [free](https://fsf.org/).
 
 ## Library organization
-| Directory  | Description |
-| ------------- | ------------- |
-| /bin  | scripts  |
-| /hdl/rtl  | VHDL synthetizable code |
-| /hdl/bhv  | VHDL code for simulation |
-| /board  | Board support packages |
-| /board/XXX/projects  | Projects for a specific board |
-| /bin  | scripts  |
+```
+├── hdl  <- Re-usable and reused vhdl
+│   ├── bhv <- here goes simulation hdl, like clock, reset, ...
+│   └── rtl <- here goes synthetizable hdl
+├── board <- hardware boards
+│   └── mimas <- one directory for each board
+│       └── ucf <- hardwired ucf, like leds
+│       ├── projects <- one directory for each project
+│           └── hello_leds
+│               ├── ucf <- part of the ucf that change with project
+│               ├── hdl <- code
+│               ├── tb  <- testbench
+│               └── tmp <- build tool crap
+└── tb
+    └── clock_reset
+        ├── hdl
+        └── tmp
+```
+
 
 ## Testing
 ### Manual testing
