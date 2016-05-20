@@ -12,4 +12,3 @@ then
 	wget http://mirrors.kernel.org/ubuntu/pool/universe/g/gnat-4.6/libgnat-4.6_4.6.4-0ubuntu5_amd64.deb -O /tmp/tmp.deb
 	dpkg --fsys-tarfile /tmp/tmp.deb | tar xOf - ./usr/lib/x86_64-linux-gnu/libgnat-4.6.so.1 > $HOME/lib/libgnat-4.6.so.1
 fi
-export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
