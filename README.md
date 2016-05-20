@@ -5,26 +5,28 @@ Because VHDL is hard and should be [free](https://fsf.org/).
 
 ## Library organization
 ```
-├── hdl					<- Re-usable and reused vhdl
+├── hdl             <- Re-usable and reused vhdl
 |   |
-│   ├── bhv				<- Simulation hdl, like clock, reset, ...
-│   └── rtl				<- Synthetizable hdl
+│   ├── bhv         <- Simulation hdl, like clock, reset, ...
+│   └── rtl         <- Synthetizable hdl
 |
 ├── board
-│   └── mimas			<- One directory for each board
-│	└── ucf				<- Hardwired ucf, like leds, buttons, ...
-|	|
-│	├── projects
-│		└── hello_leds	<- one directory for each project
-│			├── ucf		<- part of the ucf that change with project
-│			├── hdl		<- code
-│			├── tb		<- testbench
-│			└── tmp		<- build tool crap
+│   └── mimas       <- One directory for each board
+│   └── ucf         <- Hardwired ucf, like leds, buttons, ...
+|   |
+│   ├── projects
+│   └── hello_leds  <- one directory for each project
+│       ├── ucf     <- part of the ucf that change with project
+│       ├── hdl     <- code
+│       ├── tb      <- testbench
+│       └── tmp     <- build tool crap
 |
-└── tb
-	└── clock_reset		<- one directory for each tb, and at least one tb per hdl entity.
-		├── hdl
-		└── tmp
+├── tb
+|   └── clock_reset <- one directory for each tb, and at least one tb per hdl entity.
+|       ├── hdl
+|       └── tmp
+|
+└── travis          <- Travis CI scripts
 ```
 
 ## Testing
