@@ -1,5 +1,5 @@
 #!/bin/bash
-TEST=ghdl-sim.sh
+TEST=ghdl-sim-xise.sh
 BASE=$(readlink -m .)
 RESULT=0
 while read dir
@@ -36,8 +36,7 @@ do
 
 			if [ ! -z "$VERBOSE" ]
 			then
-				echo WARNING_COUNT:$WARNING_COUNT
-				echo WARNING_EXPECTED:$WARNING_EXPECTED
+				echo warning expected/count:$WARNING_EXPECTED/$WARNING_COUNT
 			fi
 		fi
 
@@ -51,6 +50,6 @@ do
 		RESULT=1
 	fi
 	cd $BASE
-done <<< "$(find . -name 'project.xise' -print | sed -e 's/project.xise//')"
+done <<< "$(find . -name '*.xise' -printf '%h\n')"
 
 exit $RESULT

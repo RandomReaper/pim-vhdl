@@ -9,9 +9,13 @@ then
 	echo $OPTIONS
 fi
 
-cat project.xise | grep "FILE_VHDL" | grep "file xil_pn" | sed -e "s/    <file xil_pn:name=\"//" | sed -e "s/\" xil_pn:type=\"FILE_VHDL\">//" | while read line
+for file in "$@"
 do
-	$GHDL -i $OPTIONS "$line"
+	if [ ! -z "$VERBOSE" ]
+	then
+		echo adding $file
+	fi
+	$GHDL -i $OPTIONS "$file"
 done
 
 $GHDL -m $OPTIONS tb
