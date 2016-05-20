@@ -11,15 +11,19 @@ notifications:
     on_success: change
     on_failure: change
 
+env:
+  - PATH=$HOME/ghdl/bin:$PATH LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+
+cache:
+    directories:
+      - $HOME/ghdl
+      - $HOME/lib
+
 before_install:
-  - mkdir ghdl
-  - wget https://github.com/tgingold/ghdl/releases/download/2016-05-03/ghdl-0.34dev-mcode-2016-05-03.tgz -O - | tar xz -C ghdl
-  - sudo apt-get update -qq
-  - sudo apt-get -y install libgnat-4.6
+  - travis/deps.sh
 
 script:
   - source bin/env.sh
-  - export PATH=$PWD/ghdl/bin:$PATH
   - cd tb
   - ghdl-all.sh
 
