@@ -13,4 +13,3 @@ then
 	dpkg --fsys-tarfile /tmp/tmp.deb | tar xOf - ./usr/lib/x86_64-linux-gnu/libgnat-4.6.so.1 > $HOME/lib/libgnat-4.6.so.1
 fi
 export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
-./ghdl/bin/ghdl --version
