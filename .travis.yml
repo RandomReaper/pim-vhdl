@@ -3,7 +3,7 @@
 #
 language: C
 
-sudo: required
+sudo: false
 dist: trusty
 
 notifications:
@@ -12,7 +12,7 @@ notifications:
     on_failure: change
 
 env:
-  - PATH=$HOME/ghdl/bin:$PATH LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+  -
 
 cache:
     directories:
@@ -23,6 +23,8 @@ before_install:
   - travis/deps.sh
 
 script:
+  - export PATH=$HOME/ghdl/bin:$PATH
+  - export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
   - source bin/env.sh
   - cd tb
   - ghdl-all.sh
