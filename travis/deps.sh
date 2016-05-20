@@ -3,7 +3,7 @@
 if [ ! -d $HOME/ghdl ]
 then
 	mkdir $HOME/ghdl
-	wget https://github.com/tgingold/ghdl/releases/download/2016-05-03/ghdl-0.34dev-mcode-2016-05-03.tgz -O - | tar xz -C $HOME/ghdl
+	wget https://github.com/tgingold/ghdl/releases/download/2016-05-03/ghdl-0.34dev-mcode-2016-05-03.tgz -O - | tar xvz -C $HOME/ghdl
 fi
 
 if [ ! -e $HOME/lib/libgnat-4.6.so.1 ]
