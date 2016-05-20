@@ -38,7 +38,7 @@ Add the scripts to the PATH, go to the test bench directory and run :
 ```bash
 source bin/env.sh
 cd tb/ad7476
-ghdl-sim.sh
+sim.sh
 ```
 Expected result: ```../../hdl/bhv/clock/clock_stop.vhd:52:8:@100875ns:(assertion note): PIM_VHDL_SIMULATION_DONE```
 
@@ -47,7 +47,7 @@ Add the scripts to the PATH, go to the test benches and run them all :
 ```bash
 source bin/env.sh
 cd tb
-ghdl-all.sh
+all.sh
 ```
 Expected result:
 ```

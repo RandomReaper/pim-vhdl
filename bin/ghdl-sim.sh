@@ -1,4 +1,14 @@
 #!/bin/bash
+#
+# @brief Simulate the 'tb' entity using .vhdl files provided as argument
+#
+#
+
+if [[ $# -eq 0 ]] ; then
+	echo 'no args, nothing to do'
+	exit 1
+fi
+
 DIR=$(mktemp -d)
 GHDL="ghdl"
 OPTIONS="--workdir=$DIR"

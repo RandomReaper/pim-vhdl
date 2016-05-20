@@ -1,4 +1,22 @@
 #!/bin/bash
+#
+# @brief	Find recursievly all Xilinx ISE project files and simulate them
+#
+# @param	none
+# @env		verbose when VERBOSE=1
+# @return	0 when all test are
+#
+# @usage	Go to the directory and call this script.
+#
+# * The test bench entity MUST be called 'tb'.
+#
+# * The end of a successful test bench must report the message
+#	"PIM_VHDL_SIMULATION_DONE" with the severity note, example : 'assert false report "PIM_VHDL_SIMULATION_DONE" severity note;'
+#
+# * A warning in a test bench is considered a *failure* unless it is preceded by
+# 	"PIM_VHDL_WARNING_EXPECTED", example: 'assert false report "PIM_VHDL_WARNING_EXPECTED, testing a flag" severity note'
+#
+
 TEST=ghdl-sim-xise.sh
 BASE=$(readlink -m .)
 RESULT=0

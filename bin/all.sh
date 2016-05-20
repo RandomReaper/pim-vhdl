@@ -1,0 +1,1 @@
+ghdl-all-xise.sh

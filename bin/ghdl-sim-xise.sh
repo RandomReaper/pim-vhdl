@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# @brief Simulate the entity 'tb' from a Xilinx ISE project.
+#
+
 files=()
 while read line
 do
