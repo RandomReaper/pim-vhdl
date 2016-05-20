@@ -23,11 +23,7 @@ before_install:
   - travis/deps.sh
 
 script:
-  - export PATH=$HOME/ghdl/bin:$PATH
-  - export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
-  - source bin/env.sh
-  - cd tb
-  - ghdl-all.sh
+  - travis/tb.sh
 
 after_failure:
-  - VERBOSE=1 ghdl-all.sh
+  - VERBOSE=1 travis/tb.sh
