@@ -26,9 +26,6 @@ script:
   - export PATH=$HOME/ghdl/bin:$PATH
   - export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
   - source bin/env.sh
-  - echo PATH=$PATH
-  - which ghdl
-  - ls -lh $HOME/ghdl/bin/ghdl
   - cd tb
   - ghdl-all.sh
 
