@@ -5,29 +5,46 @@ Because VHDL is hard and should be [free](https://fsf.org/).
 
 ## Library organization
 ```
-├── hdl             <- Re-usable and reused vhdl
++── hdl                 <- Re-usable and reused vhdl
 |   |
-│   ├── bhv         <- Simulation hdl, like clock, reset, ...
-│   └── rtl         <- Synthetizable hdl
+|   +── bhv             <- Simulation hdl, like clock, reset, ...
+|   \── rtl             <- Synthetizable hdl
 |
-├── board
-│   └── mimas       <- One directory for each board
-│   └── ucf         <- Hardwired ucf, like leds, buttons, ...
-|   |
-│   ├── projects
-│   └── hello_leds  <- one directory for each project
-│       ├── ucf     <- part of the ucf that change with project
-│       ├── hdl     <- code
-│       ├── tb      <- testbench
-│       └── tmp     <- build tool crap
++── board
+|   \── mimas           <- One directory for each board
+|       +── ucf         <- Hardwired ucf, like leds, buttons, ...
+|       |
+|       +── projects
+|       \── hello_leds  <- one directory for each project
+|           +── ucf     <- part of the ucf that change with project
+|           +── hdl     <- code
+|           +── tb      <- testbench
+|           \── tmp     <- build tool crap
 |
-├── tb
-|   └── clock_reset <- one directory for each tb, and at least one tb per hdl entity.
-|       ├── hdl
-|       └── tmp
++── tb
+|   \── fifo <- one directory for each tb, and at least one tb per hdl entity.
+|       +── 00_reset    <- tb for the reset(s)
+|       |   +── hdl     <- here goest the 'tb' entity
+|       |   \── tmp
+|       +── 01_simple
+|       \── 02_flags
 |
-└── travis          <- Travis CI scripts
+\── travis          <- Travis CI scripts
 ```
+
+## CodingStyle
+### Indentation
+**tabs** size **4**
+### Synchronous entities
+All synchronous entities MUST have at least those signals:
+
+* The clock signal is named ```clock```.
+* The asynchronous reset signal is named ```reset```.
+* The synchronous reset signal is named ```reset_sync```.
+
+#### Reset
+Synchronous entities are expected to behave the same when there is no
+reset, when there is a synchronous or an asynchronous reset.
 
 ## Testing
 * *For windows users*: install [cygwin](https://cygwin.com/setup-x86_64.exe) with at least ```git```, ```wget``` and ```unzip```.

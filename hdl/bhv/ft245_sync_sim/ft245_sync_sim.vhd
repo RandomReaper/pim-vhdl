@@ -107,7 +107,7 @@ port map
 	reset		=> reset,
 
 	-- input
-	sync_reset	=> '0',
+	reset_sync	=> '0',
 	write		=> d_data_write,
 	write_data	=> d_data_in,
 
@@ -148,7 +148,7 @@ port map
 	reset		=> reset,
 
 	-- input
-	sync_reset	=> '0',
+	reset_sync	=> '0',
 	write		=> wr,
 	write_data	=> tmp,
 

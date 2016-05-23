@@ -32,6 +32,7 @@ port
 (
 	clock			: in	std_ulogic;
 	reset			: in	std_ulogic;
+	reset_sync		: in	std_ulogic;
 
 	write			: in	std_ulogic;
 	write_data		: in	std_ulogic_vector(7 downto 0);
@@ -78,7 +79,7 @@ begin
 
 state_machine: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		state.name		<= STATE_RESET;
 		state.counter	<= (others => '0');
 	elsif rising_edge(clock) then
@@ -166,7 +167,7 @@ status_full <= rx_full;
 
 packet_count_gen: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		packet_count <= (others => '0');
 	elsif rising_edge(clock) then
 		if state.name = STATE_IDLE and next_state.name = STATE_HEADER then
@@ -177,7 +178,7 @@ end process;
 
 in_count_gen: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		in_count <= (others => '0');
 	elsif rising_edge(clock) then
 		if rx_read = '1' then
@@ -193,9 +194,9 @@ generic map
 )
 port map
 (
-	reset		=> reset,
 	clock		=> clock,
-	sync_reset	=> '0',
+	reset		=> reset,
+	reset_sync	=> reset_sync,
 	write		=> write,
 	write_data	=> write_data,
 
@@ -212,9 +213,9 @@ generic map
 )
 port map
 (
-	reset		=> reset,
 	clock		=> clock,
-	sync_reset	=> '0',
+	reset		=> reset,
+	reset_sync	=> reset_sync,
 	write		=> tx_write,
 	write_data	=> tx_data,
 

@@ -33,8 +33,9 @@ generic
 );
 port
 (
-	clock	: in	std_ulogic;
-	reset	: in	std_ulogic;
+	clock		: in	std_ulogic;
+	reset		: in	std_ulogic;
+	reset_sync	: in	std_ulogic;
 
 	-- To the adc7476
 	sclk		: out	std_ulogic;
@@ -59,14 +60,15 @@ gen_adc_if: for i in 0 to g_parallel-1 generate
 		)
 		port map
 		(
-			reset	=> reset,
-			clock	=> clock,
+			reset		=> reset,
+			reset_sync	=> reset_sync,
+			clock		=> clock,
 
-			sdata	=> sdata(i),
-			data	=> data((12*(i+1))-1 downto 12*i),
-			data_valid => data_valid,
-			n_cs	=> n_cs,
-			sclk	=> sclk
+			sdata		=> sdata(i),
+			data		=> data((12*(i+1))-1 downto 12*i),
+			data_valid	=> data_valid,
+			n_cs		=> n_cs,
+			sclk		=> sclk
 		);
 	end generate;
 
@@ -78,12 +80,13 @@ gen_adc_if: for i in 0 to g_parallel-1 generate
 		)
 		port map
 		(
-			reset	=> reset,
-			clock	=> clock,
+			reset		=> reset,
+			reset_sync	=> reset_sync,
+			clock		=> clock,
 
-			sdata	=> sdata(i),
-			data	=> data((12*(i+1))-1 downto 12*i),
-			data_valid => open
+			sdata		=> sdata(i),
+			data		=> data((12*(i+1))-1 downto 12*i),
+			data_valid	=> open
 		);
 	end generate;
 end generate;

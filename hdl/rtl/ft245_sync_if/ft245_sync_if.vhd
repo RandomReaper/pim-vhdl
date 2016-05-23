@@ -117,6 +117,8 @@ port
 	-- Interface to the internal logic
 	-----------------------------------------------------
 	reset			: in	std_ulogic;
+	reset_sync		: in std_ulogic;
+
 
 	-- FPGA -> FTDI
 	in_data			: in	std_ulogic_vector(7 downto 0);
@@ -222,7 +224,7 @@ adbus <= std_logic_vector(adbus_int) when oe = '1' else (others => 'Z');
 -- Synchronize input signals
 in_sync: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		out_data_int	<= (others => '0');
 		ft_tx			<= '0';
 		ft_rx			<= '0';
@@ -238,7 +240,7 @@ end process;
 -- Synchronize output signals
 out_sync: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		adbus_int	<= (others => '0');
 		rd_n			<= '1';
 		wr_n			<= '1';
@@ -260,7 +262,7 @@ end process;
 
 state_machine: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		state <= STATE_RESET;
 	elsif rising_edge(clock) then
 		state <= next_state;
@@ -358,7 +360,7 @@ with next_state select in_read_int <=
 
 old_rx: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		for i in ft_read_old'range loop
 			ft_read_old(i) <= '0';
 		end loop;
@@ -382,7 +384,7 @@ end process;
 
 out_data_old_proc: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		for i in out_data_old'range loop
 			out_data_old(i).data <= (others => '0');
 			out_data_old(i).valid <= '0';
@@ -426,7 +428,7 @@ end process;
 
 old_tx: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		for i in ft_write_old'range loop
 			ft_write_old(i) <= '0';
 		end loop;
@@ -440,7 +442,7 @@ end process;
 
 in_read_old_proc: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		in_read_old			<= '0';
 	elsif rising_edge(clock) then
 		in_read_old			<= in_read_int;
@@ -449,7 +451,7 @@ end process;
 
 process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		for i in in_data_old'range loop
 			in_data_old(i).data	 <= (others => '0');
 			in_data_old(i).valid <= '0';

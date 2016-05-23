@@ -32,8 +32,9 @@ generic
 );
 port
 (
-	clock	: in	std_ulogic;
-	reset	: in	std_ulogic;
+	clock		: in	std_ulogic;
+	reset		: in	std_ulogic;
+	reset_sync	: in	std_ulogic;
 
 	-- To the adc7476
 	sclk		: out	std_ulogic;
@@ -48,13 +49,15 @@ port
 end ad7476_if;
 
 architecture rtl of ad7476_if is
-	signal cs			: std_ulogic;
-	signal c_counter	: unsigned((2**g_prescaler)-1 downto 0);
-	signal b_counter	: unsigned(4 downto 0);
+	signal cs				: std_ulogic		:= '0';
+	signal c_counter		: unsigned((2**g_prescaler)-1 downto 0) := (others => '0');
+	signal b_counter		: unsigned(4 downto 0) := (others => '1');
 
-	signal sclk_int		: std_ulogic;
-	signal sclk_old		: std_ulogic;
-	signal sample		: std_ulogic;
+	signal sclk_int			: std_ulogic		:= '0';
+	signal sclk_old			: std_ulogic;
+	signal sample			: std_ulogic;
+	signal data_valid_int	: std_ulogic		:= '0';
+	signal data_int			: std_ulogic_vector(data'range) := (others => '0');
 begin
 
 -- Internal to external signal mapping
@@ -63,7 +66,7 @@ sclk <= sclk_int;
 
 clock_prescale: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		c_counter <= (others => '0');
 	elsif rising_edge(clock) then
 		c_counter <= c_counter + 1;
@@ -74,7 +77,7 @@ sclk_int <= c_counter(c_counter'left);
 
 bit_counter: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		b_counter <= (others => '1');
 	elsif rising_edge(clock) then
 		if c_counter = 0 then
@@ -88,41 +91,38 @@ end process;
 
 sclk_rising: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		sclk_old <= '0';
-	elsif rising_edge(clock) then
+	elsif rising_edge(clock) and reset_sync = '0' then
 		sclk_old <= sclk_int;
 	end if;
 end process;
 sample <= sclk_int and not sclk_old;
 
+data_valid <= data_valid_int;
+data <= data_int;
+
 sample_gen: process(reset, clock)
 begin
-	if reset = '1' then
-		data	<= (others => '0');
-		data_valid	<= '0';
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+		data_int		<= (others => '0');
+		data_valid_int	<= '0';
 	elsif rising_edge(clock) then
-		data_valid <= '0';
+		data_valid_int <= '0';
 
 		if sample = '1' then
 			case to_integer(b_counter) is
 				when 4+0 to 4+10 =>
-					data(11-to_integer(b_counter-4)) <= sdata;
+					data_int(11-to_integer(b_counter-4)) <= sdata;
 				when 4+11 =>
-					data(11-to_integer(b_counter-4)) <= sdata;
-					data_valid <= '1';
+					data_int(11-to_integer(b_counter-4)) <= sdata;
+					data_valid_int <= '1';
 				when others =>
 			end case;
 		end if;
 	end if;
 end process;
 
-cs_gen: process(b_counter)
-begin
-	cs <= '0';
-	if b_counter < 18 then
-		cs <= '1';
-	end if;
-end process;
+cs <= '1' when (b_counter < 18) else '0';
 
 end rtl;

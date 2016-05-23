@@ -44,6 +44,7 @@ port
 	led				: out	std_ulogic_vector(7 downto 0);
 
 	reset			: in	std_ulogic;
+	reset_sync		: in	std_ulogic;
 	-- ADCs
 	sclk			: out	std_ulogic;
 	n_cs			: out	std_ulogic;
@@ -87,6 +88,7 @@ port map
 	suspend_n		=> suspend_n,
 
 	reset			=> reset,
+	reset_sync		=> reset_sync,
 
 	out_data		=> read_data,
 	out_valid		=> read_valid,
@@ -100,17 +102,18 @@ port map
 i_ad7476_p_if: entity work.ad7476_parallel_if
 generic map
 (
-	g_prescaler	=> 1,
-	g_parallel	=> g_parallel
+	g_prescaler		=> 1,
+	g_parallel		=> g_parallel
 )
 port map
 (
-	reset	=> reset,
-	clock	=> clock,
+	reset		=> reset,
+	reset_sync	=> reset_sync,
+	clock		=> clock,
 
-	sclk	=> sclk,
-	n_cs	=> n_cs,
-	sdata	=> sdata,
+	sclk		=> sclk,
+	n_cs		=> n_cs,
+	sdata		=> sdata,
 
 	data		=> adc_data48,
 	data_valid	=> adc_data_valid
@@ -137,6 +140,7 @@ port map
 (
 	clock		=> clock,
 	reset		=> reset,
+	reset_sync	=> reset_sync,
 
 	in_data		=> adc_data64,
 	in_write	=> in_data_valid,
@@ -158,8 +162,9 @@ generic map
 )
 port map
 (
-	reset			=> reset,
 	clock			=> clock,
+	reset			=> reset,
+	reset_sync		=> reset_sync,
 
 	write_data		=> adc_data8,
 	write			=> adc_data8_valid,

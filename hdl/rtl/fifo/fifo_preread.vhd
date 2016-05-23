@@ -39,9 +39,9 @@ entity fifo_preread is
 	(
 		clock				: in std_ulogic;
 		reset				: in std_ulogic;
+		reset_sync			: in std_ulogic;
 
 		-- input
-		sync_reset			: in std_ulogic;
 		write				: in std_ulogic;
 		write_data			: in std_ulogic_vector;
 
@@ -76,7 +76,7 @@ read_data <= read_data_int when read_fifo_old = '0' else read_data_fifo;
 
 data_out: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		read_data_int	<= (others => '0');
 		read_fifo_old	<= '0';
 		data_ready		<= '0';
@@ -120,9 +120,9 @@ port map
 (
 	clock				=> clock,
 	reset				=> reset,
+	reset_sync			=> reset_sync,
 
 	-- input
-	sync_reset			=> sync_reset,
 	write				=> write,
 	write_data			=> write_data,
 

@@ -30,6 +30,7 @@ generic
 port
 (
 	reset		: in	std_ulogic;
+	reset_sync	: in	std_ulogic;
 
 	sclk		: in	std_ulogic;
 	n_cs		: in	std_ulogic;
@@ -43,10 +44,11 @@ gen_adc_sim: for i in 0 to g_parallel-1 generate
 	i_adc_sim_x: entity work.ad7476_sim
 		port map
 		(
-			reset	=> reset,
-			sdata	=> sdata(i),
-			n_cs	=> n_cs,
-			sclk	=> sclk
+			reset		=> reset,
+			reset_sync	=> reset_sync,
+			sdata		=> sdata(i),
+			n_cs		=> n_cs,
+			sclk		=> sclk
 		);
 end generate;
 end architecture bhv;

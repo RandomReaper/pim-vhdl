@@ -39,9 +39,9 @@ port
 (
 	clock				: in std_ulogic;
 	reset				: in std_ulogic;
+	reset_sync			: in std_ulogic;
 
 	-- input
-	sync_reset			: in std_ulogic;
 	write				: in std_ulogic;
 	write_data			: in std_ulogic_vector;
 
@@ -75,7 +75,7 @@ architecture rtl of fifo is
 	signal read_ptr_next	: unsigned(ptr_range_r);
 	signal write_ptr		: unsigned(ptr_range_r);
 	signal write_ptr_next	: unsigned(ptr_range_r);
-	
+
 	signal full_async		: std_ulogic;
 	signal empty_async		: std_ulogic;
 
@@ -87,7 +87,7 @@ begin
 -----------------------------------------------------------------------------
 fifo_count_proc: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		used_int <= (others => '0');
 	elsif rising_edge(clock) then
 		if write = '1' and full = '0' then
@@ -101,10 +101,6 @@ begin
 		-- ignore full, since it is valid
 		if write = '1' and read = '1' and empty = '0' then
 			used_int <= used_int;
-		end if;
-
-		if sync_reset = '1' then
-			used_int <= (others => '0');
 		end if;
 	end if;
 end process;
@@ -132,7 +128,7 @@ read_ptr_next <= read_ptr + 1;
 
 fifo_ptr_proc: process(reset, clock)
 begin
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		write_ptr <= (others => '0');
 		read_ptr <= (others => '0');
 		write_error <= '0';
@@ -160,7 +156,7 @@ begin
 				read_ptr <= read_ptr_next;
 			else
 				read_error <= '1';
-			
+
 			--pragma synthesis_off
 			assert (false) report "status_read_error" severity warning;
 			--pragma synthesis_on
@@ -181,17 +177,11 @@ begin
 				full <= '1';
 			end if;
 		end if;
-		
+
 		if read = '1' and write = '1' then
 			empty <= '0';
 		end if;
 
-		if sync_reset = '1' then
-			write_ptr <= (others => '0');
-			read_ptr <= (others => '0');
-			full <= '0';
-			empty <= '1';
-		end if;
 	end if;
 end process;
 
@@ -213,7 +203,7 @@ fifo_in_proc : process(clock)
 begin
 
 	--pragma synthesis_off
-	if reset = '1' then
+	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
 		mem <= (others => (others =>'U'));
 	end if;
 	--pragma synthesis_on
