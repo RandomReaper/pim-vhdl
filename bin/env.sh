@@ -6,14 +6,16 @@
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PATH=$CURRENT_DIR:$PATH
-
 if ! ghdl -v >/dev/null 2>&1
 then
-	>&2 echo '***************************************************************************'
-	>&2 echo '*** WARNING: ghdl not found, trying to install it in '$CURRENT_DIR/.cache
-	>&2 echo '***************************************************************************'
+	if ! [ -e $CURRENT_DIR/.cache/ghdl/bin/ghdl ]
+	then
+		>&2 echo '***************************************************************************'
+		>&2 echo '*** WARNING: ghdl not found, trying to install it in '$CURRENT_DIR/.cache
+		>&2 echo '***************************************************************************'
+		HOME=$CURRENT_DIR/.cache $CURRENT_DIR/../travis/deps.sh
+	fi
 
-	HOME=$CURRENT_DIR/.cache $CURRENT_DIR/../travis/deps.sh
 	export PATH=$CURRENT_DIR/.cache/ghdl/bin:$PATH
 
 	if uname | grep Linux > /dev/null

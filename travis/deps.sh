@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if uname | grep Linux > /dev/null
 then
 	if ! [ -e $HOME/ghdl/bin/ghdl ]
@@ -22,10 +21,23 @@ then
 		exit 1
 	fi
 
-	if [ -e $HOME/ghdl/bin/ghdl ]
+	if ! wget --version >/dev/null 2>&1
 	then
-		mkdir -p $HOME/ghdl
-		wget -q https://github.com/tgingold/ghdl/releases/download/v0.33/ghdl-0.33-win32.zip -O - | tar xz -C $HOME/ghdl
+		echo wget is requiered, please install it.
+		exit 1
+	fi
+
+	if ! [ -e $HOME/ghdl/bin/ghdl ]
+	then
+		BEFORE=$PWD
+		mkdir -p $HOME
+		cd $HOME
+		rm -rf ghdl
+		wget -q https://github.com/tgingold/ghdl/releases/download/v0.33/ghdl-0.33-win32.zip
+		unzip ghdl-0.33-win32.zip >/dev/null 2>&1
+		mv ghdl-0.33 ghdl/
+		chmod +x ghdl/bin/ghdl
+		cd $BEFORE
 	fi
 else
 	echo unsupported OS
