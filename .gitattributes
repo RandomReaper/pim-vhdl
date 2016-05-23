@@ -1,0 +1,5 @@
+* text=auto
+
+# .sh and .vdh file will be used in cygwin
+*.sh text eol=lf
+*.vhd text eol=lf
