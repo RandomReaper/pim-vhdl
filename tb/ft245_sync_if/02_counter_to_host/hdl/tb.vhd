@@ -116,7 +116,8 @@ port map
 	reset_n		=> reset_n,
 	suspend_n	=> suspend_n,
 
-	reset		=> reset
+	reset		=> reset,
+	reset_sync	=> '0'
 );
 
 i_ft_sim : entity work.ft245_sync_sim
@@ -152,8 +153,9 @@ generic map
 )
 port map
 (
-	reset			=> reset,
 	clock			=> clock,
+	reset			=> reset,
+	reset_sync		=> '0',
 
 	in_data			=> d_data_out,
 	in_valid		=> d_data_out_valid,

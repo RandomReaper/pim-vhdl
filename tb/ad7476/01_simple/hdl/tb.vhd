@@ -87,6 +87,7 @@ generic map
 port map
 (
 	reset		=> reset,
+	reset_sync	=> '0',
 	clock		=> clock,
 
 	sclk		=> sclk,
@@ -105,6 +106,7 @@ generic map
 port map
 (
 	reset		=> reset,
+	reset_sync	=> '0',
 	sclk		=> sclk,
 	n_cs		=> n_cs,
 	sdata		=> sdata

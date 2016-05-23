@@ -76,6 +76,7 @@ port map
 
 	-- Interface to the internal logic
 	reset			=> reset,
+	reset_sync		=> '0',
 
 	in_data			=> write_data,
 	in_read			=> write_read,
@@ -111,7 +112,7 @@ port map
 	reset			=> reset,
 	clock			=> clock,
 
-	sync_reset		=> fifo_reset,
+	reset_sync		=> fifo_reset,
 
 	write_data		=> fifo_data,
 	write			=> fifo_write,

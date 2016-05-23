@@ -32,7 +32,7 @@ architecture bhv of tb is
 
 	signal reset 				: std_ulogic;
 	signal clock 				: std_ulogic;
-	signal sync_reset			: std_ulogic;
+	signal reset_sync			: std_ulogic;
 	signal write				: std_ulogic;
 	signal write_data			: std_ulogic_vector(7 downto 0);
 	signal read					: std_ulogic;
@@ -60,7 +60,7 @@ begin
 		(
 			reset 				=> reset,
 			clock 				=> clock,
-			sync_reset			=> sync_reset,
+			reset_sync			=> reset_sync,
 			write				=> write,
 			write_data			=> write_data,
 			read				=> read,
@@ -81,7 +81,7 @@ begin
 	-----------------------------------------------------------------------------
 
 	reset			<= '1';
-	sync_reset		<= '0';
+	reset_sync		<= '0';
 	read			<= '0';
 	write			<= '0';
 	write_data		<= x"00";
@@ -188,7 +188,7 @@ begin
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	write_data <= x"00";
 	write <= '0';
-	sync_reset		<= '1';
+	reset_sync		<= '1';
 
 	-- should not reset before clock !
 	assert (free					= g_depth-1)	report "fifo buggy !?!" severity failure;
@@ -199,7 +199,7 @@ begin
 	assert (status_write_error		= '0')          report "fifo buggy !?!" severity failure;
 
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
-	sync_reset		<= '0';
+	reset_sync		<= '0';
 	-- Now should be reset
 	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
 	assert (used					= 0)			report "fifo buggy !?!" severity failure;

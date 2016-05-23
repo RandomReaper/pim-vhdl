@@ -90,10 +90,9 @@ generic map
 )
 port map
 (
-	reset			=> reset,
 	clock			=> clock,
-
-	sync_reset	=> '0',
+	reset			=> reset,
+	reset_sync		=> '0',
 
 	write_data		=> write_data,
 	write			=> write,

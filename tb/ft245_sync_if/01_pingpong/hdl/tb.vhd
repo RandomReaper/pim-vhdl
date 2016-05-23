@@ -102,6 +102,8 @@ port map
 	suspend_n		=> suspend_n,
 
 	reset			=> reset,
+	reset_sync		=> '0',
+
 	out_data		=> read_data,
 	out_valid		=> read_valid,
 	out_full		=> status_full,
@@ -122,7 +124,7 @@ port map
 	reset		=> reset,
 
 	-- input
-	sync_reset	=> '0',
+	reset_sync	=> '0',
 	write		=> read_valid,
 	write_data	=> read_data,
 

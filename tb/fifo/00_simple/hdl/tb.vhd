@@ -30,7 +30,7 @@ architecture bhv of tb is
 	signal clock			: std_ulogic;
 
 	signal counter			: unsigned(7 downto 0);
-	signal counter_enable		: unsigned(7 downto 0);
+	signal counter_enable	: unsigned(7 downto 0);
 
 	signal read				: std_ulogic;
 	signal empty			: std_ulogic;
@@ -89,10 +89,9 @@ generic map
 )
 port map
 (
-	reset			=> reset,
 	clock			=> clock,
-
-	sync_reset	=> '0',
+	reset			=> reset,
+	reset_sync		=> '0',
 
 	write_data		=> write_data,
 	write			=> write,

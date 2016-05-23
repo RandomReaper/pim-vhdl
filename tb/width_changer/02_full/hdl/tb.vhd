@@ -109,8 +109,9 @@ end process;
 i_dut0: entity work.width_changer
 port map
 (
-	reset		=> reset,
 	clock		=> clock,
+	reset		=> reset,
+	reset_sync	=> '0',
 
 	in_data		=> data4,
 	in_write	=> data4_write,
@@ -124,8 +125,9 @@ port map
 i_dut1: entity work.width_changer
 port map
 (
-	reset		=> reset,
 	clock		=> clock,
+	reset		=> reset,
+	reset_sync	=> '0',
 
 	in_data		=> data16,
 	in_write	=> data16_write,
@@ -139,8 +141,9 @@ port map
 i_dut2: entity work.width_changer
 port map
 (
-	reset		=> reset,
 	clock		=> clock,
+	reset		=> reset,
+	reset_sync	=> '0',
 
 	in_data		=> data8,
 	in_write	=> data8_write,
@@ -154,8 +157,9 @@ port map
 i_dut3: entity work.width_changer
 port map
 (
-	reset		=> reset,
 	clock		=> clock,
+	reset		=> reset,
+	reset_sync	=> '0',
 
 	in_data		=> data24,
 	in_write	=> data24_write,
@@ -180,8 +184,8 @@ port map
 i_reset : entity work.reset
 port map
 (
-	reset	=> reset,
-	clock	=> clock
+	clock	=> clock,
+	reset	=> reset
 );
 
 end bhv;

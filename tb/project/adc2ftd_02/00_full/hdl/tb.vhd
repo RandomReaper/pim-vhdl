@@ -32,7 +32,6 @@ end tb;
 
 architecture bhv of tb is
 	signal reset			: std_ulogic;
-
 	signal clock			: std_ulogic;
 	signal adbus			: std_logic_vector(7 downto 0);
 	signal reset_n			: std_ulogic;
@@ -130,7 +129,8 @@ port map
 	n_cs			=> n_cs,
 	sdata			=> sdata,
 
-	reset			=> reset
+	reset			=> reset,
+	reset_sync		=> '0'
 );
 
 i_ft245_sim: entity work.ft245_sync_sim
@@ -162,6 +162,7 @@ generic map
 port map
 (
 	reset			=> reset,
+	reset_sync		=> '0',
 	sclk			=> sclk,
 	n_cs			=> n_cs,
 	sdata			=> sdata
@@ -174,8 +175,9 @@ generic map
 )
 port map
 (
-	reset			=> reset,
 	clock			=> clock,
+	reset			=> reset,
+	reset_sync		=> '0',
 
 	in_data			=> d_data_out,
 	in_valid		=> d_data_out_valid,
@@ -187,8 +189,9 @@ port map
 i_wc: entity work.width_changer
 port map
 (
-	reset		=> reset,
 	clock		=> clock,
+	reset		=> reset,
+	reset_sync	=> '0',
 
 	in_data		=> out_data,
 	in_write	=> out_valid,
