@@ -186,7 +186,7 @@ architecture rtl of ft245_sync_if is
 	signal oe				: std_ulogic;
 	signal adbus_int		: std_ulogic_vector(in_data'range);
 	signal ft_read_old		: std_ulogic_vector(1 downto 0);
-	signal out_data_int		: std_ulogic_vector(in_data'range);
+	signal out_data_int		: std_ulogic_vector(in_data'range) := (others => '0');
 	signal out_valid_int	: std_ulogic;
 
 	-- Data TX
