@@ -4,6 +4,8 @@
 #
 #
 
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/env.sh
+
 if [[ $# -eq 0 ]] ; then
 	echo 'no args, nothing to do'
 	exit 1

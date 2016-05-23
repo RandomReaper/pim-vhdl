@@ -2,3 +2,4 @@ tmp/
 iseconfig/
 *.log
 *.swp
+.cache/

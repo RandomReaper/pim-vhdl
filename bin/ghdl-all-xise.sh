@@ -17,6 +17,8 @@
 # 	"PIM_VHDL_WARNING_EXPECTED", example: 'assert false report "PIM_VHDL_WARNING_EXPECTED, testing a flag" severity note'
 #
 
+source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/env.sh
+
 TEST=ghdl-sim-xise.sh
 BASE=$(readlink -m .)
 RESULT=0
