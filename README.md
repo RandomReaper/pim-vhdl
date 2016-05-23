@@ -30,8 +30,12 @@ Because VHDL is hard and should be [free](https://fsf.org/).
 ```
 
 ## Testing
+* *For windows users*: install [cygwin](https://cygwin.com/setup-x86_64.exe) with at least ```git```, ```wget``` and ```unzip```.
+
+* Install [ghdl](https://github.com/tgingold/ghdl) and add it to your PATH or
+let the scripts get it for you.
+
 ### Manual testing
-Install [ghdl](https://github.com/tgingold/ghdl).
 
 #### Testing one test bench
 Add the scripts to the PATH, go to the test bench directory and run :
