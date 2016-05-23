@@ -34,7 +34,6 @@ port
 (
 	clock		: in	std_ulogic;
 	reset		: in	std_ulogic;
-	reset_sync	: in	std_ulogic;
 
 	-- To the adc7476
 	sclk		: out	std_ulogic;
@@ -66,7 +65,7 @@ sclk <= sclk_int;
 
 clock_prescale: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		c_counter <= (others => '0');
 	elsif rising_edge(clock) then
 		c_counter <= c_counter + 1;
@@ -77,7 +76,7 @@ sclk_int <= c_counter(c_counter'left);
 
 bit_counter: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		b_counter <= (others => '1');
 	elsif rising_edge(clock) then
 		if c_counter = 0 then
@@ -91,9 +90,9 @@ end process;
 
 sclk_rising: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		sclk_old <= '0';
-	elsif rising_edge(clock) and reset_sync = '0' then
+	elsif rising_edge(clock) then
 		sclk_old <= sclk_int;
 	end if;
 end process;
@@ -104,7 +103,7 @@ data <= data_int;
 
 sample_gen: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		data_int		<= (others => '0');
 		data_valid_int	<= '0';
 	elsif rising_edge(clock) then

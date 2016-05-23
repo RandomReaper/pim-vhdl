@@ -133,7 +133,6 @@ port map
 (
 	reset	=> reset,
 	clock	=> clock,
-	reset_sync	=> '0',
 
 	write_data		=> write_data,
 	write			=> write,
@@ -153,7 +152,6 @@ port map
 (
 	clock		=> clock,
 	reset		=> reset,
-	reset_sync	=> '0',
 
 	in_data		=> read_data,
 	in_valid	=> read_valid,

@@ -47,7 +47,6 @@ i_dut : entity work.width_changer
 	(
 	clock		=> clock,
 	reset		=> reset,
-	reset_sync	=> '0',
 
 	in_data		=> in_data,
 	in_write	=> in_write,

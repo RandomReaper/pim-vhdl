@@ -76,7 +76,7 @@ read_data <= read_data_int when read_fifo_old = '0' else read_data_fifo;
 
 data_out: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		read_data_int	<= (others => '0');
 		read_fifo_old	<= '0';
 		data_ready		<= '0';
@@ -106,6 +106,17 @@ begin
 
 			--pragma synthesis_off
 			assert (false) report "status_read_error" severity warning;
+			--pragma synthesis_on
+		end if;
+
+		if reset_sync = '1' then
+			read_data_int	<= (others => '0');
+			read_fifo_old	<= '0';
+			data_ready		<= '0';
+			status_read_error<= '0';
+
+			--pragma synthesis_off
+			read_data_int	<= (others => 'U');
 			--pragma synthesis_on
 		end if;
 	end if;

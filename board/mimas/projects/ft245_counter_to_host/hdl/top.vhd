@@ -42,8 +42,7 @@ port
 
 	led				: out	std_ulogic_vector(7 downto 0);
 
-	reset			: in	std_ulogic;
-	reset_sync		: in	std_ulogic
+	reset			: in	std_ulogic
 );
 end top;
 
@@ -77,7 +76,6 @@ port map
 	suspend_n		=> suspend_n,
 
 	reset			=> reset,
-	reset_sync		=> reset_sync,
 
 	out_data		=> read_data,
 	out_valid		=> read_valid,
@@ -99,7 +97,6 @@ port map
 (
 	clock			=> clock,
 	reset			=> reset,
-	reset_sync		=> reset_sync,
 
 	write_data		=> std_ulogic_vector(counter),
 	write			=> write,

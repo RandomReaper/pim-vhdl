@@ -111,7 +111,6 @@ port map
 (
 	clock		=> clock,
 	reset		=> reset,
-	reset_sync	=> '0',
 
 	in_data		=> data4,
 	in_write	=> data4_write,
@@ -127,7 +126,6 @@ port map
 (
 	clock		=> clock,
 	reset		=> reset,
-	reset_sync	=> '0',
 
 	in_data		=> data16,
 	in_write	=> data16_write,
@@ -143,7 +141,6 @@ port map
 (
 	clock		=> clock,
 	reset		=> reset,
-	reset_sync	=> '0',
 
 	in_data		=> data8,
 	in_write	=> data8_write,
@@ -159,7 +156,6 @@ port map
 (
 	clock		=> clock,
 	reset		=> reset,
-	reset_sync	=> '0',
 
 	in_data		=> data24,
 	in_write	=> data24_write,

@@ -32,7 +32,6 @@ end tb;
 architecture bhv of tb is
 
 	signal reset			: std_ulogic;
-	signal reset_sync		: std_ulogic;
 	signal clock			: std_ulogic;
 	signal stop				: std_ulogic;
 
@@ -53,7 +52,6 @@ begin
 	-----------------------------------------------------------------------------
 	stop		<= '0';
 	reset		<= '0';
-	reset_sync	<= '0';
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -85,26 +83,8 @@ begin
 	wait until falling_edge(clock);
 
 	-----------------------------------------------------------------------------
-	-- Sync reset
-	-----------------------------------------------------------------------------
-
-	reset_sync	<= '1';
-	wait until rising_edge(clock);
-	reset_sync	<= '0';
-	wait until rising_edge(clock);
-	wait until falling_edge(clock);
-
-	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity warning;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity warning;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity warning;
-	assert (unsigned(data)			= 0)			report "data should be 0";
-
-	-----------------------------------------------------------------------------
 	-- End of test
 	-----------------------------------------------------------------------------
-
-	wait until rising_edge(clock);
-	wait until falling_edge(clock);
 
 	stop <= '1';
 
@@ -121,7 +101,6 @@ generic map
 port map
 (
 	reset		=> reset,
-	reset_sync	=> reset_sync,
 	clock		=> clock,
 
 	sclk		=> sclk,
@@ -140,7 +119,6 @@ generic map
 port map
 (
 	reset		=> reset,
-	reset_sync	=> reset_sync,
 	sclk		=> sclk,
 	n_cs		=> n_cs,
 	sdata		=> sdata

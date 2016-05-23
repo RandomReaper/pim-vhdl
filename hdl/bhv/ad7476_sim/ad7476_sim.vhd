@@ -29,7 +29,6 @@ entity ad7476_sim is
 port
 (
 	reset		: in	std_ulogic;
-	reset_sync	: in	std_ulogic;
 	sclk		: in	std_ulogic;
 	n_cs		: in	std_ulogic;
 	sdata		: out	std_ulogic

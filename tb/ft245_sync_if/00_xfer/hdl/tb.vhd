@@ -76,7 +76,6 @@ port map
 
 	-- Interface to the internal logic
 	reset			=> reset,
-	reset_sync		=> '0',
 
 	in_data			=> write_data,
 	in_read			=> write_read,

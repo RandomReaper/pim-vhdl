@@ -30,7 +30,6 @@ generic
 port
 (
 	reset		: in	std_ulogic;
-	reset_sync	: in	std_ulogic;
 
 	sclk		: in	std_ulogic;
 	n_cs		: in	std_ulogic;
@@ -45,7 +44,6 @@ gen_adc_sim: for i in 0 to g_parallel-1 generate
 		port map
 		(
 			reset		=> reset,
-			reset_sync	=> reset_sync,
 			sdata		=> sdata(i),
 			n_cs		=> n_cs,
 			sclk		=> sclk

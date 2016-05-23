@@ -35,7 +35,6 @@ port
 (
 	clock		: in	std_ulogic;
 	reset		: in	std_ulogic;
-	reset_sync	: in	std_ulogic;
 
 	-- To the adc7476
 	sclk		: out	std_ulogic;
@@ -61,7 +60,6 @@ gen_adc_if: for i in 0 to g_parallel-1 generate
 		port map
 		(
 			reset		=> reset,
-			reset_sync	=> reset_sync,
 			clock		=> clock,
 
 			sdata		=> sdata(i),
@@ -81,7 +79,6 @@ gen_adc_if: for i in 0 to g_parallel-1 generate
 		port map
 		(
 			reset		=> reset,
-			reset_sync	=> reset_sync,
 			clock		=> clock,
 
 			sdata		=> sdata(i),

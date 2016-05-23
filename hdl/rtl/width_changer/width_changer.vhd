@@ -31,7 +31,6 @@ entity wc_int is
 	(
 		clock			: in	std_ulogic;
 		reset			: in	std_ulogic;
-		reset_sync		: in	std_ulogic;
 
 		in_data			: in	std_ulogic_vector;
 		in_write		: in	std_ulogic;
@@ -52,7 +51,6 @@ entity width_changer is
 	(
 		clock			: in	std_ulogic;
 		reset			: in	std_ulogic;
-		reset_sync		: in	std_ulogic;
 
 		in_data			: in	std_ulogic_vector;
 		in_write		: in	std_ulogic;
@@ -78,7 +76,6 @@ entity wc_gen is
 	(
 		clock		: in	std_ulogic;
 		reset		: in	std_ulogic;
-		reset_sync	: in	std_ulogic;
 
 		in_data		: in	std_ulogic_vector;
 		in_write	: in	std_ulogic;
@@ -107,7 +104,6 @@ smaller: if g_out_width < g_in_width generate
 	(
 		clock		=> clock,
 		reset		=> reset,
-		reset_sync	=> reset_sync,
 
 		in_data		=> in_data,
 		in_write	=> in_write,
@@ -126,7 +122,6 @@ bigger: if g_out_width > g_in_width generate
 	(
 		clock		=> clock,
 		reset		=> reset,
-		reset_sync	=> reset_sync,
 
 		in_data		=> in_data,
 		in_write	=> in_write,
@@ -158,7 +153,6 @@ begin
 	(
 		clock		=> clock,
 		reset		=> reset,
-		reset_sync	=> reset_sync,
 
 		in_data		=> in_data,
 		in_write	=> in_write,
@@ -178,7 +172,7 @@ begin
 
 state_proc: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		state <= (others => '0');
 		memory <= (others => '0');
 	elsif rising_edge(clock) then
@@ -199,7 +193,6 @@ begin
 
 			assert unsigned(state) = 0 or unsigned(state) = 1 report "in_write while not empty" severity warning;
 		end if;
-
 	end if;
 end process;
 
@@ -236,7 +229,7 @@ begin
 out_write <= out_write_int;
 state_proc: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		state <= (others => '0');
 		state(state'left) <= '1';
 		out_write_int	<= '0';
@@ -269,10 +262,9 @@ end process;
 
 data_proc: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		memory<= (others => '-');
 	elsif rising_edge(clock) then
-
 		--pragma synthesis_off
 		if out_write_int = '1' then
 			memory <= (others => '-');

@@ -30,7 +30,6 @@ port
 (
 	clock			: in	std_ulogic;
 	reset			: in	std_ulogic;
-	reset_sync		: in	std_ulogic;
 
 	in_data			: in	std_ulogic_vector(7 downto 0);
 	in_valid		: in	std_ulogic;
@@ -66,7 +65,7 @@ begin
 
 buffer_proc: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		buf <= (others =>(others => '0'));
 	elsif rising_edge(clock) then
 		if in_valid = '1' and state = STATE_IDLE then
@@ -84,7 +83,7 @@ end process;
 
 state_proc: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		state <= STATE_RESET;
 	elsif rising_edge(clock) then
 		state <= next_state;
@@ -94,7 +93,7 @@ end process;
 counter_proc:
 process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		header_counter <= (others => '0');
 	elsif rising_edge(clock) then
 		if state = STATE_HEADER then

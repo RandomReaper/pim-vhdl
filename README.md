@@ -40,11 +40,13 @@ All synchronous entities MUST have at least those signals:
 
 * The clock signal is named ```clock```.
 * The asynchronous reset signal is named ```reset```.
-* The synchronous reset signal is named ```reset_sync```.
 
 #### Reset
 Synchronous entities are expected to behave the same when there is no
-reset, when there is a synchronous or an asynchronous reset.
+reset, or when there is an asynchronous reset.
+
+Entities with a synchronous reset will be generated using a script. This script will be
+written when there is some need for it.
 
 ## Testing
 * *For windows users*: install [cygwin](https://cygwin.com/setup-x86_64.exe) with at least ```git```, ```wget``` and ```unzip```.

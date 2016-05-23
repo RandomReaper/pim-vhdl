@@ -87,7 +87,7 @@ begin
 -----------------------------------------------------------------------------
 fifo_count_proc: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		used_int <= (others => '0');
 	elsif rising_edge(clock) then
 		if write = '1' and full = '0' then
@@ -101,6 +101,10 @@ begin
 		-- ignore full, since it is valid
 		if write = '1' and read = '1' and empty = '0' then
 			used_int <= used_int;
+		end if;
+
+		if reset_sync = '1' then
+			used_int <= (others => '0');
 		end if;
 	end if;
 end process;
@@ -128,7 +132,7 @@ read_ptr_next <= read_ptr + 1;
 
 fifo_ptr_proc: process(reset, clock)
 begin
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		write_ptr <= (others => '0');
 		read_ptr <= (others => '0');
 		write_error <= '0';
@@ -182,6 +186,15 @@ begin
 			empty <= '0';
 		end if;
 
+		if reset_sync = '1' then
+			write_ptr <= (others => '0');
+			read_ptr <= (others => '0');
+			write_error <= '0';
+			read_error <= '0';
+			full <= '0';
+			empty <= '1';
+		end if;
+
 	end if;
 end process;
 
@@ -203,7 +216,7 @@ fifo_in_proc : process(clock)
 begin
 
 	--pragma synthesis_off
-	if reset = '1' or (rising_edge(clock) and reset_sync = '1') then
+	if reset = '1' then
 		mem <= (others => (others =>'U'));
 	end if;
 	--pragma synthesis_on
@@ -217,6 +230,12 @@ begin
 
 		if write = '1' and (full_async = '0' or read = '1') then
 			mem(to_integer(write_ptr(mem_range_r))) <= write_data;
+		end if;
+
+		if reset_sync = '1' then
+			--pragma synthesis_off
+			mem <= (others => (others =>'U'));
+			--pragma synthesis_on
 		end if;
 	end if;
 end process;
