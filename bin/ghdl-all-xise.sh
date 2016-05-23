@@ -70,6 +70,6 @@ do
 		RESULT=1
 	fi
 	cd $BASE
-done <<< "$(find . -name '*.xise' -printf '%h\n')"
+done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
 
 exit $RESULT
