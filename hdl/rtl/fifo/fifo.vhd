@@ -67,19 +67,19 @@ architecture rtl of fifo is
 
 	signal mem 				: mem_t := (others => (others => '0'));
 
-	signal full				: std_ulogic;
-	signal empty			: std_ulogic;
+	signal full				: std_ulogic := '0';
+	signal empty			: std_ulogic := '1';
 	signal write_error		: std_ulogic;
 	signal read_error		: std_ulogic;
-	signal read_ptr			: unsigned(ptr_range_r);
+	signal read_ptr			: unsigned(ptr_range_r) := (others => '0');
 	signal read_ptr_next	: unsigned(ptr_range_r);
-	signal write_ptr		: unsigned(ptr_range_r);
+	signal write_ptr		: unsigned(ptr_range_r) := (others => '0');
 	signal write_ptr_next	: unsigned(ptr_range_r);
 
 	signal full_async		: std_ulogic;
 	signal empty_async		: std_ulogic;
 
-	signal used_int 		: unsigned(used'range);
+	signal used_int 		: unsigned(used'range) := (others => '0');
 begin
 
 -----------------------------------------------------------------------------

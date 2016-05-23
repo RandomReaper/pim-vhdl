@@ -66,7 +66,7 @@ architecture rtl of fifo_preread is
 	signal read_fifo		: std_ulogic;
 	signal read_fifo_old	: std_ulogic;
 	signal status_empty_fifo: std_ulogic;
-	signal data_ready		: std_ulogic;
+	signal data_ready		: std_ulogic := '0';
 begin
 
 status_empty	<= not data_ready;
