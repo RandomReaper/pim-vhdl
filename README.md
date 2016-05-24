@@ -72,18 +72,25 @@ all.sh
 ```
 Expected result:
 ```
-success : ./fifo/00_simple/
-success : ./fifo/01_flags/
-success : ./fifo/02_preread/
-success : ./width_changer/01_smaller/
-success : ./width_changer/00_bigger/
-success : ./width_changer/02_full/
-success : ./packetizer/
-success : ./project/adc2ftd_02/00_full/
-success : ./ad7476/
-success : ./ft245_sync_if/02_counter_to_host/
-success : ./ft245_sync_if/00_xfer/
-success : ./ft245_sync_if/01_pingpong/
+./ad7476/00_reset                  : success
+./ad7476/01_simple                 : success
+./fifo/00_reset                    : success
+./fifo/01_reset_preread            : success
+./fifo/02_flags                    : success
+./fifo/03_simple                   : success
+./fifo/04_preread                  : success
+./ft245_sync_if/00_reset           : success
+./ft245_sync_if/01_xfer            : success
+./ft245_sync_if/02_pingpong        : success
+./ft245_sync_if/03_counter_to_host : success
+./packetizer/00_reset              : success
+./packetizer/01_simple             : success
+./project/adc2ftd_02/00_reset      : success
+./project/adc2ftd_02/01_full       : success
+./width_changer/00_reset           : success
+./width_changer/01_bigger          : success
+./width_changer/02_smaller         : success
+./width_changer/03_full            : success
 ```
 
 ### Automated testing

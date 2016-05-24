@@ -21,6 +21,17 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/env.sh
 
 TEST=ghdl-sim-xise.sh
 BASE=$(readlink -m .)
+
+# Get max length
+LENGTH=0
+while read dir
+do
+	if [ ${#dir} -gt "$LENGTH" ]
+	then
+		LENGTH=${#dir}
+	fi
+done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
+
 RESULT=0
 while read dir
 do
@@ -29,6 +40,9 @@ do
 	WARNING_EXPECTED=0
 	WARNING_COUNT=0
 	SUB_RESULT=2
+
+	printf "%-$LENGTH""s : " "$dir"
+
 	while read line
 	do
 		if [ ! -z "$VERBOSE" ]
@@ -64,9 +78,9 @@ do
 
 	if (( SUB_RESULT == 0 ))
 	then
-		echo "success : $dir"
+		echo "success"
 	else
-		echo "FAILURE : $dir"
+		echo "FAILURE"
 		RESULT=1
 	fi
 	cd $BASE
