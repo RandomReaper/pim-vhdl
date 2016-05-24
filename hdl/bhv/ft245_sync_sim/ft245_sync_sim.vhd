@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- file		: clock.vhd
+-- file			: ft245_sync_sim.vhd
 --
 -- brief		: Simulate a FT2232H in FT245 Synchronous fifo mode
 -- author(s)	: marc at pignat dot org
