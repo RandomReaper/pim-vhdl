@@ -46,7 +46,7 @@ Synchronous entities are expected to behave the same when there is no
 reset, or when there is an asynchronous reset.
 
 Entities with a synchronous reset will be generated using a script. This script
-will be written when there is some need for it, for instance something like:
+will be written when there is some need for it, the script will do something like:
 
 ```diff
 --- async.vhd	2016-05-24 16:58:20.691007466 +0200
