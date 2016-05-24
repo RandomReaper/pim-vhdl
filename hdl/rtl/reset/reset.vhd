@@ -26,8 +26,8 @@ library ieee;
 entity reset_for_ram_fpga is
 	port
 	(
-		clock : in     std_ulogic;
-		reset : out    std_ulogic := '1'
+		clock : in		std_ulogic;
+		reset : out		std_ulogic := '1'
 	);
 end reset_for_ram_fpga;
 

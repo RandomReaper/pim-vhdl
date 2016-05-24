@@ -133,7 +133,7 @@ generic map
 port map
 (
 	clock		=> clock,
-	stop	   	=> stop
+	stop		=> stop
 );
 
 end bhv;

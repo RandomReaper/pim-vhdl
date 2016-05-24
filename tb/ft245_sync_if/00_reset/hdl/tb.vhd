@@ -41,13 +41,13 @@ architecture bhv of tb is
 	signal wr_n				: std_ulogic;
 	signal oe_n				: std_ulogic;
 
-	signal in_data		: std_ulogic_vector(7 downto 0);
-	signal in_empty		: std_ulogic;
-	signal in_read		: std_ulogic;
+	signal in_data			: std_ulogic_vector(7 downto 0);
+	signal in_empty			: std_ulogic;
+	signal in_read			: std_ulogic;
 
-	signal out_data		: std_ulogic_vector(7 downto 0);
+	signal out_data			: std_ulogic_vector(7 downto 0);
 	signal out_valid		: std_ulogic;
-	signal out_full		: std_ulogic;
+	signal out_full			: std_ulogic;
 
 	signal rxf				: std_ulogic;
 	signal txe				: std_ulogic;
@@ -170,7 +170,7 @@ generic map
 port map
 (
 	clock		=> clock,
-	stop	   	=> stop
+	stop		=> stop
 );
 
 end bhv;

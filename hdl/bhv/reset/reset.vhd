@@ -29,8 +29,8 @@ entity reset is
 	);
 	port
 	(
-		clock : in     std_ulogic;
-		reset : out    std_ulogic
+		clock : in		std_ulogic;
+		reset : out		std_ulogic
 	);
 end reset;
 

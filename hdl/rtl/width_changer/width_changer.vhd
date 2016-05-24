@@ -74,23 +74,23 @@ entity wc_gen is
 	);
 	port
 	(
-		clock		: in	std_ulogic;
-		reset		: in	std_ulogic;
+		clock			: in	std_ulogic;
+		reset			: in	std_ulogic;
 
-		in_data		: in	std_ulogic_vector;
-		in_write	: in	std_ulogic;
-		in_ready	: out	std_ulogic;
+		in_data			: in	std_ulogic_vector;
+		in_write		: in	std_ulogic;
+		in_ready		: out	std_ulogic;
 
-		out_data	: out	std_ulogic_vector;
-		out_write	: out	std_ulogic;
-		out_ready	: in	std_ulogic
+		out_data		: out	std_ulogic_vector;
+		out_write		: out	std_ulogic;
+		out_ready		: in	std_ulogic
 	);
 end wc_gen;
 
 architecture rtl of wc_gen is
 begin
 	assert
-		    (in_data'right = 0)
+			(in_data'right = 0)
 		and (out_data'right = 0)
 		and (in_data'left >= 0)
 		and (out_data'left >= 0)

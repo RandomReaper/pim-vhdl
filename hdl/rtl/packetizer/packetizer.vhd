@@ -149,8 +149,8 @@ with to_integer(state.counter) select header <=
 	x"00"								when 7,
 
 	-- 16 bit packet size, 0,0
-	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) /   (2**8),8))		when 8,
-	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) mod (2**8),8))		when 9,
+	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) /	(2**8),8))		when 8,
+	std_ulogic_vector(to_unsigned((2**g_nrdata_log2) mod(2**8),8))		when 9,
 	x"00"			when 10,
 	x"00"			when 11,
 

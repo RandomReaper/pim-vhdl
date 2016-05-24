@@ -78,18 +78,18 @@ tx			<= tx_enable and not tx_fifo_empty;
 tx_counter_gen: process(reset, clock)
 begin
 	if reset = '1' then
-		tx_enable	<= '0';
-		txe			<= '0';
-		tx_enable_old<= '0';
+		tx_enable		<= '0';
+		txe				<= '0';
+		tx_enable_old	<= '0';
 	elsif rising_edge(clock) then
-		tx_enable_old<= tx;
+		tx_enable_old	<= tx;
 		if tx_full = '1' then
-			tx_enable <= '1';
-			txe		  <= '0';
+			tx_enable	<= '1';
+			txe			<= '0';
 		end if;
 		if tx_fifo_empty = '1' then
-			tx_enable <= '0';
-			txe		  <= '1';
+			tx_enable	<= '0';
+			txe			<= '1';
 		end if;
 	end if;
 end process;

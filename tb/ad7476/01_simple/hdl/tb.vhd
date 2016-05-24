@@ -118,7 +118,7 @@ generic map
 port map
 (
 	clock		=> clock,
-	stop	   	=> stop
+	stop		=> stop
 );
 
 i_reset : entity work.reset

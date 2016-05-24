@@ -24,6 +24,7 @@ before_install:
 
 script:
   - travis/tb.sh
+  - travis/codingstyle.sh
 
 after_failure:
   - VERBOSE=1 travis/tb.sh

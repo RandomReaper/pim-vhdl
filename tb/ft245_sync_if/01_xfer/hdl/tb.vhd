@@ -132,8 +132,8 @@ end process;
 tbp: process
 	procedure waitFor
 	(
-		signal clock  : in std_ulogic;
-		signal sig	  : in std_ulogic;
+		signal clock	: in std_ulogic;
+		signal sig		: in std_ulogic;
 		val	: in std_ulogic;
 		t : in integer;
 		m : string

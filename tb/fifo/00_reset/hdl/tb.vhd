@@ -52,8 +52,6 @@ begin
 	free <= to_integer(unsigned(free_int));
 	used <= to_integer(unsigned(used_int));
 
-
-
 	tb : process
 	begin
 
@@ -71,10 +69,10 @@ begin
 
 	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
 	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')          report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
-	assert (status_full				= '0')          report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
-	assert (status_read_error		= '0')          report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
-	assert (status_write_error		= '0')          report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
+	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
+	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
+	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
+	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -91,10 +89,10 @@ begin
 
 	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
 	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')          report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
-	assert (status_full				= '0')          report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
-	assert (status_read_error		= '0')          report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
-	assert (status_write_error		= '0')          report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
+	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
+	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
+	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
+	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -111,10 +109,10 @@ begin
 
 	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
 	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')          report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
-	assert (status_full				= '0')          report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
-	assert (status_read_error		= '0')          report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
-	assert (status_write_error		= '0')          report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
+	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
+	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
+	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
+	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
 
 	-----------------------------------------------------------------------------
 	-- End of test
@@ -159,7 +157,7 @@ generic map
 port map
 (
 	clock		=> clock,
-	stop	   	=> stop
+	stop		=> stop
 );
 
 end bhv;
