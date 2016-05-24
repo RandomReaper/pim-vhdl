@@ -49,8 +49,8 @@ Entities with a synchronous reset will be generated using a script. This script
 will be written when there is some need for it, the script will do something like:
 
 ```diff
---- async.vhd	2016-05-24 16:58:20.691007466 +0200
-+++ sync.vhd	2016-05-24 16:58:18.338984332 +0200
+--- async.vhd
++++ sync.vhd
 @@ -1,8 +1,9 @@
 -process(reset, clock)
 +process(clock)
