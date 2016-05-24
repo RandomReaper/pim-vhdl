@@ -30,6 +30,7 @@
 -- * FTDI Signals MUST be connected directly and tied into the IO pads.
 --   * For Xilinx FPGA, nothing has to be done since the "iob" attribute is set.
 --
+-- * Host code at https://github.com/RandomReaper/ft2tcp
 -----------------------------------------------------------------------------
 --
 -- * FPGA -> FTDI
