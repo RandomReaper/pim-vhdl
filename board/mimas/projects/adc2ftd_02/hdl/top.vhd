@@ -44,6 +44,7 @@ port
 	led				: out	std_ulogic_vector(7 downto 0);
 
 	reset			: in	std_ulogic;
+
 	-- ADCs
 	sclk			: out	std_ulogic;
 	n_cs			: out	std_ulogic;
