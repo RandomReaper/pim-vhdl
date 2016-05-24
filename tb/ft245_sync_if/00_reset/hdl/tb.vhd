@@ -99,7 +99,7 @@ begin
 	assert (siwu					= '1')			report "siwu should be '1' and is " & std_ulogic'image(siwu) severity bug_severity;
 	assert (reset_n					= '1')			report "reset_n should be '1' and is " & std_ulogic'image(reset_n) severity bug_severity;
 	assert (out_valid				= '0')			report "out_valid should be '0' and is " & std_ulogic'image(out_valid) severity bug_severity;
-	assert (out_data	= (out_data'range => '-'))	report "out_data should be all -";
+	assert (out_data	= (out_data'range => '-'))	report "out_data should be all -" severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -120,7 +120,7 @@ begin
 	assert (siwu					= '1')			report "siwu should be '1' and is " & std_ulogic'image(siwu) severity bug_severity;
 	assert (reset_n					= '1')			report "reset_n should be '1' and is " & std_ulogic'image(reset_n) severity bug_severity;
 	assert (out_valid				= '0')			report "out_valid should be '0' and is " & std_ulogic'image(out_valid) severity bug_severity;
-	assert (out_data	= (out_data'range => '-'))	report "out_data should be all -";
+	assert (out_data	= (out_data'range => '-'))	report "out_data should be all -" severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);

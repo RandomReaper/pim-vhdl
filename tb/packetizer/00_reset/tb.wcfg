@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/pim/git/hw/tb/packetizer/00_reset/tmp/tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="24" />
+   <wvobject fp_name="divider24" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">write</obj_property>
+      <obj_property name="ObjectShortName">write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/write_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">write_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">write_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/read_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">read_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">read_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">read</obj_property>
+      <obj_property name="ObjectShortName">read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/status_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">status_empty</obj_property>
+      <obj_property name="ObjectShortName">status_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/status_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">status_full</obj_property>
+      <obj_property name="ObjectShortName">status_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/tx_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_write</obj_property>
+      <obj_property name="ObjectShortName">tx_write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/tx_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/tx_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">tx_full</obj_property>
+      <obj_property name="ObjectShortName">tx_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/rx_read" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_read</obj_property>
+      <obj_property name="ObjectShortName">rx_read</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/rx_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_empty</obj_property>
+      <obj_property name="ObjectShortName">rx_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/rx_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/rx_full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rx_full</obj_property>
+      <obj_property name="ObjectShortName">rx_full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/packet_count" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">packet_count[7:0]</obj_property>
+      <obj_property name="ObjectShortName">packet_count[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/in_count" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">in_count[5:0]</obj_property>
+      <obj_property name="ObjectShortName">in_count[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/state" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/next_state" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">next_state</obj_property>
+      <obj_property name="ObjectShortName">next_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/header" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">header[7:0]</obj_property>
+      <obj_property name="ObjectShortName">header[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/g_nrdata_log2" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">g_nrdata_log2</obj_property>
+      <obj_property name="ObjectShortName">g_nrdata_log2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/g_depth_in_log2" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">g_depth_in_log2</obj_property>
+      <obj_property name="ObjectShortName">g_depth_in_log2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_dut/g_depth_out_log2" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">g_depth_out_log2</obj_property>
+      <obj_property name="ObjectShortName">g_depth_out_log2</obj_property>
+   </wvobject>
+</wave_config>

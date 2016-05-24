@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
 -- file			: tb.vhd
 --
--- brief		: Test bench
+-- brief		: Test bench for the with changer
 -- author(s)	: marc at pignat dot org
 -----------------------------------------------------------------------------
 -- Copyright 2015,2016 Marc Pignat
@@ -23,30 +23,53 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity tb is
-generic
-(
-	g_parallel	: natural := 3
-);
 end tb;
 
 architecture bhv of tb is
 	constant bug_severity : severity_level := failure;
 
-	signal reset			: std_ulogic;
-	signal clock			: std_ulogic;
-	signal stop				: std_ulogic;
+	constant half_period : time := 0.5 ns;
 
-	signal sclk				: std_ulogic;
-	signal n_cs				: std_ulogic;
-	signal sdata			: std_ulogic_vector(g_parallel-1 downto 0);
-
-	signal data_valid		: std_ulogic;
-	signal data				: std_ulogic_vector(g_parallel*12 - 1 downto 0);
-	signal expected_data	: std_ulogic_vector(data'range);
+	signal reset 		: std_ulogic;
+	signal clock 		: std_ulogic;
+	signal stop 		: std_ulogic;
+	signal in_data		: std_ulogic_vector(3 downto 0);
+	signal in_write		: std_ulogic;
+	signal in_ready		: std_ulogic;
+	signal out_data		: std_ulogic_vector(11 downto 0);
+	signal out_ready	: std_ulogic;
+	signal out_write	: std_ulogic;
 begin
 
-	tb : process
-	begin
+i_dut : entity work.width_changer
+	port map
+	(
+	clock		=> clock,
+	reset		=> reset,
+
+	in_data		=> in_data,
+	in_write	=> in_write,
+	in_ready	=> in_ready,
+
+	out_data	=> out_data,
+	out_write	=> out_write,
+	out_ready	=> out_ready
+	);
+
+i_clock: entity work.clock_stop
+generic map
+(
+	frequency => 100.0e6
+)
+port map
+(
+	clock	=> clock,
+	stop	=> stop
+);
+
+tb : process
+	variable timeout : integer;
+begin
 
 	-----------------------------------------------------------------------------
 	-- No reset
@@ -57,10 +80,9 @@ begin
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
 
-	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity bug_severity;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
-	assert (unsigned(data)			= 0)			report "data should be 0" severity bug_severity;
+	assert (in_ready				= '0')			report "in_ready should be '0' and is " & std_ulogic'image(in_ready) severity bug_severity;
+	assert (out_write				= '0')			report "out_valid should be '0' and is " & std_ulogic'image(out_valid) severity bug_severity;
+	assert (out_data	= (out_data'range => '-'))	report "out_data should be all -" severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -75,10 +97,9 @@ begin
 	reset		<= '0';
 	wait until falling_edge(clock);
 
-	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity bug_severity;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
-	assert (unsigned(data)			= 0)			report "data should be 0" severity bug_severity;
+	assert (in_ready				= '0')			report "in_ready should be '0' and is " & std_ulogic'image(in_ready) severity bug_severity;
+	assert (out_write				= '0')			report "out_valid should be '0' and is " & std_ulogic'image(out_valid) severity bug_severity;
+	assert (out_data	= (out_data'range => '-'))	report "out_data should be all -" severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -91,50 +112,7 @@ begin
 
 	wait;
 
-	end process;
-
-i_adc_if : entity work.ad7476_parallel_if
-generic map
-(
-	g_prescaler	=> 1,
-	g_parallel	=> g_parallel
-)
-port map
-(
-	reset		=> reset,
-	clock		=> clock,
-
-	sclk		=> sclk,
-	n_cs		=> n_cs,
-	sdata		=> sdata,
-
-	data		=> data,
-	data_valid	=> data_valid
-);
-
-i_adc_sim : entity work.ad7476_parallel_sim
-generic map
-(
-	g_parallel	=> g_parallel
-)
-port map
-(
-	reset		=> reset,
-	sclk		=> sclk,
-	n_cs		=> n_cs,
-	sdata		=> sdata
-);
-
-
-i_clock : entity work.clock_stop
-generic map
-(
-	frequency	=> 80.0e6
-)
-port map
-(
-	clock		=> clock,
-	stop		=> stop
-);
+end process;
 
 end bhv;
+

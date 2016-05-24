@@ -30,19 +30,20 @@ generic
 end tb;
 
 architecture bhv of tb is
-	constant bug_severity : severity_level := failure;
+	constant bug_severity : severity_level := warning;
 
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
 	signal stop				: std_ulogic;
 
-	signal sclk				: std_ulogic;
-	signal n_cs				: std_ulogic;
-	signal sdata			: std_ulogic_vector(g_parallel-1 downto 0);
+	signal write			: std_ulogic;
+	signal write_data		: std_ulogic_vector(7 downto 0);
 
-	signal data_valid		: std_ulogic;
-	signal data				: std_ulogic_vector(g_parallel*12 - 1 downto 0);
-	signal expected_data	: std_ulogic_vector(data'range);
+	signal read_data		: std_ulogic_vector(7 downto 0);
+	signal read				: std_ulogic;
+
+	signal status_empty		: std_ulogic;
+	signal status_full		: std_ulogic;
 begin
 
 	tb : process
@@ -51,16 +52,19 @@ begin
 	-----------------------------------------------------------------------------
 	-- No reset
 	-----------------------------------------------------------------------------
-	stop		<= '0';
-	reset		<= '0';
+	stop			<= '0';
+	reset			<= '0';
+
+	write			<= '0';
+	write_data		<= (others => '0');
+	read			<= '0';
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
 
-	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity bug_severity;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
-	assert (unsigned(data)			= 0)			report "data should be 0" severity bug_severity;
+	assert (status_empty				= '1')			report "status_empty should be '1' and is " & std_ulogic'image(status_empty) severity bug_severity;
+	assert (status_full					= '0')			report "status_full should be '0' and is " & std_ulogic'image(status_full) severity bug_severity;
+	assert (read_data					= (read_data'range => 'U'))	report "read_data should be U" severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -75,10 +79,9 @@ begin
 	reset		<= '0';
 	wait until falling_edge(clock);
 
-	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity bug_severity;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
-	assert (unsigned(data)			= 0)			report "data should be 0" severity bug_severity;
+	assert (status_empty				= '1')			report "status_empty should be '1' and is " & std_ulogic'image(status_empty) severity bug_severity;
+	assert (status_full					= '0')			report "status_full should be '0' and is " & std_ulogic'image(status_full) severity bug_severity;
+	assert (read_data					= (read_data'range => 'U'))	report "read_data should be U" severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -93,38 +96,21 @@ begin
 
 	end process;
 
-i_adc_if : entity work.ad7476_parallel_if
-generic map
-(
-	g_prescaler	=> 1,
-	g_parallel	=> g_parallel
-)
+i_dut : entity work.packetizer
 port map
 (
-	reset		=> reset,
-	clock		=> clock,
+	reset			=> reset,
+	clock			=> clock,
 
-	sclk		=> sclk,
-	n_cs		=> n_cs,
-	sdata		=> sdata,
+	write			=> write,
+	write_data		=> write_data,
 
-	data		=> data,
-	data_valid	=> data_valid
+	read_data		=> read_data,
+	read			=> read,
+
+	status_empty	=> status_empty,
+	status_full		=> status_full
 );
-
-i_adc_sim : entity work.ad7476_parallel_sim
-generic map
-(
-	g_parallel	=> g_parallel
-)
-port map
-(
-	reset		=> reset,
-	sclk		=> sclk,
-	n_cs		=> n_cs,
-	sdata		=> sdata
-);
-
 
 i_clock : entity work.clock_stop
 generic map
