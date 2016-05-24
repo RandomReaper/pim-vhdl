@@ -45,8 +45,27 @@ All synchronous entities MUST have at least those signals:
 Synchronous entities are expected to behave the same when there is no
 reset, or when there is an asynchronous reset.
 
-Entities with a synchronous reset will be generated using a script. This script will be
-written when there is some need for it.
+Entities with a synchronous reset will be generated using a script. This script
+will be written when there is some need for it, for instance something like:
+
+```diff
+--- async.vhd	2016-05-24 16:58:20.691007466 +0200
++++ sync.vhd	2016-05-24 16:58:18.338984332 +0200
+@@ -1,8 +1,9 @@
+-process(reset, clock)
++process(clock)
+ begin
+-	if reset = '1' then
+-		some_signal <= '0';
+-	elsif rising_edge(clock) then
++	if rising_edge(clock) then
+ 		some_signal <= not some_signal;
++		if reset = '1' then
++			some_signal <= '0';
++		end if;
+ 	end if;
+ end process;
+```
 
 ## Testing
 * *For windows users*: install [cygwin](https://cygwin.com/setup-x86_64.exe) with at least ```git```, ```wget``` and ```unzip```.
