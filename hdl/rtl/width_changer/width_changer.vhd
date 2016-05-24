@@ -221,7 +221,7 @@ end process;
 end rtl_smaller;
 
 architecture rtl_bigger of wc_int is
-	signal memory				: std_ulogic_vector(out_data'range);
+	signal memory				: std_ulogic_vector(out_data'range) := (others => '0');
 	signal state				: std_ulogic_vector((out_data'length/in_data'length) downto 0);
 	signal out_write_int		: std_ulogic;
 begin
@@ -263,7 +263,7 @@ end process;
 data_proc: process(reset, clock)
 begin
 	if reset = '1' then
-		memory<= (others => '-');
+		memory<= (others => '0');
 	elsif rising_edge(clock) then
 		--pragma synthesis_off
 		if out_write_int = '1' then
