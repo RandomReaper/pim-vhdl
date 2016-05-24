@@ -15,11 +15,11 @@
   <version xil_pn:ise_version="14.7" xil_pn:schema_version="2"/>
 
   <files>
-    <file xil_pn:name="../../hdl/bhv/clock/clock_stop.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/bhv/clock/clock_stop.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="6"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="1"/>
     </file>
-    <file xil_pn:name="../../hdl/bhv/reset/reset.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/bhv/reset/reset.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="5"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="2"/>
     </file>
@@ -27,19 +27,19 @@
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="7"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="13"/>
     </file>
-    <file xil_pn:name="../../hdl/rtl/packetizer/packetizer.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/rtl/packetizer/packetizer.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="20"/>
     </file>
-    <file xil_pn:name="../../hdl/rtl/fifo/fifo.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/rtl/fifo/fifo.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="1"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="21"/>
     </file>
-    <file xil_pn:name="../../hdl/rtl/fifo/fifo_preread.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/rtl/fifo/fifo_preread.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="2"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="20"/>
     </file>
-    <file xil_pn:name="../../hdl/rtl/packetizer/depacketizer.vhd" xil_pn:type="FILE_VHDL">
+    <file xil_pn:name="../../../hdl/rtl/packetizer/depacketizer.vhd" xil_pn:type="FILE_VHDL">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="4"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="22"/>
     </file>
