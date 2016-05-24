@@ -13,9 +13,12 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/env.sh
 RESULT=0
 while read file
 do
-	if cat $file | grep "    " | grep -v "\-\-" 2>&1 > /dev/null
+	TEST="cat $file | sed -e 's/--.*//' | grep -n '    '"
+	if eval "$TEST" > /dev/null
 	then
-		echo CodingStyle:$file:4 space found, should be a TAB.
+		>&2 echo $file : CodingStyle 4 space found, should be a TAB.
+		>&2 eval "$TEST"
+		>&2 echo
 		RESULT=1
 		if [ ! -z "$FIX" ]
 		then
