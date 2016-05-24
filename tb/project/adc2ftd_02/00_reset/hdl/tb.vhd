@@ -30,6 +30,7 @@ generic
 end tb;
 
 architecture bhv of tb is
+	constant bug_severity : severity_level := failure;
 
 	signal reset 			: std_ulogic;
 	signal clock 			: std_ulogic;
@@ -81,13 +82,13 @@ begin
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
 
-	assert (rd						= '0')			report "rd should be '0' and is " & std_ulogic'image(rd) severity warning;
-	assert (wr						= '0')			report "wr should be '0' and is " & std_ulogic'image(wr) severity warning;
-	assert (oe						= '0')			report "oe should be '0' and is " & std_ulogic'image(oe) severity warning;
-	assert (siwu					= '1')			report "siwu should be '1' and is " & std_ulogic'image(siwu) severity warning;
-	assert (reset_n					= '1')			report "reset_n should be '1' and is " & std_ulogic'image(reset_n) severity warning;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity warning;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity warning;
+	assert (rd						= '0')			report "rd should be '0' and is " & std_ulogic'image(rd) severity bug_severity;
+	assert (wr						= '0')			report "wr should be '0' and is " & std_ulogic'image(wr) severity bug_severity;
+	assert (oe						= '0')			report "oe should be '0' and is " & std_ulogic'image(oe) severity bug_severity;
+	assert (siwu					= '1')			report "siwu should be '1' and is " & std_ulogic'image(siwu) severity bug_severity;
+	assert (reset_n					= '1')			report "reset_n should be '1' and is " & std_ulogic'image(reset_n) severity bug_severity;
+	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
+	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -102,13 +103,13 @@ begin
 	reset		<= '0';
 	wait until falling_edge(clock);
 
-	assert (rd						= '0')			report "rd should be '0' and is " & std_ulogic'image(rd) severity warning;
-	assert (wr						= '0')			report "wr should be '0' and is " & std_ulogic'image(wr) severity warning;
-	assert (oe						= '0')			report "oe should be '0' and is " & std_ulogic'image(oe) severity warning;
-	assert (siwu					= '1')			report "siwu should be '1' and is " & std_ulogic'image(siwu) severity warning;
-	assert (reset_n					= '1')			report "reset_n should be '1' and is " & std_ulogic'image(reset_n) severity warning;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity warning;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity warning;
+	assert (rd						= '0')			report "rd should be '0' and is " & std_ulogic'image(rd) severity bug_severity;
+	assert (wr						= '0')			report "wr should be '0' and is " & std_ulogic'image(wr) severity bug_severity;
+	assert (oe						= '0')			report "oe should be '0' and is " & std_ulogic'image(oe) severity bug_severity;
+	assert (siwu					= '1')			report "siwu should be '1' and is " & std_ulogic'image(siwu) severity bug_severity;
+	assert (reset_n					= '1')			report "reset_n should be '1' and is " & std_ulogic'image(reset_n) severity bug_severity;
+	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
+	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);

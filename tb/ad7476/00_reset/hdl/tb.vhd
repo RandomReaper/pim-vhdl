@@ -30,6 +30,7 @@ generic
 end tb;
 
 architecture bhv of tb is
+	constant bug_severity : severity_level := failure;
 
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
@@ -56,9 +57,9 @@ begin
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
 
-	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity warning;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity warning;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity warning;
+	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity bug_severity;
+	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
+	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
 	assert (unsigned(data)			= 0)			report "data should be 0";
 
 	wait until rising_edge(clock);
@@ -74,9 +75,9 @@ begin
 	reset		<= '0';
 	wait until falling_edge(clock);
 
-	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity warning;
-	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity warning;
-	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity warning;
+	assert (data_valid				= '0')			report "data_valid should be '0' and is " & std_ulogic'image(data_valid) severity bug_severity;
+	assert (sclk					= '0')			report "sclk should be '0' and is " & std_ulogic'image(sclk) severity bug_severity;
+	assert (n_cs					= '0')			report "n_cs should be '0' and is " & std_ulogic'image(n_cs) severity bug_severity;
 	assert (unsigned(data)			= 0)			report "data should be 0";
 
 	wait until rising_edge(clock);

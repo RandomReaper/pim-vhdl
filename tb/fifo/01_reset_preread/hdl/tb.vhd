@@ -26,6 +26,7 @@ entity tb is
 end tb;
 
 architecture bhv of tb is
+	constant bug_severity : severity_level := failure;
 
 	constant g_depth_log2 : integer := 2;
 	constant g_depth : integer := 2**g_depth_log2;
@@ -69,12 +70,12 @@ begin
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
 
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
-	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
-	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
-	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity bug_severity;
+	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity bug_severity;
+	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity bug_severity;
+	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -89,12 +90,12 @@ begin
 	reset		<= '0';
 	wait until falling_edge(clock);
 
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
-	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
-	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
-	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity bug_severity;
+	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity bug_severity;
+	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity bug_severity;
+	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity bug_severity;
 
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
@@ -109,12 +110,12 @@ begin
 	wait until rising_edge(clock);
 	wait until falling_edge(clock);
 
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity failure;
-	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity failure;
-	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity failure;
-	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "empty should be '1' and is " & std_ulogic'image(status_empty) severity bug_severity;
+	assert (status_full				= '0')			report "status_full should be '1' and is " & std_ulogic'image(status_full) severity bug_severity;
+	assert (status_read_error		= '0')			report "status_read_error should be '1' and is " & std_ulogic'image(status_read_error) severity bug_severity;
+	assert (status_write_error		= '0')			report "status_write_error should be '1' and is " & std_ulogic'image(status_write_error) severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- End of test

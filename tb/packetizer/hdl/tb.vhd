@@ -30,6 +30,8 @@ generic
 end tb;
 
 architecture bhv of tb is
+	constant bug_severity : severity_level := failure;
+
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
 
@@ -102,21 +104,21 @@ begin
 		while out_valid /= '1' loop
 			wait until falling_edge(clock);
 
-			assert timeout > 0 report "Timeout waiting for data_valid" severity failure;
+			assert timeout > 0 report "Timeout waiting for data_valid" severity bug_severity;
 
 			timeout := timeout - 1;
 		end loop;
 
 		while out_valid = '1' loop
 
-			assert out_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(out_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity failure;
+			assert out_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(out_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity bug_severity;
 			expected_data <= std_ulogic_vector(unsigned(expected_data) + 1);
 			wait until falling_edge(clock);
 		end loop;
 
 	end loop;
 
-	assert out_valid = '0' report "Wrong data valid duration" severity failure;
+	assert out_valid = '0' report "Wrong data valid duration" severity bug_severity;
 
 	wait;
 end process;

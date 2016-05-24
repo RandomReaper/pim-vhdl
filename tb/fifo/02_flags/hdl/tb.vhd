@@ -26,6 +26,8 @@ entity tb is
 end tb;
 
 architecture bhv of tb is
+	constant bug_severity : severity_level := failure;
+
 	constant g_depth_log2 : integer := 2;
 	constant g_depth : integer := 2**g_depth_log2;
 	constant half_period : time := 0.5 ns;
@@ -93,12 +95,12 @@ begin
 	-----------------------------------------------------------------------------
 	-- Verify all outputs after reset
 	-----------------------------------------------------------------------------
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test a read twice when empty
@@ -109,12 +111,12 @@ begin
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	read <= '0';
 
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 
 	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read when empty:status_read_error expected" severity note;
 
@@ -122,12 +124,12 @@ begin
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	read <= '0';
 
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test a write
@@ -139,12 +141,12 @@ begin
 	write_data <= x"00";
 	write <= '0';
 
-	assert (free					= g_depth-1)	report "fifo buggy !?!" severity failure;
-	assert (used					= 1)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth-1)	report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 1)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test a simultaneous read/write with only one data in the fifo, should work
@@ -157,13 +159,13 @@ begin
 	write <= '0';
 	read <= '0';
 
-	assert (free					= g_depth-1)	report "fifo buggy !?!" severity failure;
-	assert (used					= 1)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (read_data				= x"55")		report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth-1)	report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 1)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (read_data				= x"55")		report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test read back
@@ -172,13 +174,13 @@ begin
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	read <= '0';
 
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (read_data				= x"aa")		report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (read_data				= x"aa")		report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test synchronous reset
@@ -191,22 +193,22 @@ begin
 	reset_sync		<= '1';
 
 	-- should not reset before clock !
-	assert (free					= g_depth-1)	report "fifo buggy !?!" severity failure;
-	assert (used					= 1)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth-1)	report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 1)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	reset_sync		<= '0';
 	-- Now should be reset
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test a simultaneous read/write while empty, (only read should fail)
@@ -221,12 +223,12 @@ begin
 	write <= '0';
 	read <= '0';
 
-	assert (free					= g_depth-1)	report "fifo buggy !?!" severity failure;
-	assert (used					= 1)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth-1)	report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 1)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test read back
@@ -235,13 +237,13 @@ begin
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
 	read <= '0';
 
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (read_data				= x"11")		report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (read_data				= x"11")		report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test fifo full
@@ -250,15 +252,15 @@ begin
 	for i in 0 to g_depth-1 loop
 		write_data <= std_ulogic_vector(to_unsigned(i, 8));
 		wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
-		assert (free					= g_depth-i-1)	report "fifo buggy !?!" severity failure;
-		assert (used					= i+1)			report "fifo buggy !?!" severity failure;
-		assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-		assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-		assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+		assert (free					= g_depth-i-1)	report "fifo buggy !?!" severity bug_severity;
+		assert (used					= i+1)			report "fifo buggy !?!" severity bug_severity;
+		assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+		assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+		assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 		if i /= g_depth-1 then
-			assert (status_full			= '0')			report "fifo buggy !?!" severity failure;
+			assert (status_full			= '0')			report "fifo buggy !?!" severity bug_severity;
 		else
-			assert (status_full			= '1')			report "fifo buggy !?!" severity failure;
+			assert (status_full			= '1')			report "fifo buggy !?!" severity bug_severity;
 		end if;
 	end loop;
 	write <= '0';
@@ -275,12 +277,12 @@ begin
 	write_data <= x"00";
 	write <= '0';
 
-	assert (free					= 0)			report "fifo buggy !?!" severity failure;
-	assert (used					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '1')			report "fifo buggy !?!" severity failure;
+	assert (free					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (used					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '1')			report "fifo buggy !?!" severity bug_severity;
 
 	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing write when full:status_write_error expected" severity note;
 
@@ -290,12 +292,12 @@ begin
 	write_data <= x"00";
 	write <= '0';
 
-	assert (free					= 0)			report "fifo buggy !?!" severity failure;
-	assert (used					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '1')			report "fifo buggy !?!" severity failure;
+	assert (free					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (used					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '1')			report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test a simultaneous read/write while full, should work
@@ -308,13 +310,13 @@ begin
 	write <= '0';
 	read <= '0';
 
-	assert (free					= 0)			report "fifo buggy !?!" severity failure;
-	assert (used					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (read_data				= x"00")		report "fifo buggy !?!" severity failure;
+	assert (free					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (used					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (read_data				= x"00")		report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test write when full twice -> write error
@@ -327,12 +329,12 @@ begin
 	write_data <= x"00";
 	write <= '0';
 
-	assert (free					= 0)			report "fifo buggy !?!" severity failure;
-	assert (used					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '1')			report "fifo buggy !?!" severity failure;
+	assert (free					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (used					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '1')			report "fifo buggy !?!" severity bug_severity;
 
 	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing write when full:status_write_error expected" severity note;
 
@@ -342,12 +344,12 @@ begin
 	write_data <= x"00";
 	write <= '0';
 
-	assert (free					= 0)			report "fifo buggy !?!" severity failure;
-	assert (used					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '1')			report "fifo buggy !?!" severity failure;
+	assert (free					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (used					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '1')			report "fifo buggy !?!" severity bug_severity;
 
 	-----------------------------------------------------------------------------
 	-- Test read back -> data should be ok
@@ -357,16 +359,16 @@ begin
 
 	for i in 0 to g_depth-1 loop
 		wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
-		assert read_data = std_ulogic_vector(to_unsigned(i+1, 8)) report "fifo buggy !?!" severity failure;
-		assert (free					= i+1)			report "fifo buggy !?!" severity failure;
-		assert (used					= g_depth-1-i)	report "fifo buggy !?!" severity failure;
-		assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-		assert (status_read_error		= '0')			report "fifo buggy !?!" severity failure;
-		assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
+		assert read_data = std_ulogic_vector(to_unsigned(i+1, 8)) report "fifo buggy !?!" severity bug_severity;
+		assert (free					= i+1)			report "fifo buggy !?!" severity bug_severity;
+		assert (used					= g_depth-1-i)	report "fifo buggy !?!" severity bug_severity;
+		assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+		assert (status_read_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+		assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
 		if i /= g_depth-1 then
-			assert (status_empty			= '0')		report "fifo buggy !?!" severity failure;
+			assert (status_empty			= '0')		report "fifo buggy !?!" severity bug_severity;
 		else
-			assert (status_empty			= '1')		report "fifo buggy !?!" severity failure;
+			assert (status_empty			= '1')		report "fifo buggy !?!" severity bug_severity;
 		end if;
 	end loop;
 
@@ -376,22 +378,22 @@ begin
 	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read when empty:status_read_error expected" severity note;
 
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
 
 	assert false									report "PIM_VHDL_WARNING_EXPECTED: Testing read when empty:status_read_error expected" severity note;
 
 	wait for half_period; clock <= '1'; wait for half_period; clock <= '0';
-	assert (free					= g_depth)		report "fifo buggy !?!" severity failure;
-	assert (used					= 0)			report "fifo buggy !?!" severity failure;
-	assert (status_full				= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_read_error		= '1')			report "fifo buggy !?!" severity failure;
-	assert (status_write_error		= '0')			report "fifo buggy !?!" severity failure;
-	assert (status_empty			= '1')			report "fifo buggy !?!" severity failure;
+	assert (free					= g_depth)		report "fifo buggy !?!" severity bug_severity;
+	assert (used					= 0)			report "fifo buggy !?!" severity bug_severity;
+	assert (status_full				= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_read_error		= '1')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_write_error		= '0')			report "fifo buggy !?!" severity bug_severity;
+	assert (status_empty			= '1')			report "fifo buggy !?!" severity bug_severity;
 
 	read <= '0';
 

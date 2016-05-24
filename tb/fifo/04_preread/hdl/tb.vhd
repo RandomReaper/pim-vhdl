@@ -26,6 +26,8 @@ entity tb is
 end tb;
 
 architecture bhv of tb is
+	constant bug_severity : severity_level := failure;
+
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
 
@@ -63,14 +65,14 @@ tb_proc: process
 		while read_valid /= '1' loop
 			wait until falling_edge(clock);
 
-			assert timeout > 0 report "Timeout waiting for read_valid" severity failure;
+			assert timeout > 0 report "Timeout waiting for read_valid" severity bug_severity;
 
 			timeout := timeout - 1;
 		end loop;
 
 		while read_valid = '1' loop
 
-			assert read_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(read_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity failure;
+			assert read_data = expected_data report "Wrong data out_data:" &integer'image(to_integer(unsigned(read_data))) &" expected : " &integer'image(to_integer(unsigned(expected_data))) severity bug_severity;
 			expected_data <= std_ulogic_vector(unsigned(expected_data) + 1);
 			wait until falling_edge(clock);
 		end loop;
