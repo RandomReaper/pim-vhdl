@@ -48,6 +48,19 @@ reset, or when there is an asynchronous reset.
 Entities with a synchronous reset will be generated using a script. This script will be
 written when there is some need for it.
 
+| Original code (asynchronous reset) | Code generated for synchronous reset |
+| ------------- | ------------- |
+| <pre lang="vhdl">process(reset, clock)				</pre> | <pre lang="vhdl">process(clock)						</pre> |
+| <pre lang="vhdl">begin								</pre> | <pre lang="vhdl">begin									</pre> |
+| <pre lang="vhdl">if reset ='1' then					</pre> | <pre lang="vhdl">										</pre> |
+| <pre lang="vhdl">    some_signal <= '0';				</pre> | <pre lang="vhdl">										</pre> |
+| <pre lang="vhdl">elsif rising_edge(clock)	then		</pre> | <pre lang="vhdl">if rising_edge(clock)	then			</pre> |
+| <pre lang="vhdl">    some_signal <= not some_signal;	</pre> | <pre lang="vhdl">    some_signal <= not some_signal;	</pre> |
+| <pre lang="vhdl">end if;								</pre> | <pre lang="vhdl">    if reset = '1' then				</pre> |
+| <pre lang="vhdl">										</pre> | <pre lang="vhdl">        some_signal <= '0';			</pre> |
+| <pre lang="vhdl">										</pre> | <pre lang="vhdl">    end if;							</pre> |
+| <pre lang="vhdl">										</pre> | <pre lang="vhdl">end if;								</pre> |
+| <pre lang="vhdl">end process;							</pre> | <pre lang="vhdl">end process;							</pre> |
 ## Testing
 * *For windows users*: install [cygwin](https://cygwin.com/setup-x86_64.exe) with at least ```git```, ```wget``` and ```unzip```.
 
