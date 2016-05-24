@@ -89,3 +89,6 @@ success : ./ft245_sync_if/01_pingpong/
 ### Automated testing
 All test benches are run on [Travis CI](https://travis-ci.org), at each commit. The status of the latest run is shown after the title of this page.
 
+## Code
+* Code for the host side of FTDI FT245 synchronous fifo is available at [ft2tcp](https://github.com/RandomReaper/ft2tcp)
+
