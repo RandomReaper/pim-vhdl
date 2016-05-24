@@ -30,7 +30,7 @@ generic
 end tb;
 
 architecture bhv of tb is
-	constant bug_severity : severity_level := warning;
+	constant bug_severity : severity_level := failure;
 
 	signal reset			: std_ulogic;
 	signal clock			: std_ulogic;
