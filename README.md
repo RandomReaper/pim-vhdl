@@ -35,6 +35,17 @@ Because VHDL is hard and should be [free](https://fsf.org/).
 ## CodingStyle
 ### Indentation
 **tabs** size **4**
+
+### Active state
+Signals are generally active high, including the ```reset```. Active-low signals
+can be used when they are directly connected to the hardware.
+
+### Test benches
+* Test benches are required for all rtl entities.
+* Test benches results must be checked using ```assert```
+* Successful test benches assert the message ```PIM_VHDL_SIMULATION_DONE``` with the severity ```note```.
+* Expected asserts with severity ```warning``` should be announced by using an assert starting with ```PIM_VHDL_SIMULATION_DONE```.
+
 ### Synchronous entities
 All synchronous entities MUST have at least those signals:
 
