@@ -45,8 +45,9 @@ All synchronous entities MUST have at least those signals:
 Synchronous entities are expected to behave the same when there is no
 reset, or when there is an asynchronous reset.
 
-Entities with a synchronous reset will be generated using a script. This script
-will be written when there is some need for it, the script will do something like:
+Hardware requiring synchronous reset will use a script for converting asynchronous
+reset to synchronous. This script will be written when there is some need for it,
+and will do something like:
 
 ```diff
 --- async.vhd
