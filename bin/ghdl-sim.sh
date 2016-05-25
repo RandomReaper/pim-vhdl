@@ -52,7 +52,6 @@ then
 fi
 
 $GHDL -m $OPTIONS tb $ARCH
-echo $GHDL -e $OPTIONS tb $ARCH
 $GHDL -e $OPTIONS tb $ARCH
 $GHDL -r $OPTIONS tb $ARCH --ieee-asserts=disable-at-0
 rm -r $DIR
