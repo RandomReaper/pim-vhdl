@@ -33,57 +33,67 @@ do
 done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
 
 RESULT=0
-while read dir
+for USE_RESET in 0 1
 do
-	cd $dir
-
-	WARNING_EXPECTED=0
-	WARNING_COUNT=0
-	SUB_RESULT=2
-
-	printf "%-$LENGTH""s : " "$dir"
-
-	while read line
+	echo "Running all tb from $PWD with USE_RESET=$USE_RESET"
+	while read dir
 	do
-		if [ ! -z "$VERBOSE" ]
-		then
-			echo $line
-		fi
+		cd $dir
 
-		if echo $line | grep ':(assertion warning):' > /dev/null
-		then
-			((WARNING_COUNT++))
-		fi
+		WARNING_EXPECTED=0
+		WARNING_COUNT=0
+		SUB_RESULT=2
 
-		if echo $line | grep ':(assertion note): PIM_VHDL_WARNING_EXPECTED' > /dev/null
-		then
-			((WARNING_EXPECTED++))
-		fi
+		printf "%-$LENGTH""s : " "$dir"
 
-		if echo $line | grep 'PIM_VHDL_SIMULATION_DONE' > /dev/null
-		then
-			SUB_RESULT=0
-			if (( WARNING_EXPECTED != WARNING_COUNT))
-			then
-				SUB_RESULT=1
-			fi
-
+		while read line
+		do
 			if [ ! -z "$VERBOSE" ]
 			then
-				echo warning expected/count:$WARNING_EXPECTED/$WARNING_COUNT
+				echo $line
 			fi
+
+			if echo $line | grep ':(assertion warning):' > /dev/null
+			then
+				((WARNING_COUNT++))
+				if (( WARNING_EXPECTED != WARNING_COUNT))
+				then
+					echo warning rised before expected
+					SUB_RESULT=1
+				fi
+			fi
+
+			if echo $line | grep ':(assertion note): PIM_VHDL_WARNING_EXPECTED' > /dev/null
+			then
+				((WARNING_EXPECTED++))
+			fi
+
+			if echo $line | grep 'PIM_VHDL_SIMULATION_DONE' > /dev/null
+			then
+				SUB_RESULT=0
+				if (( WARNING_EXPECTED != WARNING_COUNT))
+				then
+					SUB_RESULT=1
+				fi
+
+				if [ ! -z "$VERBOSE" ]
+				then
+					echo warning expected/count:$WARNING_EXPECTED/$WARNING_COUNT
+				fi
+			fi
+
+		done <<< "$($TEST 2>&1)"
+
+		if (( SUB_RESULT == 0 ))
+		then
+			echo "success"
+		else
+			echo "FAILURE"
+			RESULT=1
 		fi
-
-	done <<< "$($TEST 2>&1)"
-
-	if (( SUB_RESULT == 0 ))
-	then
-		echo "success"
-	else
-		echo "FAILURE"
-		RESULT=1
-	fi
-	cd $BASE
-done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
+		cd $BASE
+	done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
+	echo
+done
 
 exit $RESULT
