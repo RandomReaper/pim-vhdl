@@ -21,6 +21,7 @@ then
 	echo $OPTIONS
 fi
 
+MANAGED=0
 for file in "$@"
 do
 	if [ ! -z "$VERBOSE" ]
@@ -28,10 +29,30 @@ do
 		echo adding $file
 	fi
 	$GHDL -i $OPTIONS "$file"
+	if cat "$file" | grep -q 'managed_tb'
+	then
+		MANAGED=1
+	fi
 done
 
-$GHDL -m $OPTIONS tb
-$GHDL -e $OPTIONS tb
-$GHDL -r $OPTIONS tb --ieee-asserts=disable-at-0
-rm -r $DIR
+if [ -z "$USE_RESET" ]
+then
+	USE_RESET=0
+fi
 
+ARCH=""
+if [ "$MANAGED" -eq 1 ]
+then
+	if [ "$USE_RESET" -eq 1 ]
+	then
+		ARCH="bhv_with_reset"
+	else
+		ARCH="bhv_without_reset"
+	fi
+fi
+
+$GHDL -m $OPTIONS tb $ARCH
+echo $GHDL -e $OPTIONS tb $ARCH
+$GHDL -e $OPTIONS tb $ARCH
+$GHDL -r $OPTIONS tb $ARCH --ieee-asserts=disable-at-0
+rm -r $DIR

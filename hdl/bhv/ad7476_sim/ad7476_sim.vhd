@@ -37,10 +37,10 @@ end ad7476_sim;
 
 architecture bhv of ad7476_sim is
 	alias clock is sclk;
-	signal data		: unsigned(11 downto 0);
-	signal cs		: std_ulogic;
-	signal cs_old	: std_ulogic;
-	signal counter	: unsigned(4 downto 0);
+	signal data		: unsigned(11 downto 0) := (11 => '1', others => '0');
+	signal cs		: std_ulogic := '0';
+	signal cs_old	: std_ulogic := '0';
+	signal counter	: unsigned(4 downto 0) := (others => '0');
 begin
 
 cs <= not(n_cs);
