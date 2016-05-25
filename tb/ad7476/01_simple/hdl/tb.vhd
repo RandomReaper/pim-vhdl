@@ -22,19 +22,10 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity tb is
-generic
-(
-	g_parallel	: natural := 3
-);
-end tb;
+architecture bhv of managed_tb is
+	constant bug_severity	: severity_level := failure;
 
-architecture bhv of tb is
-	constant bug_severity : severity_level := failure;
-
-	signal reset			: std_ulogic;
-	signal clock			: std_ulogic;
-	signal stop				: std_ulogic;
+	constant g_parallel		: natural := 3;
 
 	signal sclk				: std_ulogic;
 	signal n_cs				: std_ulogic;
@@ -54,8 +45,6 @@ begin
 	for i in 0 to g_parallel - 1 loop
 		expected_data(12*i) <= '1';
 	end loop;
-
-	wait until falling_edge(reset);
 
 	for i in 0 to 100 loop
 		timeout := 100;
@@ -110,24 +99,6 @@ port map
 	sclk		=> sclk,
 	n_cs		=> n_cs,
 	sdata		=> sdata
-);
-
-i_clock : entity work.clock_stop
-generic map
-(
-	frequency	=> 80.0e6
-)
-port map
-(
-	clock		=> clock,
-	stop		=> stop
-);
-
-i_reset : entity work.reset
-port map
-(
-	reset		=> reset,
-	clock		=> clock
 );
 
 end bhv;

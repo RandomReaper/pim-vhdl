@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="/home/pim/Dropbox/drittsekk/01_pim/10_git/hw/tb/ad7476/tmp/tb_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="/home/pim/git/hw/tb/ad7476/01_simple/tmp/tb_isim_beh1.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="numeric_std" />
             <top_module name="std_logic_1164" />
@@ -11,45 +11,51 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="9" />
-   <wvobject fp_name="/tb/i_adc_if/clock" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">clock</obj_property>
-      <obj_property name="ObjectShortName">clock</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_adc_if/reset" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">reset</obj_property>
-      <obj_property name="ObjectShortName">reset</obj_property>
-   </wvobject>
+   <WVObjectSize size="11" />
    <wvobject fp_name="divider24" type="divider">
       <obj_property name="label">New Divider</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">128 128 255</obj_property>
       <obj_property name="TextColor">230 230 230</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_adc_if/sclk" type="logic" db_ref_id="1">
+   <wvobject fp_name="/tb/i_managed_tb/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/stop" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">stop</obj_property>
+      <obj_property name="ObjectShortName">stop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/sclk" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">sclk</obj_property>
       <obj_property name="ObjectShortName">sclk</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_adc_if/n_cs" type="logic" db_ref_id="1">
+   <wvobject fp_name="/tb/i_managed_tb/n_cs" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">n_cs</obj_property>
       <obj_property name="ObjectShortName">n_cs</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_adc_if/sdata" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">sdata[1:0]</obj_property>
-      <obj_property name="ObjectShortName">sdata[1:0]</obj_property>
+   <wvobject fp_name="/tb/i_managed_tb/sdata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sdata[2:0]</obj_property>
+      <obj_property name="ObjectShortName">sdata[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_adc_if/data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">data[23:0]</obj_property>
-      <obj_property name="ObjectShortName">data[23:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_adc_if/data_valid" type="logic" db_ref_id="1">
+   <wvobject fp_name="/tb/i_managed_tb/data_valid" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">data_valid</obj_property>
       <obj_property name="ObjectShortName">data_valid</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/expected_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">expected_data[23:0]</obj_property>
-      <obj_property name="ObjectShortName">expected_data[23:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+   <wvobject fp_name="/tb/i_managed_tb/data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data[35:0]</obj_property>
+      <obj_property name="ObjectShortName">data[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/expected_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">expected_data[35:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_data[35:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/g_parallel" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">g_parallel</obj_property>
+      <obj_property name="ObjectShortName">g_parallel</obj_property>
    </wvobject>
 </wave_config>
