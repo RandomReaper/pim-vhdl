@@ -52,7 +52,7 @@ tb_proc: process
 
 	for i in 0 to 1000 loop
 
-		timeout := 10;
+		timeout := 20;
 		while read_valid /= '1' loop
 			wait until falling_edge(clock);
 

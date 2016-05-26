@@ -69,8 +69,8 @@ architecture rtl of fifo is
 
 	signal full				: std_ulogic := '0';
 	signal empty			: std_ulogic := '1';
-	signal write_error		: std_ulogic;
-	signal read_error		: std_ulogic;
+	signal write_error		: std_ulogic := '0';
+	signal read_error		: std_ulogic := '0';
 	signal read_ptr			: unsigned(ptr_range_r) := (others => '0');
 	signal read_ptr_next	: unsigned(ptr_range_r);
 	signal write_ptr		: unsigned(ptr_range_r) := (others => '0');
