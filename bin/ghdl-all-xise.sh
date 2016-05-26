@@ -44,6 +44,8 @@ do
 		WARNING_COUNT=0
 		SUB_RESULT=2
 
+		export USE_RESET
+
 		printf "%-$LENGTH""s : " "$dir"
 
 		while read line
