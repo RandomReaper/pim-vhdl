@@ -166,8 +166,8 @@ end rtl;
 
 architecture rtl_smaller of wc_int is
 	signal memory				: std_ulogic_vector(in_data'range);
-	signal state				: std_ulogic_vector((in_data'length/out_data'length) - 1 downto 0);
-	signal out_write_int	: std_ulogic;
+	signal state				: std_ulogic_vector((in_data'length/out_data'length) - 1 downto 0) := (others => '0');
+	signal out_write_int		: std_ulogic := '0';
 begin
 
 state_proc: process(reset, clock)
@@ -222,29 +222,31 @@ end rtl_smaller;
 
 architecture rtl_bigger of wc_int is
 	signal memory				: std_ulogic_vector(out_data'range) := (others => '0');
+	signal state1				: std_ulogic_vector((out_data'length/in_data'length) downto 0) := (others => '0');
 	signal state				: std_ulogic_vector((out_data'length/in_data'length) downto 0);
-	signal out_write_int		: std_ulogic;
+	signal out_write_int		: std_ulogic := '0';
 begin
+
+state <= not state1(state1'left) & state1(state1'left-1 downto 0);
 
 out_write <= out_write_int;
 state_proc: process(reset, clock)
 begin
 	if reset = '1' then
-		state <= (others => '0');
-		state(state'left) <= '1';
+		state1 <= (others => '0');
 		out_write_int	<= '0';
 	elsif rising_edge(clock) then
 		out_write_int	<= '0';
 
 		if in_write = '1' then
-			state <= std_ulogic_vector(unsigned(state) srl 1);
+			state1 <= std_ulogic_vector(unsigned(state) srl 1);
+			state1(state1'left) <= '1';
 		end if;
 
 		if (state(state'right + 1) = '1' and in_write = '1') or state(state'right) = '1' then
 			if out_ready = '1' then
 				out_write_int	<= '1';
-				state <= (others => '0');
-				state(state'left) <= '1';
+				state1 <= (others => '0');
 			end if;
 		end if;
 	end if;
@@ -254,7 +256,7 @@ data_ready_proc: process(state, in_write, out_ready)
 begin
 	in_ready	<= '1';
 
-	if state(state'right) = '1' or state(state'right + 1) = '1'then
+	if state(state'right) = '1' or state(state'right + 1) = '1' then
 		in_ready	<= out_ready;
 	end if;
 
