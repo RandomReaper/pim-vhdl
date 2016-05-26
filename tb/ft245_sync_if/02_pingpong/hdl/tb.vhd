@@ -22,14 +22,9 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity tb is
-end tb;
-
-architecture bhv of tb is
+architecture bhv of managed_tb is
 	constant bug_severity : severity_level := failure;
 
-	signal reset			: std_ulogic;
-	signal clock			: std_ulogic;
 	signal adbus			: std_logic_vector(7 downto 0);
 	signal txe_n			: std_ulogic;
 	signal rxf_n			: std_ulogic;
@@ -39,9 +34,9 @@ architecture bhv of tb is
 	signal siwu				: std_ulogic;
 	signal suspend_n		: std_ulogic;
 	signal reset_n			: std_ulogic;
-	signal d_counter		: unsigned(7 downto 0);
-	signal d_data_in		: std_ulogic_vector(7 downto 0);
-	signal d_data_write		: std_ulogic;
+	signal d_counter		: unsigned(7 downto 0) := (others => '0');
+	signal d_data_in		: std_ulogic_vector(7 downto 0) := (others => '-');
+	signal d_data_write		: std_ulogic := '0';
 	signal d_data_full		: std_ulogic;
 	signal status_full		: std_ulogic;
 	signal in_empty			: std_ulogic;
@@ -49,11 +44,9 @@ architecture bhv of tb is
 	signal in_data			: std_ulogic_vector(7 downto 0);
 	signal in_read			: std_ulogic;
 	signal read_valid		: std_ulogic;
-	signal stop				: std_ulogic;
 	signal expected_data	: std_ulogic_vector(7 downto 0);
 	signal d_data_out		: std_ulogic_vector(7 downto 0);
 	signal d_data_out_valid	: std_ulogic;
-
 begin
 
 tb_proc: process
@@ -62,8 +55,6 @@ begin
 	stop <= '0';
 
 	expected_data <= (others => '0');
-
-	wait until falling_edge(reset);
 
 	for i in 0 to 15 loop
 		timeout := 100;
@@ -75,7 +66,7 @@ begin
 			timeout := timeout - 1;
 		end loop;
 
-		assert d_data_out = expected_data report "Wrong data i:" &integer'image(i) severity bug_severity;
+		assert d_data_out = expected_data report "Wrong data (is " & integer'image(to_integer(unsigned(d_data_out))) & " ) exptected : " & integer'image(to_integer(unsigned(expected_data))) severity bug_severity;
 		expected_data <= std_ulogic_vector(unsigned(expected_data) + 1);
 		wait until falling_edge(clock);
 
@@ -169,13 +160,6 @@ port map
 	d_data_out_valid => d_data_out_valid
 );
 
-i_reset : entity work.reset
-port map
-(
-	reset	=> reset,
-	clock	=> clock
-);
-
 sim_pc: process(reset, clock)
 begin
 	if reset = '1' then
@@ -194,16 +178,5 @@ begin
 		end if;
 	end if;
 end process;
-
-i_clock: entity work.clock_stop
-generic map
-(
-	frequency => 60.0e6
-)
-port map
-(
-	clock	=> clock,
-	stop	=> stop
-);
 
 end bhv;
