@@ -3,7 +3,7 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="/home/pim/Dropbox/drittsekk/01_pim/10_git/hw/tb/project/adc2ftd_02/00_full/tmp/tb_isim_beh.wdb" id="1" type="auto">
+      <db_ref path="/home/pim/git/hw/tb/project/adc2ftd_02/01_full/tmp/tb_isim_beh.wdb" id="1" type="auto">
          <top_modules>
             <top_module name="numeric_std" />
             <top_module name="std_logic_1164" />
@@ -11,96 +11,154 @@
          </top_modules>
       </db_ref>
    </db_ref_list>
-   <WVObjectSize size="20" />
-   <wvobject fp_name="/tb/i_top/i_packetizer/clock" type="logic" db_ref_id="1">
+   <WVObjectSize size="36" />
+   <wvobject fp_name="/tb/i_managed_tb/clock" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">clock</obj_property>
       <obj_property name="ObjectShortName">clock</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/reset" type="logic" db_ref_id="1">
+   <wvobject fp_name="/tb/i_managed_tb/reset" type="logic" db_ref_id="1">
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/tx_write" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">tx_write</obj_property>
-      <obj_property name="ObjectShortName">tx_write</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/tx_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">tx_data[7:0]</obj_property>
-      <obj_property name="ObjectShortName">tx_data[7:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/rx_read" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">rx_read</obj_property>
-      <obj_property name="ObjectShortName">rx_read</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/rx_empty" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">rx_empty</obj_property>
-      <obj_property name="ObjectShortName">rx_empty</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/rx_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">rx_data[7:0]</obj_property>
-      <obj_property name="ObjectShortName">rx_data[7:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/packet_count" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">packet_count[7:0]</obj_property>
-      <obj_property name="ObjectShortName">packet_count[7:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/in_count" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">in_count[5:0]</obj_property>
-      <obj_property name="ObjectShortName">in_count[5:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/state" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">state</obj_property>
-      <obj_property name="ObjectShortName">state</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/next_state" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">next_state</obj_property>
-      <obj_property name="ObjectShortName">next_state</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/header" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">header[7:0]</obj_property>
-      <obj_property name="ObjectShortName">header[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_packetizer/g_nrdata_log2" type="other" db_ref_id="1">
-      <obj_property name="ElementShortName">g_nrdata_log2</obj_property>
-      <obj_property name="ObjectShortName">g_nrdata_log2</obj_property>
-   </wvobject>
-   <wvobject fp_name="divider24" type="divider">
-      <obj_property name="label">New Divider</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="BkColor">128 128 255</obj_property>
-      <obj_property name="TextColor">230 230 230</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/i_top/i_wc/in_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">in_data[63:0]</obj_property>
-      <obj_property name="ObjectShortName">in_data[63:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/tmp" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">tmp[11:0]</obj_property>
-      <obj_property name="ObjectShortName">tmp[11:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/expected_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">expected_data[63:0]</obj_property>
-      <obj_property name="ObjectShortName">expected_data[63:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/adc_data" type="array" db_ref_id="1">
-      <obj_property name="ElementShortName">adc_data[63:0]</obj_property>
-      <obj_property name="ObjectShortName">adc_data[63:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/adc_data_valid" type="logic" db_ref_id="1">
-      <obj_property name="ElementShortName">adc_data_valid</obj_property>
-      <obj_property name="ObjectShortName">adc_data_valid</obj_property>
+   <wvobject fp_name="/tb/i_managed_tb/stop" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">stop</obj_property>
+      <obj_property name="ObjectShortName">stop</obj_property>
    </wvobject>
    <wvobject fp_name="divider84" type="divider">
       <obj_property name="label">New Divider</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="BkColor">128 128 255</obj_property>
       <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/adbus" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">adbus[7:0]</obj_property>
+      <obj_property name="ObjectShortName">adbus[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/reset_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/txe_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">txe_n</obj_property>
+      <obj_property name="ObjectShortName">txe_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/rxf_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rxf_n</obj_property>
+      <obj_property name="ObjectShortName">rxf_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/wr_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wr_n</obj_property>
+      <obj_property name="ObjectShortName">wr_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/rd_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rd_n</obj_property>
+      <obj_property name="ObjectShortName">rd_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/siwu" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">siwu</obj_property>
+      <obj_property name="ObjectShortName">siwu</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/oe_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">oe_n</obj_property>
+      <obj_property name="ObjectShortName">oe_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/suspend_n" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">suspend_n</obj_property>
+      <obj_property name="ObjectShortName">suspend_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/sclk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sclk</obj_property>
+      <obj_property name="ObjectShortName">sclk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/n_cs" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">n_cs</obj_property>
+      <obj_property name="ObjectShortName">n_cs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/sdata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">sdata[3:0]</obj_property>
+      <obj_property name="ObjectShortName">sdata[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/d_data_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">d_data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">d_data_out[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/d_data_out_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">d_data_out_valid</obj_property>
+      <obj_property name="ObjectShortName">d_data_out_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/out_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/out_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_valid</obj_property>
+      <obj_property name="ObjectShortName">out_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/adc_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">adc_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">adc_data[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/adc_data_valid" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">adc_data_valid</obj_property>
+      <obj_property name="ObjectShortName">adc_data_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/tmp" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">tmp[11:0]</obj_property>
+      <obj_property name="ObjectShortName">tmp[11:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/expected_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">expected_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_data[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/bug_severity" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">bug_severity</obj_property>
+      <obj_property name="ObjectShortName">bug_severity</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/g_parallel" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">g_parallel</obj_property>
+      <obj_property name="ObjectShortName">g_parallel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/g_nrdata_log2" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">g_nrdata_log2</obj_property>
+      <obj_property name="ObjectShortName">g_nrdata_log2</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider28" type="divider">
+      <obj_property name="label">New Divider</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="BkColor">128 128 255</obj_property>
+      <obj_property name="TextColor">230 230 230</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/in_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">in_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/in_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">in_write</obj_property>
+      <obj_property name="ObjectShortName">in_write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/in_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">in_ready</obj_property>
+      <obj_property name="ObjectShortName">in_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/out_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_data[63:0]</obj_property>
+      <obj_property name="ObjectShortName">out_data[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/out_write" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_write</obj_property>
+      <obj_property name="ObjectShortName">out_write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb/i_managed_tb/i_wc/out_ready" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">out_ready</obj_property>
+      <obj_property name="ObjectShortName">out_ready</obj_property>
    </wvobject>
 </wave_config>

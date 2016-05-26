@@ -22,18 +22,10 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity tb is
-generic
-(
-	g_nrdata_log2	: natural := 7
-);
-end tb;
+architecture bhv of managed_tb is
+	constant bug_severity	: severity_level := failure;
+	constant g_nrdata_log2	: natural := 7;
 
-architecture bhv of tb is
-	constant bug_severity : severity_level := failure;
-
-	signal reset			: std_ulogic;
-	signal clock			: std_ulogic;
 	signal adbus			: std_logic_vector(7 downto 0);
 	signal txe_n			: std_ulogic;
 	signal rxf_n			: std_ulogic;
@@ -43,12 +35,10 @@ architecture bhv of tb is
 	signal siwu				: std_ulogic;
 	signal suspend_n		: std_ulogic;
 	signal reset_n			: std_ulogic;
-	signal d_counter		: unsigned(7 downto 0);
+	signal d_counter		: unsigned(7 downto 0) := (others => '0');
 	signal d_data_in		: std_ulogic_vector(7 downto 0);
 	signal d_data_write		: std_ulogic;
 	signal d_data_full		: std_ulogic;
-	signal status_full		: std_ulogic;
-	signal status_empty		: std_ulogic;
 	signal read_data		: std_ulogic_vector(7 downto 0);
 	signal write_data		: std_ulogic_vector(7 downto 0);
 	signal write_read		: std_ulogic;
@@ -61,7 +51,6 @@ architecture bhv of tb is
 	signal out_data			: std_ulogic_vector(7 downto 0);
 	signal out_valid		: std_ulogic;
 
-	signal stop				: std_ulogic;
 	signal expected_data	: std_ulogic_vector(7 downto 0);
 begin
 
@@ -71,8 +60,6 @@ tb_proc: process
 	stop <= '0';
 
 	expected_data <= (others => '0');
-
-	wait until falling_edge(reset);
 
 	for i in 0 to 1000 loop
 
@@ -175,23 +162,5 @@ begin
 		d_counter <= d_counter + 1;
 	end if;
 end process;
-
-i_reset : entity work.reset
-port map
-(
-	reset	=> reset,
-	clock	=> clock
-);
-
-i_clock : entity work.clock_stop
-generic map
-(
-	frequency	=> 60.0e6
-)
-port map
-(
-	clock	=> clock,
-	stop	=> stop
-);
 
 end bhv;

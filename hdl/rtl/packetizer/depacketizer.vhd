@@ -37,7 +37,7 @@ port
 	out_data		: out	std_ulogic_vector(7 downto 0);
 	out_valid		: out	std_ulogic;
 
-	header_valid	: out	std_ulogic
+	header_valid	: out	std_ulogic := '0'
 );
 end depacketizer;
 
@@ -53,10 +53,10 @@ architecture rtl of depacketizer is
 		STATE_DATA
 	);
 
-	signal header_counter		: unsigned(5 downto 0);
-	signal data_counter			: unsigned(g_nrdata_log2 downto 0);
+	signal header_counter		: unsigned(5 downto 0) := (others => '0');
+	signal data_counter			: unsigned(g_nrdata_log2 downto 0) := (others => '0');
 
-	signal state				: state_t;
+	signal state				: state_t := STATE_RESET;
 	signal next_state			: state_t;
 
 	signal out_valid_int		: std_ulogic;

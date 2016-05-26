@@ -53,8 +53,8 @@ architecture rtl of packetizer is
 	signal rx_data		: std_ulogic_vector(write_data'range);
 	signal rx_full		: std_ulogic;
 
-	signal packet_count : unsigned(7 downto 0);
-	signal in_count		: unsigned(g_nrdata_log2 downto 0);
+	signal packet_count : unsigned(7 downto 0) := (others => '0');
+	signal in_count		: unsigned(g_nrdata_log2 downto 0) := (others => '0');
 
 	type state_e is
 	(
@@ -70,7 +70,8 @@ architecture rtl of packetizer is
 		counter	: unsigned(7 downto 0);
 	end record;
 
-	signal state		: state_t;
+	signal state		: state_t :=
+		(name => STATE_RESET, counter => (others => '0'));
 	signal next_state	: state_t;
 
 	signal header		: std_ulogic_vector(read_data'range);

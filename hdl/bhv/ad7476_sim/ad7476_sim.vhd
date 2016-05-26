@@ -31,7 +31,7 @@ port
 	reset		: in	std_ulogic;
 	sclk		: in	std_ulogic;
 	n_cs		: in	std_ulogic;
-	sdata		: out	std_ulogic
+	sdata		: out	std_ulogic := '0'
 );
 end ad7476_sim;
 

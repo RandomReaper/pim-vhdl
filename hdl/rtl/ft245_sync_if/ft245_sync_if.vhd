@@ -106,10 +106,10 @@ port
 	adbus			: inout	std_logic_vector(7 downto 0);
 	rxf_n			: in	std_ulogic;
 	txe_n			: in	std_ulogic;
-	rd_n			: out	std_ulogic;
-	wr_n			: out	std_ulogic;
+	rd_n			: out	std_ulogic := '1';
+	wr_n			: out	std_ulogic := '1';
 	clock			: in	std_ulogic;
-	oe_n			: out	std_ulogic;
+	oe_n			: out	std_ulogic := '1';
 	siwu			: out	std_ulogic;
 	reset_n			: out	std_ulogic;
 	suspend_n		: in	std_ulogic;
@@ -161,16 +161,16 @@ architecture rtl of ft245_sync_if is
 	);
 
 	-- State
-	signal state			: state_e;
+	signal state			: state_e := STATE_RESET;
 	signal next_state		: state_e;
 
 	-- Positive versions of ft245 control signals
 	signal ft_oe			: std_ulogic;
 	signal ft_write			: std_ulogic;
 	signal ft_read			: std_ulogic;
-	signal ft_suspend		: std_ulogic;
-	signal ft_tx			: std_ulogic;
-	signal ft_rx			: std_ulogic;
+	signal ft_suspend		: std_ulogic := '0';
+	signal ft_tx			: std_ulogic := '0';
+	signal ft_rx			: std_ulogic := '0';
 
 	-- Store missed read/write
 	type failed_element_t is
@@ -182,21 +182,23 @@ architecture rtl of ft245_sync_if is
 	type failed_t is array(integer range <>) of failed_element_t;
 
 	-- Data RX
-	signal out_data_old		: failed_t(1 downto 0);
+	signal out_data_old		: failed_t(1 downto 0) :=
+		(others => (data => (others => '-'), valid => '0'));
 	signal read_failed		: std_ulogic;
 	signal oe				: std_ulogic;
 	signal adbus_int		: std_ulogic_vector(in_data'range);
-	signal ft_read_old		: std_ulogic_vector(1 downto 0);
+	signal ft_read_old		: std_ulogic_vector(1 downto 0) := (others => '0');
 	signal out_data_int		: std_ulogic_vector(in_data'range) := (others => '0');
 	signal out_valid_int	: std_ulogic;
 
 	-- Data TX
-	signal in_data_old		: failed_t(2 downto 0);
-	signal ft_write_old		: std_ulogic_vector(1 downto 0);
-	signal write_failed		: std_ulogic;
-	signal old_counter		: unsigned(1 downto 0);
+	signal in_data_old		: failed_t(2 downto 0) :=
+		(others => (data => (others => '-'), valid => '0'));
+	signal ft_write_old		: std_ulogic_vector(1 downto 0)  := (others => '0');
+	signal write_failed		: std_ulogic := '0';
+	signal old_counter		: unsigned(1 downto 0) := (others => '0');
 	signal in_read_int		: std_ulogic;
-	signal in_read_old		: std_ulogic;
+	signal in_read_old		: std_ulogic := '0';
 
 	-- Force signals into IO pads
 	-- Warning XST specific syntax

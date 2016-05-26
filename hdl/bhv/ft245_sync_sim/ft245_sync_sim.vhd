@@ -40,8 +40,8 @@ entity ft245_sync_sim is
 		reset_n		: in	std_ulogic;
 		suspend_n	: out	std_ulogic;
 
-		d_data_out	: out	std_ulogic_vector(7 downto 0);
-		d_data_out_valid : out std_ulogic;
+		d_data_out	: out	std_ulogic_vector(7 downto 0) := (others => '-');
+		d_data_out_valid : out std_ulogic := '0';
 		d_data_in	: in	std_ulogic_vector(7 downto 0);
 		d_data_write: in	std_ulogic;
 		d_data_full	: out	std_ulogic
@@ -58,15 +58,16 @@ architecture bhv of ft245_sync_sim is
 	signal tx_full		: std_ulogic;
 	signal status_empty	: std_ulogic;
 	signal status_full	: std_ulogic;
-	signal rd_empty		: std_ulogic;
 	signal wr			: std_ulogic;
-	signal tx_enable	: std_ulogic;
-	signal tx_enable_old: std_ulogic;
+	signal tx_enable	: std_ulogic := '0';
+	signal tx_enable_old: std_ulogic := '0';
 	signal tx_fifo_empty: std_ulogic;
-	signal txe			: std_ulogic;
+	signal txe			: std_ulogic := '1';
 	signal tx			: std_ulogic;
 	signal tmp			: std_ulogic_vector(adbus'range);
 begin
+
+reset <= not reset_n;
 
 oe			<= not oe_n;
 wr			<= not wr_n and txe and not tx_full;
@@ -162,12 +163,5 @@ port map
 );
 
 rd <= not rd_n and not status_empty;
-
-i_reset : entity work.reset
-port map
-(
-	reset	=> reset,
-	clock	=> clock
-);
 
 end architecture bhv;

@@ -22,19 +22,11 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity tb is
-generic
-(
-	g_parallel		: natural := 4;
-	g_nrdata_log2	: natural := 5
-);
-end tb;
+architecture bhv of managed_tb is
+	constant bug_severity	: severity_level := warning;
+	constant g_parallel		: natural := 4;
+	constant g_nrdata_log2	: natural := 5;
 
-architecture bhv of tb is
-	constant bug_severity : severity_level := failure;
-
-	signal reset			: std_ulogic;
-	signal clock			: std_ulogic;
 	signal adbus			: std_logic_vector(7 downto 0);
 	signal reset_n			: std_ulogic;
 	signal txe_n			: std_ulogic;
@@ -57,10 +49,8 @@ architecture bhv of tb is
 	signal adc_data			: std_ulogic_vector(g_parallel*16-1 downto 0);
 	signal adc_data_valid	: std_ulogic;
 
-	signal stop				: std_ulogic;
 	signal tmp				: std_ulogic_vector(11 downto 0);
 	signal expected_data	: std_ulogic_vector(g_parallel*16-1 downto 0);
-
 begin
 
 tb_proc: process
@@ -69,8 +59,7 @@ tb_proc: process
 	stop <= '0';
 
 	tmp <= (0 => '1', others => '0');
-
-	wait until falling_edge(reset);
+	wait for 0 ns;
 
 	for i in 0 to 1000 loop
 
@@ -197,24 +186,6 @@ port map
 	out_ready	=> '1',
 	out_data	=> adc_data,
 	out_write	=> adc_data_valid
-);
-
-i_reset: entity work.reset
-port map
-(
-	reset	=> reset,
-	clock	=> clock
-);
-
-i_clock: entity work.clock_stop
-generic map
-(
-	frequency => 60.0e6
-)
-port map
-(
-	clock	=> clock,
-	stop	=> stop
 );
 
 end bhv;

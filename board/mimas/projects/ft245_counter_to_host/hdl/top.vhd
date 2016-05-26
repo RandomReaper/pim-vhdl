@@ -40,7 +40,7 @@ port
 	reset_n			: out	std_ulogic;
 	suspend_n		: in	std_ulogic;
 
-	led				: out	std_ulogic_vector(7 downto 0);
+	led				: out	std_ulogic_vector(7 downto 0) := x"aa";
 
 	reset			: in	std_ulogic
 );
@@ -57,8 +57,7 @@ architecture rtl of top is
 	signal write			: std_ulogic;
 	signal read_valid		: std_ulogic;
 
-	signal counter			: unsigned(7 downto 0);
-	signal counter_valid	: std_ulogic;
+	signal counter			: unsigned(7 downto 0) := (others => '0');
 begin
 
 i_ft_if : entity work.ft245_sync_if
