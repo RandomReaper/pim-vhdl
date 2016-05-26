@@ -22,18 +22,9 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity tb is
-generic
-(
-	g_nrdata_log2		: natural := 3
-);
-end tb;
-
-architecture bhv of tb is
-	constant bug_severity : severity_level := failure;
-
-	signal reset			: std_ulogic;
-	signal clock			: std_ulogic;
+architecture bhv of managed_tb is
+	constant bug_severity	: severity_level := failure;
+	constant g_nrdata_log2	: natural := 3;
 
 	signal counter			: unsigned(7 downto 0);
 
@@ -51,8 +42,6 @@ architecture bhv of tb is
 
 	signal out_data			: std_ulogic_vector(7 downto 0);
 	signal out_valid		: std_ulogic;
-
-	signal stop				: std_ulogic;
 
 	signal expected_data	: std_ulogic_vector(7 downto 0);
 
@@ -191,23 +180,5 @@ begin
 		read_valid <= read;
 	end if;
 end process;
-
-i_clock : entity work.clock_stop
-generic map
-(
-	frequency	=> 80.0e6
-)
-port map
-(
-	clock	=> clock,
-	stop	=> stop
-);
-
-i_reset : entity work.reset
-port map
-(
-	reset	=> reset,
-	clock	=> clock
-);
 
 end bhv;
