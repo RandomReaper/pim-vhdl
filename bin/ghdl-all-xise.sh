@@ -2,7 +2,7 @@
 #
 # @brief	Find recursievly all Xilinx ISE project files and simulate them
 #
-# @param	none
+# @param	none (= start in currrent dir) or starting directory
 # @env		verbose when VERBOSE=1
 # @return	0 when all test are
 #
@@ -25,8 +25,6 @@ function do_test
 	then
 		return
 	fi
-
-	cd $dir
 
 	WARNING_EXPECTED=0
 	WARNING_COUNT=0
@@ -72,7 +70,7 @@ function do_test
 			fi
 		fi
 
-	done <<< "$($TEST 2>&1)"
+	done <<< "$($TEST $dir 2>&1)"
 
 	if (( SUB_RESULT == 0 ))
 	then
@@ -81,11 +79,16 @@ function do_test
 		echo "FAILURE"
 		RESULT=1
 	fi
-	cd $BASE
 }
 
+if [ $# -gt 0 ]
+then
+	cd $(readlink -m "$1")
+fi
+
+START_DIR=$PWD
 TEST=ghdl-sim-xise.sh
-BASE=$(readlink -m .)
+HERE=$(echo "$PWD" | sed -e s~"$(git rev-parse --show-toplevel)"/~~)
 
 # Get max length
 LENGTH=0
@@ -99,7 +102,7 @@ done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
 
 RESULT=0
 
-echo "Running all simple tb from $PWD"
+echo "Running all 'tb' from $HERE directory"
 while read dir
 do
 	do_test
@@ -110,9 +113,9 @@ for USE_RESET in 0 1
 do
 	if [ $USE_RESET -eq 1 ]
 	then
-		echo "Running all managed_tb from $PWD with asynchronous reset"
+		echo "Running all 'managed_tb' from $HERE directory with asynchronous reset"
 	else
-		echo "Running all managed_tb from $PWD without reset"
+		echo "Running all 'managed_tb' from $HERE directory without reset"
 	fi
 
 	while read dir
@@ -121,5 +124,7 @@ do
 	done <<< "$(find . -name '*.xise' -exec grep -q "managed_tb\.vhd" {} \; -printf '%h\n' | sort)"
 	echo
 done
+
+cd $START_DIR
 
 exit $RESULT

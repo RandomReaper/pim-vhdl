@@ -103,25 +103,39 @@ all.sh
 ```
 Expected result:
 ```
+Running all 'tb' from tb directory
 ./ad7476/00_reset                  : success
-./ad7476/01_simple                 : success
 ./fifo/00_reset                    : success
 ./fifo/01_reset_preread            : success
 ./fifo/02_flags                    : success
-./fifo/03_simple                   : success
-./fifo/04_preread                  : success
 ./ft245_sync_if/00_reset           : success
 ./ft245_sync_if/01_xfer            : success
-./ft245_sync_if/02_pingpong        : success
-./ft245_sync_if/03_counter_to_host : success
 ./packetizer/00_reset              : success
-./packetizer/01_simple             : success
 ./project/adc2ftd_02/00_reset      : success
-./project/adc2ftd_02/01_full       : success
 ./width_changer/00_reset           : success
 ./width_changer/01_bigger          : success
 ./width_changer/02_smaller         : success
+
+Running all 'managed_tb' from tb directory without reset
+./ad7476/01_simple                 : success
+./fifo/03_simple                   : success
+./fifo/04_preread                  : success
+./ft245_sync_if/02_pingpong        : success
+./ft245_sync_if/03_counter_to_host : success
+./packetizer/01_simple             : success
+./project/adc2ftd_02/01_full       : success
 ./width_changer/03_full            : success
+
+Running all 'managed_tb' from tb directory with asynchronous reset
+./ad7476/01_simple                 : success
+./fifo/03_simple                   : success
+./fifo/04_preread                  : success
+./ft245_sync_if/02_pingpong        : success
+./ft245_sync_if/03_counter_to_host : success
+./packetizer/01_simple             : success
+./project/adc2ftd_02/01_full       : success
+./width_changer/03_full            : success
+
 ```
 
 ### Automated testing
