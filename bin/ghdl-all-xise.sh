@@ -19,6 +19,66 @@
 
 source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/env.sh
 
+function do_test
+{
+	cd $dir
+
+	WARNING_EXPECTED=0
+	WARNING_COUNT=0
+	SUB_RESULT=2
+
+	export USE_RESET
+
+	printf "%-$LENGTH""s : " "$dir"
+
+	while read line
+	do
+		if [ ! -z "$VERBOSE" ]
+		then
+			echo $line
+		fi
+
+		if echo $line | grep ':(assertion warning):' > /dev/null
+		then
+			((WARNING_COUNT++))
+			if (( WARNING_EXPECTED != WARNING_COUNT))
+			then
+				echo warning rised before expected
+				SUB_RESULT=1
+			fi
+		fi
+
+		if echo $line | grep ':(assertion note): PIM_VHDL_WARNING_EXPECTED' > /dev/null
+		then
+			((WARNING_EXPECTED++))
+		fi
+
+		if echo $line | grep 'PIM_VHDL_SIMULATION_DONE' > /dev/null
+		then
+			SUB_RESULT=0
+			if (( WARNING_EXPECTED != WARNING_COUNT))
+			then
+				SUB_RESULT=1
+			fi
+
+			if [ ! -z "$VERBOSE" ]
+			then
+				echo warning expected/count:$WARNING_EXPECTED/$WARNING_COUNT
+			fi
+		fi
+
+	done <<< "$($TEST 2>&1)"
+
+	if (( SUB_RESULT == 0 ))
+	then
+		echo "success"
+	else
+		echo "FAILURE"
+		RESULT=1
+	fi
+	cd $BASE
+}
+
 TEST=ghdl-sim-xise.sh
 BASE=$(readlink -m .)
 
@@ -33,68 +93,27 @@ do
 done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
 
 RESULT=0
+
+echo "Running all simple tb from $PWD"
+while read dir
+do
+	do_test
+done <<< "$(find . -name '*.xise' ! -exec grep -q "managed_tb\.vhd" {} \; -printf '%h\n' | sort)"
+echo
+
 for USE_RESET in 0 1
 do
-	echo "Running all tb from $PWD with USE_RESET=$USE_RESET"
+	if [ $USE_RESET -eq 1 ]
+	then
+		echo "Running all managed_tb from $PWD with asynchronous reset"
+	else
+		echo "Running all managed_tb from $PWD without reset"
+	fi
+
 	while read dir
 	do
-		cd $dir
-
-		WARNING_EXPECTED=0
-		WARNING_COUNT=0
-		SUB_RESULT=2
-
-		export USE_RESET
-
-		printf "%-$LENGTH""s : " "$dir"
-
-		while read line
-		do
-			if [ ! -z "$VERBOSE" ]
-			then
-				echo $line
-			fi
-
-			if echo $line | grep ':(assertion warning):' > /dev/null
-			then
-				((WARNING_COUNT++))
-				if (( WARNING_EXPECTED != WARNING_COUNT))
-				then
-					echo warning rised before expected
-					SUB_RESULT=1
-				fi
-			fi
-
-			if echo $line | grep ':(assertion note): PIM_VHDL_WARNING_EXPECTED' > /dev/null
-			then
-				((WARNING_EXPECTED++))
-			fi
-
-			if echo $line | grep 'PIM_VHDL_SIMULATION_DONE' > /dev/null
-			then
-				SUB_RESULT=0
-				if (( WARNING_EXPECTED != WARNING_COUNT))
-				then
-					SUB_RESULT=1
-				fi
-
-				if [ ! -z "$VERBOSE" ]
-				then
-					echo warning expected/count:$WARNING_EXPECTED/$WARNING_COUNT
-				fi
-			fi
-
-		done <<< "$($TEST 2>&1)"
-
-		if (( SUB_RESULT == 0 ))
-		then
-			echo "success"
-		else
-			echo "FAILURE"
-			RESULT=1
-		fi
-		cd $BASE
-	done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
+		do_test
+	done <<< "$(find . -name '*.xise' -exec grep -q "managed_tb\.vhd" {} \; -printf '%h\n' | sort)"
 	echo
 done
 
