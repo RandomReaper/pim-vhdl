@@ -21,6 +21,11 @@ source "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"/env.sh
 
 function do_test
 {
+	if [ -z "$dir" ]
+	then
+		return
+	fi
+
 	cd $dir
 
 	WARNING_EXPECTED=0
