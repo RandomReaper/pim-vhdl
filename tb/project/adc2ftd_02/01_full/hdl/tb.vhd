@@ -23,7 +23,7 @@ library ieee;
 	use ieee.numeric_std.all;
 
 architecture bhv of managed_tb is
-	constant bug_severity	: severity_level := warning;
+	constant bug_severity	: severity_level := failure;
 	constant g_parallel		: natural := 4;
 	constant g_nrdata_log2	: natural := 5;
 
