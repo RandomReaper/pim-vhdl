@@ -58,14 +58,11 @@ i_dut : entity work.width_changer
 	);
 
 i_clock: entity work.clock_stop
-generic map
-(
-	frequency => 100.0e6
-)
 port map
 (
-	clock	=> clock,
-	stop	=> stop
+	frequency	=> 100.0e6,
+	clock		=> clock,
+	stop		=> stop
 );
 
 tb : process

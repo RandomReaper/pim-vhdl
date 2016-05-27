@@ -23,20 +23,19 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity clock_stop is
-generic
-(
-	frequency	: real	:= 1.0e6
-);
 port
 (
 	stop		: in	std_ulogic;
-	clock		: out	std_ulogic
+	clock		: out	std_ulogic;
+	frequency	: in	real := 1.0e6
 );
 end clock_stop;
 
 architecture bhv of clock_stop is
-	constant period : time := (1.0 / frequency) * (1 sec);
+	signal period : time := (1.0 / frequency) * (1 sec);
 begin
+
+period <= (1.0 / frequency) * (1 sec);
 
 clock_gen : process is
 begin

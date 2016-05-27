@@ -49,6 +49,8 @@ architecture bhv of managed_tb is
 	signal d_data_out_valid	: std_ulogic;
 begin
 
+frequency <= 60.0e6;
+
 tb_proc: process
 	variable timeout : integer;
 begin

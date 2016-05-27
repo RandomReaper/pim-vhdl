@@ -127,12 +127,9 @@ port map
 
 
 i_clock : entity work.clock_stop
-generic map
-(
-	frequency	=> 80.0e6
-)
 port map
 (
+	frequency	=> 80.0e6,
 	clock		=> clock,
 	stop		=> stop
 );

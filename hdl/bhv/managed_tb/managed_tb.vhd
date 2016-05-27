@@ -25,9 +25,10 @@ library ieee;
 entity managed_tb is
 	port
 	(
-		clock	: in		std_ulogic;
-		reset	: in		std_ulogic;
-		stop	: out		std_ulogic
+		clock		: in	std_ulogic;
+		reset		: in	std_ulogic;
+		stop		: out	std_ulogic;
+		frequency	: out	real := 1.0e6
 	);
 end managed_tb;
 
@@ -40,9 +41,10 @@ begin
 end tb;
 
 architecture bhv_with_reset of tb is
-	signal clock	: std_ulogic;
-	signal reset	: std_ulogic := '0';
-	signal stop		: std_ulogic;
+	signal clock		: std_ulogic;
+	signal reset		: std_ulogic := '0';
+	signal stop			: std_ulogic;
+	signal frequency	: real := 1.0e6;
 begin
 
 	i_managed_tb: entity work.managed_tb
@@ -54,12 +56,9 @@ begin
 	);
 
 	i_clock : entity work.clock_stop
-	generic map
-	(
-		frequency	=> 80.0e6
-	)
 	port map
 	(
+		frequency	=> frequency,
 		clock		=> clock,
 		stop		=> stop
 	);
@@ -74,26 +73,25 @@ begin
 end architecture bhv_with_reset;
 
 architecture bhv_without_reset of tb is
-	signal clock	: std_ulogic;
-	signal reset	: std_ulogic := '0';
-	signal stop		: std_ulogic;
+	signal clock		: std_ulogic;
+	signal reset		: std_ulogic := '0';
+	signal stop			: std_ulogic;
+	signal frequency	: real := 1.0e6;
 begin
 
 	i_managed_tb: entity work.managed_tb
 	port map
 	(
-		reset	=> reset,
-		clock	=> clock,
-		stop	=> stop
+		frequency	=> frequency,
+		reset		=> reset,
+		clock		=> clock,
+		stop		=> stop
 	);
 
 	i_clock : entity work.clock_stop
-	generic map
-	(
-		frequency	=> 80.0e6
-	)
 	port map
 	(
+		frequency	=> frequency,
 		clock		=> clock,
 		stop		=> stop
 	);

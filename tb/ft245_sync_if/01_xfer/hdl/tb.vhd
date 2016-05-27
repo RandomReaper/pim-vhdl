@@ -99,8 +99,9 @@ oe	<= not oe_n;
 i_clock: entity work.clock_stop
 port map
 (
-	clock	=> clock,
-	stop	=> stop
+	frequency	=> 1.0e6,
+	clock		=> clock,
+	stop		=> stop
 );
 
 i_fifo : entity work.fifo

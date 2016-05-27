@@ -53,6 +53,8 @@ architecture bhv of managed_tb is
 	signal expected_data	: std_ulogic_vector(g_parallel*16-1 downto 0);
 begin
 
+frequency <= 60.0e6;
+
 tb_proc: process
 	variable timeout : integer;
 	begin
