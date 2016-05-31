@@ -221,7 +221,7 @@ end process;
 end rtl_smaller;
 
 architecture rtl_bigger of wc_int is
-	signal memory				: std_ulogic_vector(out_data'range) := (others => '0');
+	signal memory				: std_ulogic_vector(out_data'range);
 	signal state1				: std_ulogic_vector((out_data'length/in_data'length) downto 0) := (others => '0');
 	signal state				: std_ulogic_vector((out_data'length/in_data'length) downto 0);
 	signal out_write_int		: std_ulogic := '0';

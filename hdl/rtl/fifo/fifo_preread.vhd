@@ -53,7 +53,7 @@ entity fifo_preread is
 		status_full			: out std_ulogic;
 		status_empty		: out std_ulogic;
 		status_write_error	: out std_ulogic;
-		status_read_error	: out std_ulogic;
+		status_read_error	: out std_ulogic := '0';
 
 		free 				: out std_ulogic_vector(g_depth_log2 downto 0);
 		used 				: out std_ulogic_vector(g_depth_log2 downto 0)
@@ -62,9 +62,9 @@ end fifo_preread;
 
 architecture rtl of fifo_preread is
 	signal read_data_fifo	: std_ulogic_vector(read_data'range);
-	signal read_data_int	: std_ulogic_vector(read_data'range);
+	signal read_data_int	: std_ulogic_vector(read_data'range) := (others => '0');
 	signal read_fifo		: std_ulogic;
-	signal read_fifo_old	: std_ulogic;
+	signal read_fifo_old	: std_ulogic := '0';
 	signal status_empty_fifo: std_ulogic;
 	signal data_ready		: std_ulogic := '0';
 begin
