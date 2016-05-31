@@ -45,11 +45,7 @@ entity top_hw is
 end top_hw;
 
 architecture bhv of top_hw is
-	signal clock		: std_ulogic;
-	signal reset		: std_ulogic;
 begin
-
-clock <= FT_CLKOUT;
 
 i_top : entity work.top
 port map
@@ -66,16 +62,9 @@ port map
 	reset_n			=> FT_nRESET,
 	suspend_n		=> FT_nSUSPEND,
 
-	reset			=> reset,
+	reset			=> '0',
 
 	led				=> led
-);
-
-i_reset : entity work.reset_for_ram_fpga
-port map
-(
-	clock	=> clock,
-	reset	=> reset
 );
 
 end bhv;

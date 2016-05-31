@@ -50,7 +50,6 @@ port
 end top_hw;
 
 architecture bhv of top_hw is
-	signal clock		: std_ulogic;
 	signal reset		: std_ulogic;
 
 	signal sclk			: std_ulogic;
@@ -58,8 +57,7 @@ architecture bhv of top_hw is
 	signal sdata		: std_ulogic_vector(3 downto 0);
 begin
 
-
-clock <= FT_CLKOUT;
+reset <= '0';
 
 ADC_CLOCK	<= '0';
 ADC_NCS		<= '1';
@@ -98,14 +96,6 @@ port map
 	sclk		=> sclk,
 	n_cs		=> n_cs,
 	sdata		=> sdata
-);
-
-
-i_reset : entity work.reset_for_ram_fpga
-port map
-(
-	clock	=> clock,
-	reset	=> reset
 );
 
 end bhv;

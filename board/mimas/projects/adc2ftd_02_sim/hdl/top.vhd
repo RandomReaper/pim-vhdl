@@ -41,7 +41,7 @@ port
 	reset_n			: out	std_ulogic;
 	suspend_n		: in	std_ulogic;
 
-	led				: out	std_ulogic_vector(7 downto 0);
+	led				: out	std_ulogic_vector(7 downto 0) := x"55";
 
 	reset			: in	std_ulogic;
 	-- ADCs
