@@ -31,7 +31,6 @@ entity reset_for_ram_fpga is
 	);
 end reset_for_ram_fpga;
 
-
 architecture rtl of reset_for_ram_fpga is
 	signal counter	: unsigned(1 downto 0) := (others => '0');
 begin

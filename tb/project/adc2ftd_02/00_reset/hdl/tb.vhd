@@ -32,8 +32,8 @@ end tb;
 architecture bhv of tb is
 	constant bug_severity : severity_level := failure;
 
-	signal reset 			: std_ulogic;
-	signal clock 			: std_ulogic;
+	signal reset			: std_ulogic;
+	signal clock			: std_ulogic;
 
 	signal adbus			: std_logic_vector(7 downto 0) := (others => 'Z');
 	signal rxf_n			: std_ulogic;

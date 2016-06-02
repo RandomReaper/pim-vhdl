@@ -24,7 +24,7 @@ library ieee;
 entity depacketizer is
 generic
 (
-	g_nrdata_log2		: natural := 5
+	g_nrdata_log2	: natural := 5
 );
 port
 (

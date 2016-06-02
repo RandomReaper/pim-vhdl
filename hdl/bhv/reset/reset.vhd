@@ -25,7 +25,7 @@ library ieee;
 entity reset is
 	generic
 	(
-		clock_duration : natural := 5
+		clock_duration	: natural := 5
 	);
 	port
 	(

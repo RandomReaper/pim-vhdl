@@ -32,8 +32,8 @@ architecture bhv of tb is
 	constant g_depth : integer := 2**g_depth_log2;
 	constant half_period : time := 0.5 ns;
 
-	signal reset 				: std_ulogic;
-	signal clock 				: std_ulogic;
+	signal reset				: std_ulogic;
+	signal clock				: std_ulogic;
 	signal reset_sync			: std_ulogic;
 	signal write				: std_ulogic;
 	signal write_data			: std_ulogic_vector(7 downto 0);
@@ -60,8 +60,8 @@ begin
 		)
 		port map
 		(
-			reset 				=> reset,
-			clock 				=> clock,
+			reset				=> reset,
+			clock				=> clock,
 			reset_sync			=> reset_sync,
 			write				=> write,
 			write_data			=> write_data,
@@ -71,8 +71,8 @@ begin
 			status_empty		=> status_empty,
 			status_write_error	=> status_write_error,
 			status_read_error	=> status_read_error,
-			free 				=> free_int,
-			used 				=> used_int
+			free				=> free_int,
+			used				=> used_int
 		);
 
 	tb : process

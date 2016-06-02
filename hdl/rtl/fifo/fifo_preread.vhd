@@ -55,8 +55,8 @@ entity fifo_preread is
 		status_write_error	: out std_ulogic;
 		status_read_error	: out std_ulogic := '0';
 
-		free 				: out std_ulogic_vector(g_depth_log2 downto 0);
-		used 				: out std_ulogic_vector(g_depth_log2 downto 0)
+		free				: out std_ulogic_vector(g_depth_log2 downto 0);
+		used				: out std_ulogic_vector(g_depth_log2 downto 0)
 	);
 end fifo_preread;
 
@@ -125,7 +125,7 @@ end process;
 i_fifo: entity work.fifo
 generic map
 (
-	g_depth_log2 		=> g_depth_log2
+	g_depth_log2		=> g_depth_log2
 )
 port map
 (
@@ -147,7 +147,7 @@ port map
 	status_write_error	=> status_write_error,
 	status_read_error	=> open,
 
-	free 				=> free,
-	used 				=> used
+	free				=> free,
+	used				=> used
 );
 end architecture rtl;

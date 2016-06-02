@@ -133,7 +133,7 @@ port map
 	d_data_full			=> d_data_full,
 
 	d_data_out			=> d_data_out,
-	d_data_out_valid 	=> d_data_out_valid
+	d_data_out_valid	=> d_data_out_valid
 );
 
 i_depacketizer : entity work.depacketizer

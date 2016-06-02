@@ -55,8 +55,8 @@ port
 	status_write_error	: out std_ulogic;
 	status_read_error	: out std_ulogic;
 
-	free 				: out std_ulogic_vector(g_depth_log2 downto 0);
-	used 				: out std_ulogic_vector(g_depth_log2 downto 0)
+	free				: out std_ulogic_vector(g_depth_log2 downto 0);
+	used				: out std_ulogic_vector(g_depth_log2 downto 0)
 );
 end fifo;
 
@@ -65,7 +65,7 @@ architecture rtl of fifo is
 	subtype mem_range_r is natural range (g_depth_log2 - 1) downto 0;
 	subtype ptr_range_r is natural range (g_depth_log2 - 0) downto 0;
 
-	signal mem 				: mem_t := (others => (others => '0'));
+	signal mem				: mem_t := (others => (others => '0'));
 
 	signal full				: std_ulogic := '0';
 	signal empty			: std_ulogic := '1';
@@ -79,7 +79,7 @@ architecture rtl of fifo is
 	signal full_async		: std_ulogic;
 	signal empty_async		: std_ulogic;
 
-	signal used_int 		: unsigned(used'range) := (others => '0');
+	signal used_int			: unsigned(used'range) := (others => '0');
 begin
 
 -----------------------------------------------------------------------------

@@ -30,9 +30,9 @@ architecture bhv of tb is
 
 	constant half_period : time := 0.5 ns;
 
-	signal reset 		: std_ulogic;
-	signal clock 		: std_ulogic;
-	signal stop 		: std_ulogic;
+	signal reset		: std_ulogic;
+	signal clock		: std_ulogic;
+	signal stop			: std_ulogic;
 	signal in_data		: std_ulogic_vector(3 downto 0);
 	signal in_write		: std_ulogic;
 	signal in_ready		: std_ulogic;

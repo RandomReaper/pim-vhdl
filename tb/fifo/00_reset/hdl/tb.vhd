@@ -31,9 +31,9 @@ architecture bhv of tb is
 	constant g_depth_log2 : integer := 2;
 	constant g_depth : integer := 2**g_depth_log2;
 
-	signal reset 				: std_ulogic;
-	signal clock 				: std_ulogic;
-	signal stop 				: std_ulogic;
+	signal reset				: std_ulogic;
+	signal clock				: std_ulogic;
+	signal stop					: std_ulogic;
 	signal reset_sync			: std_ulogic;
 	signal write				: std_ulogic;
 	signal write_data			: std_ulogic_vector(7 downto 0);
@@ -135,8 +135,8 @@ i_fifo : entity work.fifo
 	)
 	port map
 	(
-		reset 				=> reset,
-		clock 				=> clock,
+		reset				=> reset,
+		clock				=> clock,
 		reset_sync			=> reset_sync,
 		write				=> write,
 		write_data			=> write_data,
@@ -146,8 +146,8 @@ i_fifo : entity work.fifo
 		status_empty		=> status_empty,
 		status_write_error	=> status_write_error,
 		status_read_error	=> status_read_error,
-		free 				=> free_int,
-		used 				=> used_int
+		free				=> free_int,
+		used				=> used_int
 	);
 
 i_clock : entity work.clock_stop

@@ -200,14 +200,14 @@ out_write <= out_write_int;
 process(state, memory, out_ready)
 begin
 	out_write_int	<= '0';
-	in_ready 		<= '1';
+	in_ready		<= '1';
 	out_data		<= memory((1*out_data'length) - 1 downto 0);
 	--pragma synthesis_off
 	out_data(out_data'range)	<= (others => 'U');
 	--pragma synthesis_on
 	for i in state'range loop
 		if state(i) = '1' then
-			in_ready 	<= '0';
+			in_ready	<= '0';
 			out_write_int	<= out_ready;
 			out_data			<= memory(((i+1)*out_data'length) - 1 downto (i+0)*out_data'length);
 		end if;
