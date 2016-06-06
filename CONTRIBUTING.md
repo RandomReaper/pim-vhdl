@@ -18,9 +18,10 @@ Make sure the tests pass:
 
 Make your change. Add tests for your change. Make the tests pass:
 
-    rake
+    cd tb
+    all.sh
 
-Push to your fork and [submit a pull request](./compare/)
+Push to your fork and [submit a pull request](../../compare/)
 
 At this point you're waiting on us. We like to at least comment on pull requests
 within some days. We may suggest some changes or improvements or alternatives.
@@ -28,5 +29,5 @@ within some days. We may suggest some changes or improvements or alternatives.
 Some things that will increase the chance that your pull request is accepted:
 
 * Write tests.
-* Follow our [CodingStyle](./README.md#CodingStyle).
+* Follow our [CodingStyle](./README.md#codingstyle).
 * Write a good commit message.
