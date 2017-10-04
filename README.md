@@ -142,5 +142,6 @@ Running all 'managed_tb' from tb directory with asynchronous reset
 All test benches are run on [Travis CI](https://travis-ci.org), at each commit. The status of the latest run is shown after the title of this page.
 
 ## Code
-* Code for the host side of FTDI FT245 synchronous fifo is available at [ft2tcp](https://github.com/RandomReaper/ft2tcp)
+* Code for the host side of FTDI FT245 synchronous fifo is available at [ft2tcp](https://github.com/RandomReaper/ft2tcp) and
+[ft2stdio](https://github.com/RandomReaper/ft2stdio)
 
