@@ -6,4 +6,6 @@ export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
 source bin/env.sh
 cd tb
 all.sh
+RESULT=$?
 cd $ORIG
+exit $RESULT
