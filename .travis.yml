@@ -20,11 +20,11 @@ cache:
       - $HOME/lib
 
 before_install:
-  - .travis/deps.sh
+  - ci/travis-deps.sh
 
 script:
-  - .travis/tb.sh
-  - .travis/codingstyle.sh
+  - ci/tb.sh
+  - ci/codingstyle.sh
 
 after_failure:
-  - VERBOSE=1 .travis/tb.sh
+  - VERBOSE=1 ci/tb.sh
