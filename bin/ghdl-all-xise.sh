@@ -38,10 +38,10 @@ function do_test
 	do
 		if [ ! -z "$VERBOSE" ]
 		then
-			echo $line
+			echo "$line"
 		fi
 
-		if echo $line | grep ':(assertion warning):' > /dev/null
+		if echo "$line" | grep ':(assertion warning):' > /dev/null
 		then
 			((WARNING_COUNT++))
 			if (( WARNING_EXPECTED != WARNING_COUNT))
@@ -51,12 +51,12 @@ function do_test
 			fi
 		fi
 
-		if echo $line | grep ':(assertion note): PIM_VHDL_WARNING_EXPECTED' > /dev/null
+		if echo "$line" | grep ':(assertion note): PIM_VHDL_WARNING_EXPECTED' > /dev/null
 		then
 			((WARNING_EXPECTED++))
 		fi
 
-		if echo $line | grep 'PIM_VHDL_SIMULATION_DONE' > /dev/null
+		if echo "$line" | grep 'PIM_VHDL_SIMULATION_DONE' > /dev/null
 		then
 			SUB_RESULT=0
 			if (( WARNING_EXPECTED != WARNING_COUNT))
@@ -70,7 +70,7 @@ function do_test
 			fi
 		fi
 
-	done <<< "$($TEST $dir 2>&1)"
+	done <<< "$($TEST "$dir" 2>&1)"
 
 	if (( SUB_RESULT == 0 ))
 	then
@@ -83,7 +83,7 @@ function do_test
 
 if [ $# -gt 0 ]
 then
-	cd $(readlink -m "$1")
+	cd "$(readlink -m "$1")"
 fi
 
 START_DIR=$PWD
@@ -125,6 +125,6 @@ do
 	echo
 done
 
-cd $START_DIR
+cd "$START_DIR"
 
-exit $RESULT
+exit "$RESULT"

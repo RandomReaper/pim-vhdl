@@ -16,49 +16,49 @@ do
 	TEST="cat $file | sed -e 's/--.*//' | grep -n '    '"
 	if eval "$TEST" > /dev/null
 	then
-		>&2 echo $file : CodingStyle 4 space found, should be a TAB.
+		>&2 echo "$file" : CodingStyle 4 space found, should be a TAB.
 		>&2 eval "$TEST"
 		>&2 echo
 		RESULT=1
 		if [ ! -z "$FIX" ]
 		then
-			$FIX $file
+			$FIX "$file"
 		fi
 	fi
 	TEST="cat $file | sed -e 's/--.*//' | grep -n -P ' \t'"
 	if eval "$TEST" > /dev/null
 	then
-		>&2 echo $file : CodingStyle space followed by TAB.
+		>&2 echo "$file" : CodingStyle space followed by TAB.
 		>&2 eval "$TEST"
 		>&2 echo
 		RESULT=1
 		if [ ! -z "$FIX" ]
 		then
-			$FIX $file
+			$FIX "$file"
 		fi
 	fi
 	TEST="cat $file | grep -n ' $'"
 	if eval "$TEST" > /dev/null
 	then
-		>&2 echo $file : CodingStyle leading space.
+		>&2 echo "$file" : CodingStyle leading space.
 		>&2 eval "$TEST"
 		>&2 echo
 		RESULT=1
 		if [ ! -z "$FIX" ]
 		then
-			$FIX $file
+			$FIX "$file"
 		fi
 	fi
 	TEST="cat $file | grep -n -P '\t$'"
 	if eval "$TEST" > /dev/null
 	then
-		>&2 echo $file : CodingStyle leading TAB.
+		>&2 echo "$file" : CodingStyle leading TAB.
 		>&2 eval "$TEST"
 		>&2 echo
 		RESULT=1
 		if [ ! -z "$FIX" ]
 		then
-			$FIX $file
+			$FIX "$file"
 		fi
 	fi
 done <<< "$(find . -name '*.vhd' | sort)"

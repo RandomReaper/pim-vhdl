@@ -17,8 +17,8 @@ OPTIONS="--workdir=$DIR"
 
 if uname | grep CYGWIN > /dev/null
 then
-	OPTIONS="--workdir=$(cygpath -w $DIR)"
-	echo $OPTIONS
+	OPTIONS="--workdir=$(cygpath -w "$DIR")"
+	echo "$OPTIONS"
 fi
 
 MANAGED=0
@@ -26,10 +26,10 @@ for file in "$@"
 do
 	if [ ! -z "$VERBOSE" ]
 	then
-		echo adding $file
+		echo adding "$file"
 	fi
-	$GHDL -i $OPTIONS "$file"
-	if cat "$file" | grep -q 'managed_tb'
+	$GHDL -i "$OPTIONS" "$file"
+	if grep -q 'managed_tb' "$file"
 	then
 		MANAGED=1
 	fi
@@ -51,7 +51,7 @@ then
 	fi
 fi
 
-$GHDL -m $OPTIONS tb $ARCH
-$GHDL -e $OPTIONS tb $ARCH
-$GHDL -r $OPTIONS tb $ARCH --ieee-asserts=disable-at-0
-rm -r $DIR
+$GHDL -m "$OPTIONS" tb $ARCH
+$GHDL -e "$OPTIONS" tb $ARCH
+$GHDL -r "$OPTIONS" tb $ARCH --ieee-asserts=disable-at-0
+rm -r "$DIR"

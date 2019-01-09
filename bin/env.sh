@@ -8,12 +8,12 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PATH=$CURRENT_DIR:$PATH
 if ! ghdl -v >/dev/null 2>&1
 then
-	if ! [ -e $CURRENT_DIR/.cache/ghdl/bin/ghdl ] || ! [ -e $HOME/lib/libgnat-4.6.so.1 ]
+	if ! [ -e "$CURRENT_DIR"/.cache/ghdl/bin/ghdl ] || ! [ -e "$HOME"/lib/libgnat-4.6.so.1 ]
 	then
 		>&2 echo '***************************************************************************'
-		>&2 echo '*** WARNING: ghdl not found, trying to install it in $CURRENT_DIR/.cache'
+		>&2 echo "*** WARNING: ghdl not found, trying to install it in $CURRENT_DIR/.cache"
 		>&2 echo '***************************************************************************'
-		HOME=$CURRENT_DIR/.cache $CURRENT_DIR/../ci/travis-deps.sh || exit 1
+		HOME="$CURRENT_DIR"/.cache "$CURRENT_DIR"/../ci/travis-deps.sh || exit 1
 	fi
 
 	export PATH=$CURRENT_DIR/.cache/ghdl/bin:$PATH
@@ -23,7 +23,7 @@ then
 		export LD_LIBRARY_PATH=$CURRENT_DIR/.cache/lib:$LD_LIBRARY_PATH
 	fi
 
-	echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+	echo LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
 	if ! ghdl -v
 	then
 		>&2 echo '***************************************************************************'
