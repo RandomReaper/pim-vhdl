@@ -112,7 +112,7 @@ pipeline
         always
         {
             emailext (
-                subject: "[jenkins] Job always ${env.SUBJECT_SUB}",
+                subject: "[jenkins] Job always status:${currentBuild.result} ${env.SUBJECT_SUB}",
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
