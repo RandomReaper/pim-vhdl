@@ -13,7 +13,7 @@ then
 		>&2 echo '***************************************************************************'
 		>&2 echo '*** WARNING: ghdl not found, trying to install it in $CURRENT_DIR/.cache'
 		>&2 echo '***************************************************************************'
-		HOME=$CURRENT_DIR/.cache $CURRENT_DIR/../.travis/deps.sh || exit 1
+		HOME=$CURRENT_DIR/.cache $CURRENT_DIR/../ci/travis-deps.sh || exit 1
 	fi
 
 	export PATH=$CURRENT_DIR/.cache/ghdl/bin:$PATH
