@@ -14,7 +14,7 @@ RUN \
   apt-get -y upgrade && \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
-  apt-get install -y byobu curl git htop man unzip vim wget && \
+  apt-get install -y git && \
   apt-get install -y gnat zlib1g-dev && \
   apt-get autoremove && apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
@@ -24,6 +24,8 @@ RUN \
   make install  && \
   cd .. && \
   rm -rf ghdl && \
+  apt-get -y --purge remove build-essential gnat zlib1g-dev && \
+  apt-get -y --purge autoremove && \
   echo OK
 
 # Add files.
