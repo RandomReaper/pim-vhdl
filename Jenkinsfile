@@ -22,7 +22,7 @@ pipeline
         {
 			steps
 			{
-				sh 'apt-get install -y git'
+				sh '#apt-get install -y git'
 			}
         }		
 		stage('tb')
