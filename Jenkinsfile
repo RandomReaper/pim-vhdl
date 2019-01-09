@@ -3,7 +3,6 @@ pipeline
     environment
     {
         PROJECTNAME = "pim-vhdl"
-        SUBJECT_SUB = "${env.PROJECTNAME} (${env.JOB_NAME}, build ${env.BUILD_NUMBER})"
     }
 
     agent
