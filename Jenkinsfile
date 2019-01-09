@@ -12,7 +12,7 @@ pipeline
         {
 	        filename 'Dockerfile'
 	        dir 'ci'
-	        additionalBuildArgs '-t jenkins-${PROJECTNAME}-${JOB_NAME}'
+	        additionalBuildArgs '-t jenkins-${JOB_NAME}'
 	        args '''
 	        	-v /tmp:/tmp
 	        	-v "${WORKSPACE}:/repo"
