@@ -21,6 +21,13 @@ pipeline
     
     stages
     {
+        stage('codingstyle')
+        {
+			steps
+			{
+				sh 'apt-get install -y git'
+			}
+        }		
 		stage('tb')
 		{
 			steps
