@@ -25,31 +25,31 @@ pipeline
 		{
 			steps
 			{
-				script
+				sh '''
+					cd /repo
+					./ci/tb.sh
+				'''
+			}
+			post
+			{
+				failure
 				{
-					try
-					{
-						sh '''
-							cd /repo
-							./ci/tb.sh
-						'''
-					}
-					catch (Exception e)
-					{
-						sh '''
-							cd /repo
-							VERBOSE=1 ./ci/tb.sh
-						'''
-  					}
+					sh '''
+						cd /repo
+						VERBOSE=1 ./ci/tb.sh
+					'''
 				}
-            }
+			}
 		}
         stage('codingstyle')
         {
+			steps
+			{
 				sh '''
 					cd /repo
 					./ci/codingstyle.sh
 				'''
+			}
         }		
     }
 
