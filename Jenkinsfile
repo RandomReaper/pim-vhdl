@@ -29,65 +29,68 @@ pipeline
 				sh '#apt-get install -y git'
 			}
         }
-        parallel
+        stage('tb')
         {
-    		stage('tb-unmanaged')
-    		{
-    			steps
-    			{
-    				sh '''
-    					cd /repo
-    					./ci/${STAGE_NAME}.sh
-    				'''
-    			}
-    			post
-    			{
-    				failure
-    				{
-    					sh '''
-    						cd /repo
-    						VERBOSE=1 ./ci/${STAGE_NAME}.sh
-    					'''
-    				}
-    			}
-    		}
-            stage('tb-managed_reset')
+            parallel
             {
-                steps
+        		stage('tb-unmanaged')
+        		{
+        			steps
+        			{
+        				sh '''
+        					cd /repo
+        					./ci/${STAGE_NAME}.sh
+        				'''
+        			}
+        			post
+        			{
+        				failure
+        				{
+        					sh '''
+        						cd /repo
+        						VERBOSE=1 ./ci/${STAGE_NAME}.sh
+        					'''
+        				}
+        			}
+        		}
+                stage('tb-managed_reset')
                 {
-                    sh '''
-                        cd /repo
-                        ./ci/${STAGE_NAME}.sh
-                    '''
-                }
-                post
-                {
-                    failure
+                    steps
                     {
                         sh '''
                             cd /repo
-                            VERBOSE=1 ./ci/${STAGE_NAME}.sh
+                            ./ci/${STAGE_NAME}.sh
                         '''
                     }
+                    post
+                    {
+                        failure
+                        {
+                            sh '''
+                                cd /repo
+                                VERBOSE=1 ./ci/${STAGE_NAME}.sh
+                            '''
+                        }
+                    }
                 }
-            }
-            stage('tb-managed_no_reset')
-            {
-                steps
+                stage('tb-managed_no_reset')
                 {
-                    sh '''
-                        cd /repo
-                        ./ci/${STAGE_NAME}.sh
-                    '''
-                }
-                post
-                {
-                    failure
+                    steps
                     {
                         sh '''
                             cd /repo
-                            VERBOSE=1 ./ci/${STAGE_NAME}.sh
+                            ./ci/${STAGE_NAME}.sh
                         '''
+                    }
+                    post
+                    {
+                        failure
+                        {
+                            sh '''
+                                cd /repo
+                                VERBOSE=1 ./ci/${STAGE_NAME}.sh
+                            '''
+                        }
                     }
                 }
             }
