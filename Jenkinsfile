@@ -112,7 +112,7 @@ pipeline
         always
         {
             emailext (
-                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} status:${currentBuild.currentResult}",
+                subject: "[jenkins][${env.JOB_NAME}] Build ${env.BUILD_NUMBER} status:${currentBuild.currentResult}",
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
@@ -123,7 +123,7 @@ pipeline
         fixed
         {
             emailext (
-                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} fixed",
+                subject: "[jenkins][${env.JOB_NAME}] Build ${env.BUILD_NUMBER} fixed",
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
@@ -132,7 +132,7 @@ pipeline
         regression
         {
             emailext (
-                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} regression",
+                subject: "[jenkins][${env.JOB_NAME}] Build ${env.BUILD_NUMBER} regression",
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
