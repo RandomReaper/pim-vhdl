@@ -14,7 +14,7 @@ RUN \
   apt-get -y upgrade && \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
-  apt-get install -y git && \
+  apt-get install -y git libgnat-7 && \
   apt-get install -y gnat zlib1g-dev && \
   apt-get autoremove && apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
@@ -41,3 +41,4 @@ WORKDIR /root
 
 # Define default command.
 CMD ["bash"]
+
