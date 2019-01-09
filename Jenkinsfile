@@ -9,7 +9,6 @@ pipeline
 	        additionalBuildArgs '-t jenkins-${JOB_NAME}'
 	        args """
 	        	-v /tmp:/tmp
-	        	-v "${env.WORKSPACE}:/repo"
 	        """
     	}
     }
@@ -32,7 +31,6 @@ pipeline
         			steps
         			{
         				sh '''
-        					cd /repo
         					./ci/${STAGE_NAME}.sh
         				'''
         			}
@@ -41,7 +39,6 @@ pipeline
         				failure
         				{
         					sh '''
-        						cd /repo
         						VERBOSE=1 ./ci/${STAGE_NAME}.sh
         					'''
         				}
@@ -52,7 +49,6 @@ pipeline
                     steps
                     {
                         sh '''
-                            cd /repo
                             ./ci/${STAGE_NAME}.sh
                         '''
                     }
@@ -61,7 +57,6 @@ pipeline
                         failure
                         {
                             sh '''
-                                cd /repo
                                 VERBOSE=1 ./ci/${STAGE_NAME}.sh
                             '''
                         }
@@ -72,7 +67,6 @@ pipeline
                     steps
                     {
                         sh '''
-                            cd /repo
                             ./ci/${STAGE_NAME}.sh
                         '''
                     }
@@ -81,7 +75,6 @@ pipeline
                         failure
                         {
                             sh '''
-                                cd /repo
                                 VERBOSE=1 ./ci/${STAGE_NAME}.sh
                             '''
                         }
@@ -94,7 +87,6 @@ pipeline
 			steps
 			{
 				sh '''
-					cd /repo
 					./ci/codingstyle.sh
 				'''
 			}
