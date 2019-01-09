@@ -28,27 +28,70 @@ pipeline
 			{
 				sh '#apt-get install -y git'
 			}
-        }		
-		stage('tb')
-		{
-			steps
-			{
-				sh '''
-					cd /repo
-					./ci/tb.sh
-				'''
-			}
-			post
-			{
-				failure
-				{
-					sh '''
-						cd /repo
-						VERBOSE=1 ./ci/tb.sh
-					'''
-				}
-			}
-		}
+        }
+        parallel
+        {
+    		stage('tb-unmanaged')
+    		{
+    			steps
+    			{
+    				sh '''
+    					cd /repo
+    					./ci/${STAGE_NAME}.sh
+    				'''
+    			}
+    			post
+    			{
+    				failure
+    				{
+    					sh '''
+    						cd /repo
+    						VERBOSE=1 ./ci/${STAGE_NAME}.sh
+    					'''
+    				}
+    			}
+    		}
+            stage('tb-managed_reset')
+            {
+                steps
+                {
+                    sh '''
+                        cd /repo
+                        ./ci/${STAGE_NAME}.sh
+                    '''
+                }
+                post
+                {
+                    failure
+                    {
+                        sh '''
+                            cd /repo
+                            VERBOSE=1 ./ci/${STAGE_NAME}.sh
+                        '''
+                    }
+                }
+            }
+            stage('tb-managed_no_reset')
+            {
+                steps
+                {
+                    sh '''
+                        cd /repo
+                        ./ci/${STAGE_NAME}.sh
+                    '''
+                }
+                post
+                {
+                    failure
+                    {
+                        sh '''
+                            cd /repo
+                            VERBOSE=1 ./ci/${STAGE_NAME}.sh
+                        '''
+                    }
+                }
+            }
+        }
         stage('codingstyle')
         {
 			steps

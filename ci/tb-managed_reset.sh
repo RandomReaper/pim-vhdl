@@ -10,7 +10,7 @@ fi
 
 
 cd tb
-all.sh
+ghdl-all-managed_reset-xise.sh
 RESULT=$?
 cd "$ORIG"
 exit $RESULT

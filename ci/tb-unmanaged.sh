@@ -10,7 +10,7 @@ fi
 
 
 cd tb
-all.sh
+ghdl-all-unmanaged-xise.sh
 RESULT=$?
 cd "$ORIG"
 exit $RESULT
