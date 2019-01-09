@@ -12,8 +12,7 @@ pipeline
         {
 	        filename 'Dockerfile'
 	        dir 'ci'
-	        args
-	        '''
+	        args '''
 	        	-v /tmp:/tmp
 	        	-v "${WORKSPACE}:/repo"
 	        '''
