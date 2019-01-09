@@ -15,6 +15,7 @@ pipeline
 	        args '''
 	        	-v /tmp:/tmp
 	        	-v "${WORKSPACE}:/repo"
+	        	-t "jenkins-$PROJECTNAME-$JOB_NAME"
 	        '''
     	}
     }
