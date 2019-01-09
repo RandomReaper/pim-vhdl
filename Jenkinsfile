@@ -12,7 +12,6 @@ pipeline
         {
 	        filename 'Dockerfile'
 	        dir 'ci'
-	        label 'pim-vhdl'
 	        args '-v /tmp:/tmp'
     	}
     }
