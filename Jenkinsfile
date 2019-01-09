@@ -123,7 +123,7 @@ pipeline
         fixed
         {
             emailext (
-                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} fixed" 
+                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} fixed",
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
@@ -132,7 +132,7 @@ pipeline
         regression
         {
             emailext (
-                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} regression"
+                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} regression",
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
