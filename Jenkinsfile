@@ -21,7 +21,7 @@ pipeline
     
     stages
     {
-        stage('codingstyle')
+        stage('pre')
         {
 			steps
 			{
