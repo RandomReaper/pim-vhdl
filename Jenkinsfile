@@ -3,7 +3,7 @@ pipeline
     environment
     {
         PROJECTNAME = "pim-vhdl"
-        SUBJECT_SUB = "${env.PROJECTNAME} (${env.JOB_NAME},  build ${env.BUILD_NUMBER})"
+        SUBJECT_SUB = "${env.PROJECTNAME} (${env.JOB_NAME}, build ${env.BUILD_NUMBER})"
     }
 
     agent
@@ -112,7 +112,7 @@ pipeline
         always
         {
             emailext (
-                subject: "[jenkins] Job always status:${currentBuild.currentResult} ${env.SUBJECT_SUB}",
+                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} status:${currentBuild.currentResult}",
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
@@ -123,7 +123,7 @@ pipeline
         fixed
         {
             emailext (
-                subject: "[jenkins] Job fixed ${env.SUBJECT_SUB}",
+                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} fixed" 
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
@@ -132,7 +132,7 @@ pipeline
         regression
         {
             emailext (
-                subject: "[jenkins] Job regression ${env.SUBJECT_SUB}",
+                subject: "[jenkins][${env.JOB_NAME}] ${env.SUBJECT_SUB} regression"
                 mimeType: 'text/html',
                 body: '${JELLY_SCRIPT,template="html"}',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']]
