@@ -8,15 +8,13 @@ pipeline
 
     agent
     {
-        docker
+        dockerfile
         {
-            image 'ghdl/ghdl:ubuntu18-mcode'
-            args '''
-                -u root:root
-                -v "${WORKSPACE}:/repo"
-                -v "${JENKINS_HOME}/caches/${env.PROJECTNAME}-bundle-cache:/usr/local/bundle:rw"
-            '''
-        }
+	        filename 'Dockerfile'
+	        dir 'ci'
+	        label 'pim-vhdl'
+	        args '-v /tmp:/tmp'
+    	}
     }
     
     stages
