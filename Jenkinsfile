@@ -1,10 +1,5 @@
 pipeline
 {
-    environment
-    {
-        PROJECTNAME = "pim-vhdl"
-    }
-
     agent
     {
         dockerfile
@@ -12,10 +7,10 @@ pipeline
 	        filename 'Dockerfile'
 	        dir 'ci'
 	        additionalBuildArgs '-t jenkins-${JOB_NAME}'
-	        args '''
+	        args """
 	        	-v /tmp:/tmp
-	        	-v "${WORKSPACE}:/repo"
-	        '''
+	        	-v "${env.WORKSPACE}:/repo"
+	        """
     	}
     }
     
