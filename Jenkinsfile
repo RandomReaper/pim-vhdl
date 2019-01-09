@@ -10,7 +10,7 @@ pipeline
     {
         docker
         {
-            image 'ghdl/ghdl:ubuntu18-llvm-5.0'
+            image 'ghdl/ghdl:ubuntu18-mcode'
             args '''
                 -u root:root
                 -v "${WORKSPACE}:/repo"
