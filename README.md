@@ -1,4 +1,4 @@
-# pim-vhdl [![travis-ci](https://travis-ci.org/RandomReaper/pim-vhdl.svg?branch=master)] (https://travis-ci.org/RandomReaper/pim-vhdl) [![jenkins at home](https://build.absintheaudio.com/buildStatus/icon?job=github_pim_vhdl)](https://build.absintheaudio.com/job/github_pim_vhdl/)
+# pim-vhdl [![travis-ci](https://travis-ci.org/RandomReaper/pim-vhdl.svg?branch=master)](https://travis-ci.org/RandomReaper/pim-vhdl) [![jenkins at home](https://build.absintheaudio.com/buildStatus/icon?job=github_pim_vhdl)](https://build.absintheaudio.com/job/github_pim_vhdl/)
 
 ## Why
 Because VHDL is hard and should be [free](https://fsf.org/).
