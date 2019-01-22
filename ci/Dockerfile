@@ -16,6 +16,7 @@ RUN \
   apt-get install -y software-properties-common && \
   apt-get install -y git libgnat-7 && \
   apt-get install -y gnat zlib1g-dev && \
+  apt-get install -y python3-pip && \
   apt-get autoremove && apt-get clean && \
   rm -rf /var/lib/apt/lists/* && \
   git clone --single-branch --branch ghdl-0.35 https://github.com/ghdl/ghdl.git && cd ghdl && \
@@ -28,10 +29,12 @@ RUN \
   apt-get -y --purge autoremove && \
   echo OK
 
+RUN pip3 install vunit_hdl && \
+  echo 'alias python=/usr/bin/python3' >> /root/.bashrc && \
+  echo 'alias pip=/usr/bin/pip3' >> /root/.bashrc
+
 # Add files.
-#ADD root/.bashrc /root/.bashrc
-#ADD root/.gitconfig /root/.gitconfig
-#ADD root/.scripts /root/.scripts
+ADD run.py /root/run.py
 
 # Set environment variables.
 ENV HOME /root
@@ -41,4 +44,5 @@ WORKDIR /root
 
 # Define default command.
 CMD ["bash"]
+
 
