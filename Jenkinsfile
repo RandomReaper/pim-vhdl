@@ -81,6 +81,23 @@ pipeline
                     }
                 }
             }
+            stage('tb-vunit')
+            {
+                steps
+                {
+                    sh '''
+                        cd tb/vunit
+                        ./vunit.sh --xunit-xml vunit_output.xml
+                    '''
+                }
+                post
+                {
+                    always
+                    {
+                        junit 'tb/vunit/vunit_output.xml' 
+                    }
+                }
+            }
         }
         stage('codingstyle')
         {

@@ -1,0 +1,5 @@
+<testsuite errors="0" failures="0" hostname="pim-lap" name="testsuite" skipped="0" tests="2"><testcase classname="lib.tb_example" name="all" time="0.4"><system-out>/home/pim/git/pim-vhdl/tb/vunit/00_test_vunit/tb_example.vhd:13:16:@0ms:(report note): Hello world!
+simulation stopped @0ms with status 0
+</system-out></testcase><testcase classname="lib.tb_clock_01" name="all" time="0.4"><system-out>/home/pim/git/pim-vhdl/tb/vunit/01_test_bhv_clock/tb_clock.vhd:42:16:@0ms:(report note): Hello world!
+simulation stopped @3500ns with status 0
+</system-out></testcase></testsuite>
