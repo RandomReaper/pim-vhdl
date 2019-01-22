@@ -88,7 +88,7 @@ pipeline
             {
                 sh '''
                     cd tb/vunit
-                    ./vunit.sh --xunit-xml vunit_output.xml
+                    ./run.py --xunit-xml vunit_output.xml
                 '''
             }
             post
