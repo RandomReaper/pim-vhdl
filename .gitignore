@@ -3,3 +3,4 @@ iseconfig/
 *.log
 *.swp
 .cache/
+**vunit_out/
