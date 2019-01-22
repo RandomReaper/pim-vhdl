@@ -34,7 +34,7 @@ RUN pip3 install vunit_hdl && \
   echo 'alias pip=/usr/bin/pip3' >> /root/.bashrc
 
 # Add files.
-ADD run.py /root/run.py
+#ADD run.py /root/run.py
 
 # Set environment variables.
 ENV HOME /root

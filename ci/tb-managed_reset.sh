@@ -9,7 +9,7 @@ if [ $RESULT -ne 0 ]; then
 fi
 
 
-cd tb
+cd tb/handcrafted
 ghdl-all-managed_reset-xise.sh
 RESULT=$?
 cd "$ORIG"
