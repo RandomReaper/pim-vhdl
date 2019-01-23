@@ -1,8 +1,12 @@
 -----------------------------------------------------------------------------
 -- file			: tb_vunit_tbc.vhd
 --
--- brief		: Example vunit test bench using reset AND not using reset
+-- brief		: Example vunit_tbc example
 -- author(s)	: marc at pignat dot org
+--
+-- This is an example testbench using the vunit_tbc block, this block enable
+-- the same testbench to be run with AND without reset.
+--
 -----------------------------------------------------------------------------
 -- Copyright 2015,2016 Marc Pignat
 --
@@ -25,10 +29,10 @@ library ieee;
 entity tb_vunit_tbc is
 	generic
 	(
+		-- Will be set by vunit
 		runner_cfg		: string;
 		g_reset_enable	: boolean := false
 	);
-	
 end entity;
 
 architecture tb of tb_vunit_tbc is
@@ -52,14 +56,19 @@ begin
 
 	tb : process
 	begin
+		-- Say vunit_tbc we're running
 		done <= '0';
+
+		-- Wait for the vunit_tbc reset if any
 		wait until reset = '0';
 
+		-- Here goes the real test
 		wait until rising_edge(clock);
 		wait until rising_edge(clock);
 		wait until rising_edge(clock);
 		wait until rising_edge(clock);
 		
+		-- Say vunit_tbc we're done
 		done <= '1';
 		wait;
 	end process;

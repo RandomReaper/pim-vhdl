@@ -22,8 +22,8 @@ for filename in glob.iglob(pim_lib + '/**/*.vhd', recursive=True):
 
 # TODO : add a caddy file for tb with generics
 
-mtb = lib.get_test_benches("*tbc*", True)
-for tb in mtb:
+tbc = lib.get_test_benches("*tbc", True)
+for tb in tbc:
 	tb.add_config("with_reset", generics=dict(g_reset_enable='true'))
 	tb.add_config("without_reset", generics=dict(g_reset_enable='false'))
 
