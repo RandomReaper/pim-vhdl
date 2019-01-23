@@ -1,9 +1,24 @@
 #!/usr/bin/env python3
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this file,
-# You can obtain one at http://mozilla.org/MPL/2.0/.
-#
-# Copyright (c) 2014-2018, Lars Asplund lars.anders.asplund@gmail.com
+#############################################################################
+## file			: run.py
+##
+## brief		: run vunit tests
+## author(s)	: marc at pignat dot org
+##
+#############################################################################
+## Copyright 2015-2019 Marc Pignat
+##
+## Licensed under the Apache License, Version 2.0 (the "License");
+## you may not use this file except in compliance with the License.
+## You may obtain a copy of the License at
+##
+## 		http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## See the License for the specific language governing permissions and
+## limitations under the License.
+#############################################################################
 
 from os.path import join, dirname
 from vunit import VUnit
@@ -27,6 +42,4 @@ for tb in tbc:
 	tb.add_config("with_reset", generics=dict(g_reset_enable='true'))
 	tb.add_config("without_reset", generics=dict(g_reset_enable='false'))
 
-#tb_with_lower_level_control = lib.entity("tb_with_lower_level_control")
-#tb_with_lower_level_control.scan_tests_from_file(join(root, "test_control.vhd"))
 ui.main()

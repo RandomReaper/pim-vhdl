@@ -8,7 +8,7 @@
 -- The reset feature is selected by the generic g_reset_enable
 --
 -----------------------------------------------------------------------------
--- Copyright 2015,2016 Marc Pignat
+-- Copyright 2015-2019 Marc Pignat
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.

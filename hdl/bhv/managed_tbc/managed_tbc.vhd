@@ -13,7 +13,7 @@
 -- there is no global network for routing an asynchronous reset.
 --
 -----------------------------------------------------------------------------
--- Copyright 2015,2016 Marc Pignat
+-- Copyright 2015-2019 Marc Pignat
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
