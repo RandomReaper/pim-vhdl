@@ -88,7 +88,7 @@ pipeline
             {
                 sh '''
                     cd tb/vunit
-                    ./run.py --no-color --xunit-xml vunit_output.xml
+                    ./run.py --clean --no-color --xunit-xml vunit_output.xml
                 '''
             }
             post
