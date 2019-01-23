@@ -27,7 +27,6 @@ for tb in mtb:
 	tb.add_config("with_reset", generics=dict(g_reset_enable='true'))
 	tb.add_config("without_reset", generics=dict(g_reset_enable='false'))
 
-
 #tb_with_lower_level_control = lib.entity("tb_with_lower_level_control")
 #tb_with_lower_level_control.scan_tests_from_file(join(root, "test_control.vhd"))
 ui.main()
