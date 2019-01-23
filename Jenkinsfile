@@ -115,7 +115,7 @@ pipeline
         always
         {
             telegramSend """
-            Build *${env.JOB_NAME}* status:*${currentBuild.currentResult}*, [details](${env.BUILD_URL})
+            Build *${env.JOB_NAME}* #${env.BUILD_NUMBER} status:*${currentBuild.currentResult}*, [details](${env.BUILD_URL})
             """
         }
 
@@ -123,14 +123,14 @@ pipeline
         fixed
         {
             telegramSend """
-            Build *${env.JOB_NAME}* status:*Fixed !*, [details](${env.BUILD_URL})
+            Build *${env.JOB_NAME}* #${env.BUILD_NUMBER} status:*Fixed !*, [details](${env.BUILD_URL})
             """
         }
 
         regression
         {
             telegramSend """
-            Build *${env.JOB_NAME}* status:*Regression!*, [details](${env.BUILD_URL})
+            Build *${env.JOB_NAME}* #${env.BUILD_NUMBER} status:*Regression!*, [details](${env.BUILD_URL})
             """
         }
     }
