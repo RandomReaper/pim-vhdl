@@ -125,4 +125,4 @@ i_vunit_tbc: entity work.vunit_tbc
 		done		=> done
 	);
 
-end bhv;
+end architecture;

@@ -412,4 +412,4 @@ begin
 
 	end process;
 
-end bhv;
+end architecture;

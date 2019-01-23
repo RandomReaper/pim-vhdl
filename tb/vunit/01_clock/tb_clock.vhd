@@ -31,7 +31,7 @@ entity tb_clock_00 is
 	);
 end entity;
 
-architecture tb of tb_clock_00 is
+architecture bhv of tb_clock_00 is
 	signal clock		: std_ulogic;
 begin
 	main : process

@@ -27,7 +27,7 @@ entity tb_vunit_00 is
 	generic (runner_cfg : string);
 end entity;
 
-architecture tb of tb_vunit_00 is
+architecture bhv of tb_vunit_00 is
 begin
 	main : process
 	begin

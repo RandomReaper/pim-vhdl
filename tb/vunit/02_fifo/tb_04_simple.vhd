@@ -31,7 +31,7 @@ entity tb_fifo_04_simple_tbc is
 	);
 end entity;
 
-architecture tb of tb_fifo_04_simple_tbc is
+architecture bhv of tb_fifo_04_simple_tbc is
 	signal clock		: std_ulogic;
 	signal reset		: std_ulogic;
 	signal done			: std_ulogic;
@@ -162,4 +162,4 @@ begin
 	end if;
 end process;
 
-end tb;
+end architecture;

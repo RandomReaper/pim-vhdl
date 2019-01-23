@@ -33,7 +33,7 @@ entity tb_vunit_01_tbc is
 	);
 end entity;
 
-architecture tb of tb_vunit_01_tbc is
+architecture bhv of tb_vunit_01_tbc is
 	signal clock		: std_ulogic;
 	signal reset		: std_ulogic;
 	signal done			: std_ulogic;

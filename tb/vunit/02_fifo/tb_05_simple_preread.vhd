@@ -28,7 +28,7 @@ entity tb_fifo_05_simple_preread_tbc is
 	);
 end entity;
 
-architecture tb of tb_fifo_05_simple_preread_tbc is
+architecture bhv of tb_fifo_05_simple_preread_tbc is
 	constant bug_severity : severity_level := failure;
 
 	signal clock			: std_ulogic;
@@ -152,4 +152,4 @@ d_in <= write_data when write ='1' else (others => '-');
 
 read_valid <= read and not reset;
 
-end tb;
+end architecture;

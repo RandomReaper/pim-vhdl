@@ -161,4 +161,4 @@ port map
 	clock		=> clock
 );
 
-end bhv;
+end architecture;
