@@ -1,8 +1,10 @@
 -----------------------------------------------------------------------------
--- file			: tb_clock.vhd
---
--- brief		: vunit test for clock
+-- brief		: vunit should be installed and working
 -- author(s)	: marc at pignat dot org
+--
+-- This is an example testbench using the vunit_tbc block, this block enable
+-- the same testbench to be run with AND without reset.
+--
 -----------------------------------------------------------------------------
 -- Copyright 2015-2019 Marc Pignat
 --
@@ -18,43 +20,20 @@
 -- limitations under the License.
 -----------------------------------------------------------------------------
 
-library ieee;
-	use ieee.std_logic_1164.all;
-	use ieee.numeric_std.all;
-
 library vunit_lib;
 context vunit_lib.vunit_context;
 
-entity tb_clock_01 is
-	generic
-	(
-		runner_cfg	: string;
-		frequency	: real	:= 1.0e6
-	);
+entity tb_vunit_00 is
+	generic (runner_cfg : string);
 end entity;
 
-architecture tb of tb_clock_01 is
-	signal clock		: std_ulogic;
+architecture tb of tb_vunit_00 is
 begin
 	main : process
 	begin
 		test_runner_setup(runner, runner_cfg);
-		report "Hello world!";
-		wait until rising_edge(clock);
-		wait until rising_edge(clock);
-		wait until rising_edge(clock);
-		wait until rising_edge(clock);
+		report "vunit install test";
 		test_runner_cleanup(runner); -- Simulation ends here
 	end process;
-
-	i_clock : entity work.clock
-	generic map
-	(
-		frequency	=> frequency
-	)
-	port map
-	(
-		clock		=> clock
-	);
-
 end architecture;
+

@@ -29,7 +29,7 @@ root = dirname(__file__)
 
 ui = VUnit.from_argv()
 lib = ui.add_library("lib")
-for filename in glob.iglob(root + '/**/*.vhd', recursive=True):
+for filename in sorted(glob.iglob(root + '/**/*.vhd', recursive=True)):
 	lib.add_source_files(filename)
 
 for filename in glob.iglob(pim_lib + '/**/*.vhd', recursive=True):
@@ -39,7 +39,7 @@ for filename in glob.iglob(pim_lib + '/**/*.vhd', recursive=True):
 
 tbc = lib.get_test_benches("*tbc", True)
 for tb in tbc:
-	tb.add_config("with_reset", generics=dict(g_reset_enable='true'))
-	tb.add_config("without_reset", generics=dict(g_reset_enable='false'))
+	tb.add_config("reset", generics=dict(g_reset_enable='true'))
+	tb.add_config("no_reset", generics=dict(g_reset_enable='false'))
 
 ui.main()

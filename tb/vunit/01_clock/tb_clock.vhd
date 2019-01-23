@@ -1,12 +1,6 @@
 -----------------------------------------------------------------------------
--- file			: vunit_sample_tbc.vhd
---
--- brief		: Example vunit_tbc example
+-- brief		: vunit test for clock
 -- author(s)	: marc at pignat dot org
---
--- This is an example testbench using the vunit_tbc block, this block enable
--- the same testbench to be run with AND without reset.
---
 -----------------------------------------------------------------------------
 -- Copyright 2015-2019 Marc Pignat
 --
@@ -26,51 +20,40 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity vunit_sample_tbc is
+library vunit_lib;
+context vunit_lib.vunit_context;
+
+entity tb_clock_00 is
 	generic
 	(
-		-- Will be set by vunit
-		runner_cfg		: string;
-		g_reset_enable	: boolean := false
+		runner_cfg	: string;
+		frequency	: real	:= 1.0e6
 	);
 end entity;
 
-architecture tb of vunit_sample_tbc is
+architecture tb of tb_clock_00 is
 	signal clock		: std_ulogic;
-	signal reset		: std_ulogic;
-	signal done			: std_ulogic;
 begin
-	i_vunit_tbc: entity work.vunit_tbc
+	main : process
+	begin
+		test_runner_setup(runner, runner_cfg);
+
+		wait until rising_edge(clock);
+		wait until rising_edge(clock);
+		wait until rising_edge(clock);
+		wait until rising_edge(clock);
+
+		test_runner_cleanup(runner);
+	end process;
+
+	i_clock : entity work.clock
 	generic map
 	(
-		g_frequency		=> 1.0e6,
-		g_runner_cfg	=> runner_cfg,
-		g_reset_enable	=> g_reset_enable
+		frequency	=> frequency
 	)
 	port map
 	(
-		clock		=> clock,
-		reset		=> reset,
-		done		=> done
+		clock		=> clock
 	);
 
-	tb : process
-	begin
-		-- Say vunit_tbc we're running
-		done <= '0';
-
-		-- Wait for the vunit_tbc reset if any
-		wait until reset = '0';
-
-		-- Here goes the real test
-		wait until rising_edge(clock);
-		wait until rising_edge(clock);
-		wait until rising_edge(clock);
-		wait until rising_edge(clock);
-		
-		-- Say vunit_tbc we're done
-		done <= '1';
-		wait;
-	end process;
 end architecture;
-
