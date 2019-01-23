@@ -28,8 +28,7 @@ generic
 	runner_cfg		: string;
 	g_parallel		: natural := 3
 );
-end tb_ad7476_00_reset
-;
+end tb_ad7476_00_reset;
 
 architecture bhv of tb_ad7476_00_reset is
 	constant bug_severity : severity_level := failure;
@@ -122,7 +121,6 @@ port map
 	n_cs		=> n_cs,
 	sdata		=> sdata
 );
-
 
 i_clock : entity work.clock
 generic map
