@@ -94,7 +94,7 @@ tb_proc: process
 
 end process;
 
-i_top: entity work.top
+i_top: entity work.top_adc2ftd_02
 generic map
 (
 	g_parallel		=> g_parallel,

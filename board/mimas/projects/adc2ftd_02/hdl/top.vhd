@@ -22,7 +22,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity top is
+entity top_adc2ftd_02 is
 generic
 (
 	g_nrdata_log2	: natural := 7;
@@ -50,9 +50,9 @@ port
 	n_cs			: out	std_ulogic;
 	sdata			: in	std_ulogic_vector(g_parallel-1 downto 0)
 );
-begin end;
+end entity;
 
-architecture rtl of top is
+architecture rtl of top_adc2ftd_02 is
 	alias  clock			is clkout;
 
 	signal read_data		: std_ulogic_vector(adbus'range);
@@ -182,4 +182,4 @@ begin
 	end if;
 end process;
 
-end rtl;
+end architecture;

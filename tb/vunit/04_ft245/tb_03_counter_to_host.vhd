@@ -113,7 +113,7 @@ tb_proc: process
 
 end process;
 
-i_top : entity work.top
+i_top : entity work.top_mimas_ft245_counter
 generic map
 (
 	g_nrdata_log2	=> g_nrdata_log2

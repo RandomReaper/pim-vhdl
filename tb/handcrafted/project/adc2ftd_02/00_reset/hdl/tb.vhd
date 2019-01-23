@@ -124,7 +124,7 @@ begin
 
 	end process;
 
-i_dut : entity work.top
+i_dut : entity work.top_adc2ftd_02
 generic map
 (
 	g_parallel	=> g_parallel

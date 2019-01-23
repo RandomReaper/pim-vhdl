@@ -22,7 +22,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity top is
+entity top_mimas_ft245_counter is
 generic
 (
 	g_nrdata_log2		: natural := 7
@@ -44,9 +44,9 @@ port
 
 	reset			: in	std_ulogic
 );
-end top;
+end entity;
 
-architecture rtl of top is
+architecture rtl of top_mimas_ft245_counter is
 	alias  clock is clkout;
 
 	signal status_full		: std_ulogic;

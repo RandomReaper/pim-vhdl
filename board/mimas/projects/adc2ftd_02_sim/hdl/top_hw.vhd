@@ -22,7 +22,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity top_hw is
+entity top_adc2ftd_02_sim_hw is
 port
 (
 	-- Mimas
@@ -47,9 +47,9 @@ port
 	ADC_NCS			: out	std_ulogic;
 	ADC_DATA		: in	std_ulogic_vector(3 downto 0)
 );
-end top_hw;
+end entity;
 
-architecture bhv of top_hw is
+architecture rtl of top_adc2ftd_02_sim_hw is
 	signal reset		: std_ulogic;
 
 	signal sclk			: std_ulogic;
@@ -62,7 +62,7 @@ reset <= '0';
 ADC_CLOCK	<= '0';
 ADC_NCS		<= '1';
 
-i_top : entity work.top
+i_top : entity work.top_adc2ftd_02_sim
 port map
 (
 	-- Interface to the ftdi chip
@@ -98,4 +98,4 @@ port map
 	sdata		=> sdata
 );
 
-end bhv;
+end architecture;

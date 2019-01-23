@@ -22,7 +22,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity top_hw is
+entity top_mimas_ft245_counter_hw is
 	port
 	(
 		-- Mimas
@@ -42,12 +42,12 @@ entity top_hw is
 		FT_nOE			: out	std_ulogic;
 		FT_nSUSPEND		: in	std_ulogic
 	);
-end top_hw;
+end entity;
 
-architecture bhv of top_hw is
+architecture bhv of top_mimas_ft245_counter_hw is
 begin
 
-i_top : entity work.top
+i_top : entity work.top_mimas_ft245_counter
 port map
 (
 	-- Interface to the ftdi chip
@@ -67,4 +67,4 @@ port map
 	led				=> led
 );
 
-end bhv;
+end architecture;

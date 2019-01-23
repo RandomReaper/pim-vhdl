@@ -25,6 +25,7 @@ from vunit import VUnit
 import glob
 
 pim_lib = '../../hdl'
+pim_boards = '../../board'
 root = dirname(__file__)
 
 ui = VUnit.from_argv()
@@ -33,6 +34,9 @@ for filename in sorted(glob.iglob(root + '/**/*.vhd', recursive=True)):
 	lib.add_source_files(filename)
 
 for filename in glob.iglob(pim_lib + '/**/*.vhd', recursive=True):
+	lib.add_source_files(filename)
+
+for filename in glob.iglob(pim_boards + '/**/*.vhd', recursive=True):
 	lib.add_source_files(filename)
 
 # TODO : add a caddy file for tb with generics
