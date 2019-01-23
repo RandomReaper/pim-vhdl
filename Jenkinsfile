@@ -12,10 +12,6 @@ pipeline
 	        """
     	}
     }
-    options
-    {
-    	ansiColor('xterm')
-    }
     
     stages
     {
@@ -92,7 +88,7 @@ pipeline
             {
                 sh '''
                     cd tb/vunit
-                    ./run.py --xunit-xml vunit_output.xml
+                    ./run.py --no-color --xunit-xml vunit_output.xml
                 '''
             }
             post
