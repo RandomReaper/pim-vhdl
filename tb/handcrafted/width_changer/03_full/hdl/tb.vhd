@@ -156,4 +156,4 @@ port map
 	out_write	=> data4_bis_write
 );
 
-end bhv;
+end architecture;

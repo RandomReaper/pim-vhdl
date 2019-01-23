@@ -128,4 +128,4 @@ begin
 	end if;
 end process;
 
-end rtl;
+end architecture;

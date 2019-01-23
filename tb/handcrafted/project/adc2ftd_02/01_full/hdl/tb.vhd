@@ -190,4 +190,4 @@ port map
 	out_write	=> adc_data_valid
 );
 
-end bhv;
+end architecture;

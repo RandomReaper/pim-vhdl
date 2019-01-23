@@ -124,4 +124,4 @@ end process;
 
 cs <= '1' when (b_counter < 18) else '0';
 
-end rtl;
+end architecture;

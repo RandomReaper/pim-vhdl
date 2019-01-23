@@ -101,4 +101,4 @@ port map
 	sdata		=> sdata
 );
 
-end bhv;
+end architecture;

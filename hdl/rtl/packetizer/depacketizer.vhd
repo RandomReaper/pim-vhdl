@@ -39,7 +39,7 @@ port
 
 	header_valid	: out	std_ulogic := '0'
 );
-end depacketizer;
+end entity;
 
 architecture rtl of depacketizer is
 	type buf_t is array(3 downto 0) of std_ulogic_vector(in_data'range);
@@ -160,4 +160,4 @@ begin
 	end if;
 	--pragma synthesis_on
 end process;
-end rtl;
+end architecture;

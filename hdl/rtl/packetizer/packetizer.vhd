@@ -225,4 +225,4 @@ port map
 	status_full	=> tx_full
 );
 
-end rtl;
+end architecture;

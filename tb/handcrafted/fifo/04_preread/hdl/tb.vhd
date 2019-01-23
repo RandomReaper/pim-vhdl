@@ -128,4 +128,4 @@ d_in <= write_data when write ='1' else (others => '-');
 
 read_valid <= read and not reset;
 
-end bhv;
+end architecture;

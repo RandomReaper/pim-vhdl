@@ -87,4 +87,4 @@ gen_adc_if: for i in 0 to g_parallel-1 generate
 		);
 	end generate;
 end generate;
-end rtl;
+end architecture;

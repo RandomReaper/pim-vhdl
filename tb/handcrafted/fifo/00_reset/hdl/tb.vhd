@@ -23,7 +23,7 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity tb is
-end tb;
+end entity;
 
 architecture bhv of tb is
 	constant bug_severity : severity_level := failure;
@@ -158,4 +158,4 @@ port map
 	stop		=> stop
 );
 
-end bhv;
+end architecture;

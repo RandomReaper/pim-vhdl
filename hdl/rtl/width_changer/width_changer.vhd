@@ -40,7 +40,7 @@ entity wc_int is
 		out_write		: out	std_ulogic;
 		out_ready		: in	std_ulogic
 	);
-end wc_int;
+end entity;
 
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -60,7 +60,7 @@ entity width_changer is
 		out_write		: out	std_ulogic;
 		out_ready		: in	std_ulogic
 	);
-end width_changer;
+end entity;
 
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -85,7 +85,7 @@ entity wc_gen is
 		out_write		: out	std_ulogic;
 		out_ready		: in	std_ulogic
 	);
-end wc_gen;
+end entity;
 
 architecture rtl of wc_gen is
 begin
@@ -139,7 +139,7 @@ same: if g_out_width = g_in_width generate
 	out_write	<= in_write;
 end generate;
 
-end rtl;
+end architecture;
 
 architecture rtl of width_changer is
 begin
@@ -162,7 +162,7 @@ begin
 		out_write	=> out_write,
 		out_ready	=> out_ready
 	);
-end rtl;
+end architecture;
 
 architecture rtl_smaller of wc_int is
 	signal memory				: std_ulogic_vector(in_data'range);
@@ -218,7 +218,7 @@ begin
 	end if;
 end process;
 
-end rtl_smaller;
+end architecture;
 
 architecture rtl_bigger of wc_int is
 	signal memory				: std_ulogic_vector(out_data'range);
@@ -285,4 +285,4 @@ end process;
 
 out_data <= memory;
 
-end rtl_bigger;
+end architecture;

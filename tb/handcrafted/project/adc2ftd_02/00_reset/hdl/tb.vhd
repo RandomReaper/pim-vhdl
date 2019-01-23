@@ -27,7 +27,7 @@ generic
 (
 	g_parallel	: natural := 3
 );
-end tb;
+end entity;
 
 architecture bhv of tb is
 	constant bug_severity : severity_level := failure;
@@ -161,4 +161,4 @@ port map
 	stop		=> stop
 );
 
-end bhv;
+end architecture;

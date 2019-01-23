@@ -134,4 +134,4 @@ begin
 	end if;
 end process;
 
-end bhv;
+end architecture;

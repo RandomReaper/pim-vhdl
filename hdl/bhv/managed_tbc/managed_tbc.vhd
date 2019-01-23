@@ -39,7 +39,7 @@ entity managed_tbc is
 		stop		: out	std_ulogic;
 		frequency	: out	real := 1.0e6
 	);
-end managed_tbc;
+end entity;
 
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -47,7 +47,7 @@ library ieee;
 
 entity tb is
 begin
-end tb;
+end entity;
 
 architecture bhv_with_reset of tb is
 	signal clock		: std_ulogic;
@@ -113,4 +113,3 @@ begin
 	);
 
 end architecture bhv_without_reset;
-
