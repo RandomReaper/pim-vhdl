@@ -22,7 +22,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-architecture bhv of managed_tb is
+architecture bhv of managed_tbc is
 	constant bug_severity : severity_level := failure;
 
 	signal adbus			: std_logic_vector(7 downto 0);

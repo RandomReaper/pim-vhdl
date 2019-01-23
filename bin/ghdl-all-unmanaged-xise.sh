@@ -45,7 +45,7 @@ do
 	if ! run_tb "$dir"; then
 		RESULT=1
 	fi
-done <<< "$(find . -name '*.xise' ! -exec grep -q "managed_tb\.vhd" {} \; -printf '%h\n' | sort)"
+done <<< "$(find . -name '*.xise' ! -exec grep -q "managed_tbc\.vhd" {} \; -printf '%h\n' | sort)"
 echo
 
 cd "$START_DIR"

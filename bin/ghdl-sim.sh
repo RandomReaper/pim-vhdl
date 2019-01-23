@@ -29,7 +29,7 @@ do
 		echo adding "$file"
 	fi
 	$GHDL -i "$OPTIONS" "$file"
-	if grep -q 'managed_tb' "$file"
+	if grep -q 'managed_tbc' "$file"
 	then
 		MANAGED=1
 	fi

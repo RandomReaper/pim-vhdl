@@ -41,14 +41,14 @@ done <<< "$(find . -name '*.xise' -printf '%h\n' | sort)"
 RESULT=0
 
 export USE_RESET=1
-echo "Running all 'managed_tb' from $HERE directory with asynchronous reset"
+echo "Running all 'managed_tbc' from $HERE directory with asynchronous reset"
 
 while read dir
 do
 	if ! run_tb "$dir"; then
 		RESULT=1
 	fi
-done <<< "$(find . -name '*.xise' -exec grep -q "managed_tb\.vhd" {} \; -printf '%h\n' | sort)"
+done <<< "$(find . -name '*.xise' -exec grep -q "managed_tbc\.vhd" {} \; -printf '%h\n' | sort)"
 echo
 
 cd "$START_DIR"

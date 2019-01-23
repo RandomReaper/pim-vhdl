@@ -1,8 +1,17 @@
 -----------------------------------------------------------------------------
--- file			: managed_tb.vhd
+-- file			: managed_tbc.vhd
 --
--- brief		: managed_tb and top_tb
+-- brief		: managed_tbc a managed test bench controller
 -- author(s)	: marc at pignat dot org
+--
+-- This entity runs a tb, with clock and optional asynchronous reset.
+-- The reset feature is selected by the architecture (bhv_with_reset,
+-- or bhv_with_reset).
+--
+-- The bhv_with_reset is a realistic test for some RAM based FPGA, like
+-- Xilinx, where the RAM and flip-flops are initialized by the bitstream, but
+-- there is no global network for routing an asynchronous reset.
+--
 -----------------------------------------------------------------------------
 -- Copyright 2015,2016 Marc Pignat
 --
@@ -22,7 +31,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity managed_tb is
+entity managed_tbc is
 	port
 	(
 		clock		: in	std_ulogic;
@@ -30,7 +39,7 @@ entity managed_tb is
 		stop		: out	std_ulogic;
 		frequency	: out	real := 1.0e6
 	);
-end managed_tb;
+end managed_tbc;
 
 library ieee;
 	use ieee.std_logic_1164.all;
@@ -47,7 +56,7 @@ architecture bhv_with_reset of tb is
 	signal frequency	: real := 1.0e6;
 begin
 
-	i_managed_tb: entity work.managed_tb
+	i_managed_tbc: entity work.managed_tbc
 	port map
 	(
 		reset	=> reset,
@@ -79,7 +88,7 @@ architecture bhv_without_reset of tb is
 	signal frequency	: real := 1.0e6;
 begin
 
-	i_managed_tb: entity work.managed_tb
+	i_managed_tbc: entity work.managed_tbc
 	port map
 	(
 		frequency	=> frequency,
