@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------
--- file			: tb_vunit_tbc.vhd
+-- file			: vunit_sample_tbc.vhd
 --
--- brief		: Make sure vunit_tbc tesbenches are run with and without reset
+-- brief		: Example vunit_tbc example
 -- author(s)	: marc at pignat dot org
 --
 -- This is an example testbench using the vunit_tbc block, this block enable
@@ -26,7 +26,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity tb_vunit_tbc is
+entity vunit_sample_tbc is
 	generic
 	(
 		-- Will be set by vunit
@@ -35,7 +35,7 @@ entity tb_vunit_tbc is
 	);
 end entity;
 
-architecture tb of tb_vunit_tbc is
+architecture tb of vunit_sample_tbc is
 	signal clock		: std_ulogic;
 	signal reset		: std_ulogic;
 	signal done			: std_ulogic;
@@ -72,17 +72,5 @@ begin
 		done <= '1';
 		wait;
 	end process;
-
-	tb_reset_check : process
-	begin
-		if g_reset_enable
-		then
-			wait;
-		else
-			wait until reset'event;
-			assert reset = '0' report "reset is not '0' while g_reset_enable=false" severity failure;
-		end if;
-	end process;
-
 end architecture;
 
