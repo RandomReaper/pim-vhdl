@@ -20,30 +20,39 @@
 ## limitations under the License.
 #############################################################################
 
-from os.path import join, dirname
+from os.path import dirname
 from vunit import VUnit
 import glob
 
-pim_lib = '../../hdl'
-pim_boards = '../../board'
-root = dirname(__file__)
-
+# Initialize vunit using command line arguments
 ui = VUnit.from_argv()
-lib = ui.add_library("lib")
-for filename in sorted(glob.iglob(root + '/**/*.vhd', recursive=True)):
-	lib.add_source_files(filename)
 
+# Add vunit library
+lib = ui.add_library("lib")
+
+# Add all vhdl files from pim-vhdl
+pim_lib = '../../hdl'
 for filename in glob.iglob(pim_lib + '/**/*.vhd', recursive=True):
 	lib.add_source_files(filename)
 
+# Add all vhdl files from pim-vhdl boards
+pim_boards = '../../board'
 for filename in glob.iglob(pim_boards + '/**/*.vhd', recursive=True):
 	lib.add_source_files(filename)
 
+# Add all vhdl testbenshes from CWD and subdirectories
+root = dirname(__file__)
+for filename in sorted(glob.iglob(root + '/**/*.vhd', recursive=True)):
+	lib.add_source_files(filename)
+
+
 # TODO : add a caddy file for tb with generics
 
-tbc = lib.get_test_benches("*tbc", True)
+# tb named *_tbc should be run once with an asynchronous reset and once without
+tbc = lib.get_test_benches("*_tbc", True)
 for tb in tbc:
 	tb.add_config("reset", generics=dict(g_reset_enable='true'))
 	tb.add_config("no_reset", generics=dict(g_reset_enable='false'))
 
+# Now run
 ui.main()
