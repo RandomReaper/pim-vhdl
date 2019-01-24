@@ -1,17 +1,17 @@
 #!/bin/bash
 if uname | grep Linux > /dev/null
 then
-	if ! [ -e $HOME/ghdl/bin/ghdl ]
+	if ! [ -e "$HOME"/ghdl/bin/ghdl ]
 	then
-		mkdir -p $HOME/ghdl
-		wget -q https://github.com/tgingold/ghdl/releases/download/2016-05-03/ghdl-0.34dev-mcode-2016-05-03.tgz -O - | tar xz -C $HOME/ghdl || exit 1
+		mkdir -p "$HOME"/ghdl
+		wget -q https://github.com/tgingold/ghdl/releases/download/2016-05-03/ghdl-0.34dev-mcode-2016-05-03.tgz -O - | tar xz -C "$HOME"/ghdl || exit 1
 	fi
 
-	if ! [ -e $HOME/lib/libgnat-4.6.so.1 ]
+	if ! [ -e "$HOME"/lib/libgnat-4.6.so.1 ]
 	then
-		mkdir -p $HOME/lib
+		mkdir -p "$HOME"/lib
 		wget -q http://mirrors.kernel.org/ubuntu/pool/universe/g/gnat-4.6/libgnat-4.6_4.6.4-0ubuntu5_amd64.deb -O /tmp/tmp.deb || exit 1
-		dpkg --fsys-tarfile /tmp/tmp.deb | tar xOf - ./usr/lib/x86_64-linux-gnu/libgnat-4.6.so.1 > $HOME/lib/libgnat-4.6.so.1 || exit 1
+		dpkg --fsys-tarfile /tmp/tmp.deb | tar xOf - ./usr/lib/x86_64-linux-gnu/libgnat-4.6.so.1 > "$HOME"/lib/libgnat-4.6.so.1 || exit 1
 	fi
 elif uname | grep CYGWIN > /dev/null
 then
@@ -27,17 +27,16 @@ then
 		exit 1
 	fi
 
-	if ! [ -e $HOME/ghdl/bin/ghdl ]
+	if ! [ -e "$HOME"/ghdl/bin/ghdl ]
 	then
-		BEFORE=$PWD
-		mkdir -p $HOME
-		cd $HOME
+		mkdir -p "$HOME"
+		pushd "$HOME"
 		rm -rf ghdl
 		wget -q https://github.com/tgingold/ghdl/releases/download/v0.33/ghdl-0.33-win32.zip
 		unzip ghdl-0.33-win32.zip >/dev/null 2>&1
 		mv ghdl-0.33 ghdl/
 		chmod +x ghdl/bin/ghdl
-		cd $BEFORE
+		popd
 	fi
 else
 	echo unsupported OS
