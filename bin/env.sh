@@ -1,8 +1,15 @@
+#!/bin/bash
 #
 # @brief	Add the directory containing this file to the PATH
 #
 # @usage	source this file from anywhere
 #
+
+# Make sure this script is sourced
+if [ "$0" = "$BASH_SOURCE" ]; then
+    echo "Error: Script must be sourced"
+    exit 1
+fi
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export PATH=$CURRENT_DIR:$PATH
